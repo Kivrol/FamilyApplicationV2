@@ -1,0 +1,96 @@
+body {
+    background: #ffffff;
+}
+
+header {
+    background-color: #e6e6e6;
+    font-family: Comic Sans MS, Comic Sans, cursive;
+    color: black;
+    height: 50px;
+    width: 100%;
+}
+
+header .logo {
+    float: left;
+    width: 200px;
+    height: 50px;
+    border: 1px solid;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+ header .profile {
+    float: right;
+    width: 300px;
+    height: 50px;
+    border: 1px solid;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+div .logoHeaderImg {
+    margin-left: 10px;
+}
+
+div .logoText {
+    font-size: 18px;
+    margin-top: 3%;
+    margin-left: 10px;
+}
+
+div .dropDownProfile {
+    margin-right: 10px;
+    position: relative;
+    top: 2px;
+}
+
+div .profileText {
+    font-size: 18px;
+    margin-top: 2%;
+    margin-right: 10px;
+}
+
+div .profileHeaderImg {
+    height: 32px;
+    width: 32px;
+    margin-right: 10px;
+}
+
+.mainFunc {
+    float: left;
+    height: 100vh;
+    width: 250px;
+    background-color: #e6e6e6;
+    border-right: 1px solid;
+}
+
+.liTxtSet {
+    width: 250px;
+    font-size: 22px;
+    display: block;
+    padding: 20px;
+}
+
+aside ul {
+    float: left;
+    margin-left: -32px;
+    list-style: none;
+}
+
+aside ul li:hover {
+    background-color: #ffffff;
+    transition: all .3s;
+}
+
+.iconList {
+    width: 20px;
+    margin-right:10px;
+}
+
+.linkMenu {
+    text-decoration: none;
+    color: black;
+}
+
