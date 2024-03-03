@@ -1,0 +1,9 @@
+.errorblock{
+    padding-left: 300px;
+    padding-top: 250px;
+    height: 300px;
+    width: 400px;
+    background-color: #e6e6e6;
+    border: 1px solid;
+    border-radius: 20px;
+}

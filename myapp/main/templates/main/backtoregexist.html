@@ -1,0 +1,15 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+    <link rel="stylesheet" href="{% static 'main/css/existregerror.css' %}">
+</head>
+<body>
+    <div class="errorblock">
+        <h2>a user with this Username or Password already exists</h2>
+        <a href="{% url 'registration' %}"><button>Go back to the registration page</button></a>
+    </div>
+</body>
+</html>

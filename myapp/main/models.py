@@ -24,3 +24,5 @@ class AuthUserData(models.Model):
     def isAuthenticated(self):
         # Возвращает True если пользователь аутентифицирован
         return True
+
+    objects = models.Manager()

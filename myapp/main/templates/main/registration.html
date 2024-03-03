@@ -9,14 +9,21 @@
 <body>
     <div class="container" id="container">
         <div class="form-container sign-in-container">
-            <form action="#" method="post">
+            <form action="{% url 'registration' %}" method="post">
                 {%  csrf_token %}
                 <h1>Create Account</h1>
                 <span>or use your email for registration</span>
-                <input type="text" placeholder="Name" />
-                <input type="text" placeholder="Username" />
-                <input type="password" placeholder="Password" />
-                <button>Register</button>
+<!--                {{ form.as_p }}-->
+                <p class="forms">Name</p>
+                {{ form.name }}
+                <p class="forms">Username</p>
+                {{ form.userName }}
+                <p class="forms">Password</p>
+                {{ form.password }}
+<!--                <input type="text" placeholder="Name" />-->
+<!--                <input type="text" placeholder="Username" />-->
+<!--                <input type="password" placeholder="Password" />-->
+                <button type="submit">Register</button>
                 {{ form.errors }}
             </form>
         </div>
