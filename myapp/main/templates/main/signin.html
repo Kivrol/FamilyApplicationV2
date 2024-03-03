@@ -10,12 +10,14 @@
 <body>
     <div class="container" id="container">
         <div class="form-container sign-in-container">
-            <form action="#" method="post">
+            <form action="{% url 'signin' %}" method="post">
                 {%  csrf_token %}
                 <h1>Sign in</h1>
                 <span>or use your account</span>
-                <input type="text" placeholder="username" />
-                <input type="password" placeholder="Password" />
+                {{ form.userName }}
+                {{ form.password }}
+<!--                <input type="text" placeholder="username" />-->
+<!--                <input type="password" placeholder="Password" />-->
                 <a href="#">Forgot your password?</a>
                 <button>Sign In</button>
                 {{ form.errors }}
@@ -26,6 +28,8 @@
                 <div class="overlay-panel overlay-right">
                     <h1>Welcome back!</h1>
                     <p>Join us, plan and remember the coolest family moments</p>
+                    <p>if you haven't registered yet, click Sign up</p>
+                    <a href="{% url 'registration' %}"><button class="signUpButton">Sign up</button></a>
                 </div>
             </div>
         </div>

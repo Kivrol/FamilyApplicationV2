@@ -238,3 +238,8 @@ footer a {
 .forms {
     padding: -100px;
 }
+
+.signUpButton{
+    background-color: white;
+    color: red;
+}

@@ -19,6 +19,7 @@ class AuthUserData(models.Model):
         blank=True,
         validators=[FileExtensionValidator(allowed_extensions=['jpg, png, ico'])]
         )
+    familyIdentifierName = models.CharField(max_length=100, null=True, blank=True)
 
     @property
     def isAuthenticated(self):

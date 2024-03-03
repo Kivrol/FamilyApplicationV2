@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import AuthUserData
-from .forms import RegisterUserForm
+from .forms import RegisterUserForm, AuthUserForm
 
 
 def index(request):
@@ -14,7 +14,29 @@ def profileView(request):
 
 
 def login(request):
-    return render(request, 'main/login.html')
+    template_name = 'main/signin.html'
+    form = AuthUserForm()
+    if request.method == 'POST':
+        form = AuthUserForm(request.POST)
+        if form.is_valid():
+            userName = form.cleaned_data['userName']
+            password = form.cleaned_data['password']
+            if AuthUserData.objects.filter(userName=userName).exists():
+                user = AuthUserData.objects.get(userName=userName)
+                if password == user.password:
+                    return redirect('profile')
+                else:
+                    return render(request, 'main/backtologexist.html')
+            else:
+                return render(request, 'main/backtologexist.html')
+        else:
+            form = AuthUserForm()
+            return render(request, template_name, {'form': form})
+    return render(request, template_name, {'form': form})
+
+
+def logExist(request):
+    return render(request, 'main/backtologexist.html')
 
 
 def registration(request):
@@ -29,7 +51,7 @@ def registration(request):
             isNewUsername = AuthUserData.objects.filter(userName=userName).exists()
             if not isNewUsername:
                 AuthUserData.objects.create(userName=userName, password=password, name=name)
-                return redirect('login')
+                return redirect('signin')
             else:
                 return render(request, 'main/backtoregexist.html')
         else:

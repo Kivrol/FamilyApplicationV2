@@ -19,6 +19,19 @@ class RegisterUserForm(forms.Form):
                                })
 
 
+class AuthUserForm(forms.Form):
+    userName = forms.CharField(max_length=50, min_length=5, required=True,
+                               error_messages={
+                                   'min_length': 'Длина должна быть больше 5 символов',
+                                   'max_length': 'Длина должна быть мельше 50 символов'
+                               })
+    password = forms.CharField(max_length=50, min_length=8, required=True,
+                               error_messages={
+                                   'min_length': 'Длина должна быть больше 8 символов',
+                                   'max_length': 'Длина должна быть мельше 50 символов'
+                               })
+
+
 # class RegisterUserForm(forms.ModelForm):
 #     class Meta:
 #         model = AuthUserData
