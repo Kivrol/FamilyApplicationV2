@@ -3,21 +3,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Логин</title>
     <link rel="stylesheet" href="{% static 'main/css/login.css' %}">
-    <!-- <link rel="stylesheet" href="{% static 'main/js/login.js' %}"> -->
 </head>
 <body>
     <div class="container" id="container">
         <div class="form-container sign-in-container">
-            <form action="{% url 'signin' %}" method="post">
+            <form method="post">
                 {%  csrf_token %}
                 <h1>Войдите</h1>
                 <span>or use your account</span>
-                {{ form.userName }}
-                {{ form.password }}
-<!--                <input type="text" placeholder="username" />-->
-<!--                <input type="password" placeholder="Password" />-->
+                <input type="text" name="username" id="username" placeholder="Username" />
+                <input type="password" name="password" id="pwd" placeholder="Password" />
                 <a href="#">Forgot your password?</a>
                 <button>Войти</button>
                 {{ form.errors }}
@@ -29,7 +26,7 @@
                     <h1>Рады вас снова приветствовать!</h1>
                     <p>Заходите и бла бла бла</p>
                     <p>Если вы её не зарегистрированы, нажмите на Зарегистрироваться</p>
-                    <a href="{% url 'registration' %}"><button class="signUpButton">Зареистрироваться</button></a>
+                    <a href=""><button class="signUpButton">Зареистрироваться</button></a>
                 </div>
             </div>
         </div>
