@@ -1,5 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.views.generic.edit import CreateView
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+
+
 # from .models import AuthUserData
 # from .forms import RegisterUserForm, AuthUserForm
 
@@ -12,6 +18,18 @@ def index(request):
 def profileView(request):
     template_name = 'main/profile.html'
     return render(request, template_name)
+
+
+class RegistrationView(CreateView):
+    form_class = UserCreationForm
+    template_name = 'main/profile.html'
+    success_url = reverse_lazy('login')
+    # Здесь не работает email, не сохраняется в БД при регистрации
+
+
+def logout(request):
+    logout(request)
+    redirect('profile')
 
 
 # def login(request):

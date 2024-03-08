@@ -9,22 +9,16 @@
 <body>
     <div class="container" id="container">
         <div class="form-container sign-in-container">
-            <form action="{% url 'registration' %}" method="post">
+            <form method="post">
                 {%  csrf_token %}
                 <h1>Создайте аккаунт</h1>
                 <span>or use your email for registration</span>
-<!--                {{ form.as_p }}-->
-                <p class="forms">Имя</p>
-                {{ form.name }}
-                <p class="forms">Пользовательское имя</p>
-                {{ form.userName }}
-                <p class="forms">Пароль</p>
-                {{ form.password }}
-<!--                <input type="text" placeholder="Name" />-->
-<!--                <input type="text" placeholder="Username" />-->
-<!--                <input type="password" placeholder="Password" />-->
+                <input type="text" name="username" placeholder="Username" required="" />
+                <input type="email" name="email" placeholder="Email" required="" />
+                <input type="password" name="password1" placeholder="Password" required="" />
+                <input type="password" name="password2" placeholder="Confirm password" required="" />
                 <button type="submit">Зарегистрироваться</button>
-                {{ form.errors }}
+<!--                {{ form.errors }}-->
             </form>
         </div>
         <div class="overlay-container">
@@ -32,6 +26,7 @@
                 <div class="overlay-panel overlay-right">
                     <h1>Добро пожаловать!</h1>
                     <p>Присоеденись к нам, чтобы не забыть про самые выжные моменты вышей семьи</p>
+                    <a href="{% url 'profile' %}">Если у вас уже есть аккаунт то перейдите на страницу авторизации</a>
                 </div>
             </div>
         </div>

@@ -18,7 +18,7 @@
             <div class="profile">
                 <img class="profileHeaderImg" src="{% static 'main/img/profileImg.jpg' %}" alt="profileImg">
                 <h1 class="profileText">{{ user.username }}</h1>
-                <a href="{% url 'logout' %}?next=/main/profile"><i class="fa-solid fa-lg fa-arrow-right-from-bracket dropDownProfile"></i></a>
+                <a href="{% url 'logout' %}" methods="post"><i class="fa-solid fa-lg fa-arrow-right-from-bracket dropDownProfile"></i></a>
             </div>
         </header>
         <aside class="mainFunc">
