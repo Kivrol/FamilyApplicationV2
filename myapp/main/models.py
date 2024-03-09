@@ -17,8 +17,32 @@ class UserProfile(models.Model):
         validators=[FileExtensionValidator(allowed_extensions=['jpg, png, ico'])]
     )
     familyIdentifierName = models.CharField(max_length=100, null=True, blank=True)
-
+    family = models.ForeignKey('Family', on_delete=models.SET_NULL, blank=True, null=True)
     objects = models.Manager()
+
+    def __str__(self):
+        return self.user.username
+
+    class Meta:
+        verbose_name = 'UserProfile'
+
+
+class Family(models.Model):
+    name = models.CharField(max_length=50, blank=True, null=True, verbose_name='Название', name='name')
+    avatar = models.ImageField(
+        upload_to=f'uploads/',
+        null=True,
+        blank=True,
+        validators=[FileExtensionValidator(allowed_extensions=['png'])],
+        verbose_name='Аватар',
+        name='avatar'
+    )
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        if self.name is not None:
+            return self.name
+        return f'Семья №{self.id}'
 
 
 @receiver(post_save, sender=User)
