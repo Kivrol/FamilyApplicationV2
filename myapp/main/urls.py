@@ -14,5 +14,6 @@ urlpatterns = [
     # path('signin/', views.login, name='signin'),
     # path('registration/', views.registration, name='registration'),
     # path('registration/backtoregexist', views.regExist, name='regexist'),
-    # path('signin/backtologexist', views.logExist, name='logexist')
+    # path('signin/backtologexist', views.logExist, name='logexist'),
+    # path(),
 ]
