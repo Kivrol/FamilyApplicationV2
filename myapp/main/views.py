@@ -10,6 +10,7 @@ from .models import Family, UserProfile
 from .forms import RegisterForm, LoginForm, AddFamily
 
 
+@login_required
 def index(request):
     return render(request, 'main/index.html')
 
@@ -41,6 +42,7 @@ class FamilyView(View):
         family = UserProfile.objects.get(user=request.user).family
         return render(request, 'main/family.html', {'family': family})
 
+
 class CreateFamily(View):
     def get(self, request):
         form = AddFamily()
@@ -49,7 +51,7 @@ class CreateFamily(View):
     def post(self, request):
         form = AddFamily(request.POST, request.FILES)
         if form.is_valid():
-            family = Family(name=form.cleaned_data['name'], avatar=form.cleaned_data['avatar'])
+            family = Family(name=form.cleaned_data['name'], familyAvatar=form.cleaned_data['familyAvatar'])
             family.creator = request.user
             prof = UserProfile.objects.get(user=request.user)
             prof.family = family
@@ -79,13 +81,18 @@ class RegistrationView(View):
             form.save()
             return redirect('login')
         else:
+            print(form.errors)
             return redirect('registration')
-    # Здесь не работает email, не сохраняется в БД при регистрации
 
 
 def view_logout(request):
     logout(request)
     return redirect('profile')
+
+
+class EditProfile(View):
+    def get(self, request):
+        return render(request, 'main/editprofile.html')
 
 # def login(request):
 #     template_name = 'main/signin.html'

@@ -4,7 +4,7 @@ from . import models
 
 @admin.register(models.UserProfile)
 class UserProfile(admin.ModelAdmin):
-    list_display = ('user','phoneNumber', 'birthDate', 'patronimic', 'avatar')
+    list_display = ('user', 'phoneNumber', 'birthDate', 'patronimic', 'profileAvatar')
     list_display_links = ('user',)
 
 # @admin.register(models.AuthUserData)

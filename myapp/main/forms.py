@@ -32,7 +32,10 @@ class RegisterForm(UserCreationForm):
 class AddFamily(forms.ModelForm):
     class Meta:
         model = Family
-        fields = ['name', 'avatar']
+        fields = ['name', 'familyAvatar']
+
+
+# class EditProfileDefault()
 
 
 # class RegisterUserForm(forms.Form):

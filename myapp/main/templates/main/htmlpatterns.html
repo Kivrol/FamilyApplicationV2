@@ -5,7 +5,7 @@
     <head>
         <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}{% endblock %}</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js">
         <script src="https://kit.fontawesome.com/a673f0fe84.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
     </head>
@@ -16,7 +16,7 @@
                 <h1 class="logoText">LightList</h1>
             </div>
             <div class="profile">
-                <img class="profileHeaderImg" src="{% static 'main/img/profileImg.jpg' %}" alt="profileImg">
+                <img class="profileHeaderImg rounded-circle" src="{{ BASE_DIR }}/media/{{user.userprofile.profileAvatar}}" alt="profileImg">
                 <h1 class="profileText">{{ user.username }}</h1>
                 <a href="{% url 'logout' %}" methods="post"><i class="fa-solid fa-lg fa-arrow-right-from-bracket dropDownProfile"></i></a>
             </div>

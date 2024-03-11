@@ -1,7 +1,7 @@
 {% extends 'main/htmlpatterns.html' %}
 {% load static %}
 
-{% block title %} Ваш профиль {% endblock %}
+{% block title %} Ваша семья {% endblock %}
 
 {% block mainContent %}
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
 <link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
 <div class="main-content-padding">
-{%  if family %}
+{% if family %}
 {{ family.name }}
     <ul>
     {%  for member in family.userprofile_set.all %}

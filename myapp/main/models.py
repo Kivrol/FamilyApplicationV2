@@ -7,17 +7,18 @@ from django.dispatch import receiver
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phoneNumber = models.DecimalField(max_digits=10, decimal_places=0, null=True, blank=True)
-    birthDate = models.DateField(null=True, blank=True)
-    patronimic = models.CharField(max_length=50, null=True, blank=True)
+    phoneNumber = models.DecimalField(max_digits=10, decimal_places=0, null=True, blank=True, name='phoneNumber')
+    birthDate = models.DateField(null=True, blank=True, name='birthDate')
+    patronimic = models.CharField(max_length=50, null=True, blank=True, name='patronimic')
     avatar = models.ImageField(
-        upload_to=f'',
+        upload_to=f'UserProfileImg',
         null=True,
         blank=True,
-        validators=[FileExtensionValidator(allowed_extensions=['jpg, png, ico'])]
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'png', 'ico'])],
+        name='profileAvatar'
     )
     familyIdentifierName = models.CharField(max_length=100, null=True, blank=True)
-    family = models.ForeignKey('Family', on_delete=models.SET_NULL, blank=True, null=True)
+    family = models.ForeignKey('Family', on_delete=models.SET_NULL, blank=True, null=True, name='family')
     objects = models.Manager()
 
     def __str__(self):
@@ -30,12 +31,12 @@ class UserProfile(models.Model):
 class Family(models.Model):
     name = models.CharField(max_length=50, blank=True, null=True, verbose_name='Название', name='name')
     avatar = models.ImageField(
-        upload_to=f'uploads/',
+        upload_to=f'familyImg/',
         null=True,
         blank=True,
-        validators=[FileExtensionValidator(allowed_extensions=['png'])],
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'png', 'ico'])],
         verbose_name='Аватар',
-        name='avatar'
+        name='familyAvatar'
     )
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -46,13 +47,13 @@ class Family(models.Model):
 
 
 @receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
+def createUserProfile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
 
 
 @receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
+def saveUserProfile(sender, instance, **kwargs):
     instance.userprofile.save()
 
 # class AuthUserData(models.Model):
