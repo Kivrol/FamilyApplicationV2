@@ -8,11 +8,6 @@ from django.core.exceptions import ValidationError
 from .models import Family
 
 
-# class UserProfile(forms.ModelForm):
-#     class Meta:
-#         model = User
-#         fields = ('avatar', 'patronimic', 'birthDate', 'phoneNumber', 'familyIdentifierName')
-
 class LoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput())
     password = forms.CharField(widget=forms.PasswordInput())
@@ -33,7 +28,6 @@ class AddFamily(forms.ModelForm):
     class Meta:
         model = Family
         fields = ['name', 'familyAvatar']
-
 
 # class EditProfileDefault()
 

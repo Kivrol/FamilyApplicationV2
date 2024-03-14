@@ -5,7 +5,7 @@
     <head>
         <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}{% endblock %}</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js">
         <script src="https://kit.fontawesome.com/a673f0fe84.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
     </head>
@@ -22,7 +22,7 @@
             </div>
         </header>
         <aside class="mainFunc">
-            <ul class="ulMenu">
+            <ul>
                 <a href="{% url 'calendar' %}" class="linkMenu"><li class="liTxtSet"><i class="fa-regular fa-calendar-days iconList fa-sm"></i>Календарь</li></a>
                 <a href="" class="linkMenu"><li class="liTxtSet"><i class="fa-solid fa-list-ul iconList fa-sm"></i>Список продуктов</li></a>
                 <a href="" class="linkMenu"><li class="liTxtSet"><i class="fa-solid fa-cloud iconList fa-sm"></i>Облако</li></a>
