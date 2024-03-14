@@ -1,8 +1,11 @@
+import datetime
+
 from django.db import models
 from django.core.validators import FileExtensionValidator
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils import timezone
 
 
 class UserProfile(models.Model):
@@ -39,12 +42,41 @@ class Family(models.Model):
         name='familyAvatar'
     )
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
-
+    objects = models.Manager()
     def __str__(self):
         if self.name is not None:
             return self.name
         return f'Семья №{self.id}'
 
+
+class JoinFamilyRequest(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    family = models.ForeignKey(Family, on_delete=models.CASCADE)
+    accepted = models.BooleanField(default=False)
+    objects = models.Manager()
+
+    def __str__(self):
+        return f"{self.user} хочет вступить в {self.family}"
+
+    class Meta:
+        verbose_name = 'Запрос'
+        verbose_name_plural = 'Запросы'
+
+
+class ProductListComponent(models.Model):
+    family = models.ForeignKey(Family, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50, verbose_name='Наименование')
+    unit = models.CharField(max_length=2,choices=(('шт','шт'), ('кг','кг'), ('мл','мл')), verbose_name='Мера измерения')
+    amount = models.FloatField(verbose_name='Количество')
+    date = models.DateField(verbose_name='Дата добавления', default=timezone.now)
+    objects = models.Manager()
+
+    def __str__(self):
+        return f"{self.name} - {self.amount} {self.unit} ({self.date})"
+
+    class Meta:
+        verbose_name = 'Продукт'
+        verbose_name_plural = 'Продукты'
 
 @receiver(post_save, sender=User)
 def createUserProfile(sender, instance, created, **kwargs):

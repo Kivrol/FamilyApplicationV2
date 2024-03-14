@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 
 from django.core.exceptions import ValidationError
-from .models import Family
+from .models import Family, ProductListComponent
 
 
 class LoginForm(forms.Form):
@@ -29,6 +29,15 @@ class AddFamily(forms.ModelForm):
         model = Family
         fields = ['name', 'familyAvatar']
 
+
+class AddFamilyRequest(forms.Form):
+    family = forms.ModelChoiceField(queryset=None)
+
+
+class AddProduct(forms.ModelForm):
+    class Meta:
+        model = ProductListComponent
+        fields = ['name', 'unit', 'amount']
 # class EditProfileDefault()
 
 

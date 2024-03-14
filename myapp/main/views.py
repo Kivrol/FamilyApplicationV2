@@ -6,8 +6,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
-from .models import Family, UserProfile
-from .forms import RegisterForm, LoginForm, AddFamily
+from .models import Family, UserProfile, JoinFamilyRequest, ProductListComponent
+from .forms import RegisterForm, LoginForm, AddFamily, AddFamilyRequest, AddProduct
 
 
 @login_required
@@ -94,6 +94,72 @@ class EditProfile(View):
     def get(self, request):
         return render(request, 'main/editprofile.html')
 
+
+class JoinFamilyRequestView(View):
+    def get(self, request, *args, **kwargs):
+        form = AddFamilyRequest()
+        form.user = request.user
+        form.fields['family'].queryset = Family.objects
+        return render(request, 'main/join_family_request.html', {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = AddFamilyRequest(request.POST)
+        form.fields['family'].queryset = Family.objects
+        if form.is_valid():
+            JoinFamilyRequest(user=request.user, family=form.cleaned_data['family']).save()
+            return redirect('family')
+        return redirect('join_family')
+
+
+class ProcessRequest(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            requests = JoinFamilyRequest.objects.filter(family=Family.objects.filter(creator=request.user)[0])
+        except:
+            requests = None
+        return render(request, 'main/accept_family_request.html', {'requests': requests})
+
+
+class AcceptRequest(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            req = JoinFamilyRequest.objects.filter(id=kwargs['id'])[0]
+        except IndexError:
+            return redirect('process_request')
+        profile = UserProfile.objects.get(user=req.user)
+        profile.family = req.family
+        profile.save()
+        return redirect('family')
+
+
+class DeclineRequest(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            req = JoinFamilyRequest.objects.filter(id=kwargs['id'])[0]
+        except IndexError:
+            return redirect('process_request')
+        req.delete()
+        return redirect('process_request')
+
+
+class ProductList(View):
+    def get(self, request, *args, **kwargs):
+        form = AddProduct()
+        products = ProductListComponent.objects.filter(family=UserProfile.objects.get(user=request.user).family)
+        return render(request, 'main/product_list.html', {'form': form, 'products': products})
+
+    def post(self, request, *args, **kwargs):
+        form = AddProduct(request.POST)
+        if form.is_valid():
+            new_prod = form.save(commit=False)
+            new_prod.family = UserProfile.objects.get(user=request.user).family
+            new_prod.save()
+        return redirect('product_list')
+
+class DeleteProduct(View):
+    def get(self, request, *args, **kwargs):
+        ProductListComponent.objects.filter(id=kwargs['id']).delete()
+        return redirect('product_list')
 # def login(request):
 #     template_name = 'main/signin.html'
 #     form = AuthUserForm()

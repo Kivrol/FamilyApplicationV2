@@ -1,7 +1,7 @@
 {% extends 'main/htmlpatterns.html' %}
 {% load static %}
 
-{% block title %} Ваша семья {% endblock %}
+{% block title %} Запрос на добавление в группу {% endblock %}
 
 {% block mainContent %}
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
@@ -10,17 +10,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
 <link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
 <div class="main-content-padding">
-{% if family %}
-{{ family.name }}
-    <ul>
-    {%  for member in family.userprofile_set.all %}
-        <li>{{ member.user.username }}</li>
-    {%  endfor %}</ul>
-    <a href="{% url 'delete_family' id=family.id %}">Удалить</a>
-{% else %}
-    
-Семьи не добавлено. <a href="{% url 'add_family' %}">Добавить</a> или <a href="{%  url 'join_family' %}">Вступить</a>
-{% endif %}
+<form method="POST" action="">
+    {% csrf_token %}
+    {{  form.as_p }}
+    <input type="submit" value="Добавить">
+</form>
 
 </div>
 {% endblock %}
