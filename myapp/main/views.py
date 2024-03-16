@@ -7,7 +7,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from .models import Family, UserProfile, JoinFamilyRequest, ProductListComponent
-from .forms import RegisterForm, LoginForm, AddFamily, AddFamilyRequest, AddProduct
+from .forms import RegisterForm, LoginForm, AddFamily, AddFamilyRequest, AddProduct, EditProfileDefault
 
 
 @login_required
@@ -91,8 +91,21 @@ def view_logout(request):
 
 
 class EditProfile(View):
-    def get(self, request):
-        return render(request, 'main/editprofile.html')
+    def get(self, request, *args, **kwargs):
+        form = EditProfileDefault()
+        return render(request, 'main/editprofile.html', {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = EditProfileDefault(request.POST, request.FILES)
+        if form.is_valid():
+            # userName = form.cleaned_data["editUserName"]
+            # name = form.cleaned_data["editName"]
+            # surname = form.cleaned_data["editSurname"]
+            # patronimic = form.cleaned_data["editPatronymic"]
+            # avatar = form.cleaned_data["editAvatar"]
+            return redirect('editprofile')
+        else:
+            return redirect('profile')
 
 
 class JoinFamilyRequestView(View):

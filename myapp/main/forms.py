@@ -1,4 +1,6 @@
 from django import forms
+from django.core.validators import FileExtensionValidator
+
 from .models import UserProfile
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -38,8 +40,29 @@ class AddProduct(forms.ModelForm):
     class Meta:
         model = ProductListComponent
         fields = ['name', 'unit', 'amount']
-# class EditProfileDefault()
 
+
+class EditProfileDefault(forms.Form):
+    editUserName = forms.CharField(max_length=191, required=False,
+                                   error_messages={
+                                       'max_length': 'Длина должна быть меньше 191 символов'
+                                   })
+    editName = forms.CharField(max_length=191, required=False,
+                               error_messages={
+                                   'max_length': 'Длина должна быть меньше 191 символов'
+                               })
+    editSurName = forms.CharField(max_length=191, required=False,
+                                  error_messages={
+                                      'max_length': 'Длина должна быть меньше 191 символов'
+                                  })
+    editPatronimic = forms.CharField(max_length=191, required=False,
+                                     error_messages={
+                                         'max_length': 'Длина должна быть меньше 191 символов'
+                                     })
+    editAvatar = forms.ImageField(
+        required=False,
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'png', 'ico'])],
+    )
 
 # class RegisterUserForm(forms.Form):
 #     userName = forms.CharField(max_length=50, min_length=5, required=True,

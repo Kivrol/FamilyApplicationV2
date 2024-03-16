@@ -14,56 +14,59 @@
             <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="100px" height="100px" src="{{ BASE_DIR }}/media/{{user.userprofile.profileAvatar}}"><span class="font-weight-bold">{{ user.username }}</span><span class="text-black-50">{{ user.email }}</span><span> </span></div>
             <h1></h1>
         </div>
-        <div class="col-md-5 border-right">
-            <div class="p-3 py-5">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="text-right">Редактирование профиля</h4>
+        <form method="post" enctype='multipart/form-data'>
+            {% csrf_token %}
+            <div class="col-md-5 border-right">
+                <div class="p-3 py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-right">Редактирование профиля</h4>
+                    </div>
+                    <div class="row mt-2">
+                        {% if user.username is not None %}
+                        <div class="col-md-12"><label class="labels">Никнейм</label><input type="text" class="form-control" value="" placeholder="{{user.username}}"  name="editUserName"></div>
+                        {% else %}
+                        <div class="col-md-12"><label class="labels">Никнейм</label><input type="text" class="form-control" value="" placeholder="Введите никнейм" name="editUserName"></div>
+                        {% endif %}
+                    </div>
+                    <div class="row mt-2">
+                        {% if user.first_name is not None %}
+                        <div class="col-md-12"><label class="labels">Имя</label><input type="text" class="form-control" value="" placeholder="{{user.first_name}}"  name="editName"></div>
+                        {% else %}
+                        <div class="col-md-12"><label class="labels">Имя</label><input type="text" class="form-control" value="" placeholder="Введите имя" name="editName"></div>
+                        {% endif %}
+
+                        {% if user.last_name is not None %}
+                        <div class="col-md-12"><label class="labels">Фамилия</label><input type="text" class="form-control" value="" placeholder="{{ user.last_name }}" name="editSurname"></div>
+                        {% else %}
+                        <div class="col-md-12"><label class="labels">Фамилия</label><input type="text" class="form-control" value="" placeholder="Введите фамилию" name="editSurname"></div>
+                        {% endif %}
+
+                        {% if user.userprofile.patronimic is not None %}
+                        <div class="col-md-12"><label class="labels">Отчество</label><input type="text" class="form-control" value="" placeholder="{{ user.userprofile.patronimic }}" name="editPatronimic"></div>
+                        {% else %}
+                        <div class="col-md-12"><label class="labels">Отчество</label><input type="text" class="form-control" value="" placeholder="Введите отчество" name="editPatronimic"></div>
+                        {% endif %}
+
+                    </div>
+                    <div class="row mt-3">
+                        {% if user.email is not None %}
+                        <div class="col-md-12"><label class="labels">Электронная почта</label><input type="tel" class="form-control" placeholder="{{user.email}}" value="" name=""></div>
+                        {% else %}
+                        <div class="col-md-12"><label class="labels">Электронная почта</label><input type="tel" class="form-control" placeholder="Введите электронную почту" value="" name=""></div>
+                        {% endif %}
+
+                        {% if user.userprofile.phoneNumber is not None %}
+                        <div class="col-md-12"><label class="labels">Номер телефона</label><input type="tel" class="form-control" placeholder="{{user.userprofile.phoneNumber}}" value="" name=""></div>
+                        {% else %}
+                        <div class="col-md-12"><label class="labels">Номер телефона</label><input type="tel" class="form-control" placeholder="Введите номер телефона" value="" name=""></div>
+                        {% endif %}
+
+                        <div class="col-md-12"><label class="labels">Аватар</label><input type="file" class="form-control" value="" name="editAvatar" accept=".png, .jpg, .ico"></div>
+                    </div>
+                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="submit">Save Profile</button></div>
                 </div>
-                <div class="row mt-2">
-                    {% if user.username is not None %}
-                    <div class="col-md-12"><label class="labels">Никнейм</label><input type="text" class="form-control" value="" placeholder="{{user.username}}"  name="name"></div>
-                    {% else %}
-                    <div class="col-md-12"><label class="labels">Никнейм</label><input type="text" class="form-control" value="" placeholder="Введите никнейм" name="name"></div>
-                    {% endif %}
-                </div>
-                <div class="row mt-2">
-                    {% if user.first_name is not None %}
-                    <div class="col-md-12"><label class="labels">Имя</label><input type="text" class="form-control" value="" placeholder="{{user.first_name}}"  name="name"></div>
-                    {% else %}
-                    <div class="col-md-12"><label class="labels">Имя</label><input type="text" class="form-control" value="" placeholder="Введите имя" name="name"></div>
-                    {% endif %}
-
-                    {% if user.last_name is not None %}
-                    <div class="col-md-12"><label class="labels">Фамилия</label><input type="text" class="form-control" value="" placeholder="{{ user.last_name }}" name="surname"></div>
-                    {% else %}
-                    <div class="col-md-12"><label class="labels">Фамилия</label><input type="text" class="form-control" value="" placeholder="Введите фамилию" name="surname"></div>
-                    {% endif %}
-
-                    {% if user.userprofile.patronimic is not None %}
-                    <div class="col-md-12"><label class="labels">Отчество</label><input type="text" class="form-control" value="" placeholder="{{ user.userprofile.patronimic }}" name="patronimic"></div>
-                    {% else %}
-                    <div class="col-md-12"><label class="labels">Отчество</label><input type="text" class="form-control" value="" placeholder="Введите отчество" name="patronimic"></div>
-                    {% endif %}
-
-                </div>
-                <div class="row mt-3">
-                    {% if user.email is not None %}
-                    <div class="col-md-12"><label class="labels">Электронная почта</label><input type="tel" class="form-control" placeholder="{{user.email}}" value="" name="phoneNumber"></div>
-                    {% else %}
-                    <div class="col-md-12"><label class="labels">Электронная почта</label><input type="tel" class="form-control" placeholder="Введите электронную почту" value="" name="phoneNumber"></div>
-                    {% endif %}
-
-                    {% if user.userprofile.phoneNumber is not None %}
-                    <div class="col-md-12"><label class="labels">Номер телефона</label><input type="tel" class="form-control" placeholder="{{user.userprofile.phoneNumber}}" value="" name="phoneNumber"></div>
-                    {% else %}
-                    <div class="col-md-12"><label class="labels">Номер телефона</label><input type="tel" class="form-control" placeholder="Введите номер телефона" value="" name="phoneNumber"></div>
-                    {% endif %}
-
-                    <div class="col-md-12"><label class="labels">Аватар</label><input type="file" class="form-control" value="" name="profileAvatar" accept=".png, .jpg, .ico"></div>
-                </div>
-                <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button">Save Profile</button></div>
             </div>
-        </div>
+        </form>
     </div>
 </div>
 </div>

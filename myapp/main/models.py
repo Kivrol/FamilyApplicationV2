@@ -1,5 +1,4 @@
 import datetime
-
 from django.db import models
 from django.core.validators import FileExtensionValidator
 from django.contrib.auth.models import User
@@ -43,6 +42,7 @@ class Family(models.Model):
     )
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
     objects = models.Manager()
+
     def __str__(self):
         if self.name is not None:
             return self.name
@@ -66,7 +66,8 @@ class JoinFamilyRequest(models.Model):
 class ProductListComponent(models.Model):
     family = models.ForeignKey(Family, on_delete=models.CASCADE)
     name = models.CharField(max_length=50, verbose_name='Наименование')
-    unit = models.CharField(max_length=2,choices=(('шт','шт'), ('кг','кг'), ('мл','мл')), verbose_name='Мера измерения')
+    unit = models.CharField(max_length=2, choices=(('шт', 'шт'), ('кг', 'кг'), ('мл', 'мл')),
+                            verbose_name='Мера измерения')
     amount = models.FloatField(verbose_name='Количество')
     date = models.DateField(verbose_name='Дата добавления', default=timezone.now)
     objects = models.Manager()
@@ -77,6 +78,7 @@ class ProductListComponent(models.Model):
     class Meta:
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
+
 
 @receiver(post_save, sender=User)
 def createUserProfile(sender, instance, created, **kwargs):
