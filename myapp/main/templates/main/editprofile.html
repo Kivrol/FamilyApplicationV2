@@ -29,16 +29,16 @@
                         {% endif %}
                     </div>
                     <div class="row mt-2">
-                        {% if user.first_name is not None %}
-                        <div class="col-md-12"><label class="labels">Имя</label><input type="text" class="form-control" value="" placeholder="{{user.first_name}}"  name="first_name"></div>
-                        {% else %}
-                        <div class="col-md-12"><label class="labels">Имя</label><input type="text" class="form-control" value="" placeholder="Введите имя" name="first_name"></div>
-                        {% endif %}
-
                         {% if user.last_name is not None %}
                         <div class="col-md-12"><label class="labels">Фамилия</label><input type="text" class="form-control" value="" placeholder="{{ user.last_name }}" name="last_name"></div>
                         {% else %}
                         <div class="col-md-12"><label class="labels">Фамилия</label><input type="text" class="form-control" value="" placeholder="Введите фамилию" name="last_name"></div>
+                        {% endif %}
+
+                        {% if user.first_name is not None %}
+                        <div class="col-md-12"><label class="labels">Имя</label><input type="text" class="form-control" value="" placeholder="{{user.first_name}}"  name="first_name"></div>
+                        {% else %}
+                        <div class="col-md-12"><label class="labels">Имя</label><input type="text" class="form-control" value="" placeholder="Введите имя" name="first_name"></div>
                         {% endif %}
 
                         {% if user.userprofile.patronimic is not None %}
