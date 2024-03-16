@@ -42,27 +42,38 @@ class AddProduct(forms.ModelForm):
         fields = ['name', 'unit', 'amount']
 
 
-class EditProfileDefault(forms.Form):
-    editUserName = forms.CharField(max_length=191, required=False,
+class EditUserForm(forms.Form):
+    username = forms.CharField(max_length=191, required=False,
                                    error_messages={
                                        'max_length': 'Длина должна быть меньше 191 символов'
                                    })
-    editName = forms.CharField(max_length=191, required=False,
+    first_name = forms.CharField(max_length=191, required=False,
                                error_messages={
                                    'max_length': 'Длина должна быть меньше 191 символов'
                                })
-    editSurName = forms.CharField(max_length=191, required=False,
+    last_name = forms.CharField(max_length=191, required=False,
                                   error_messages={
                                       'max_length': 'Длина должна быть меньше 191 символов'
                                   })
-    editPatronimic = forms.CharField(max_length=191, required=False,
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name']
+
+
+class EditProfileForm(forms.Form):
+    patronimic = forms.CharField(max_length=191, required=False,
                                      error_messages={
                                          'max_length': 'Длина должна быть меньше 191 символов'
                                      })
-    editAvatar = forms.ImageField(
+    profileAvatar = forms.ImageField(
         required=False,
         validators=[FileExtensionValidator(allowed_extensions=['jpg', 'png', 'ico'])],
     )
+
+    class Meta:
+        model = UserProfile
+        fields = ['patronimic', 'profileAvatar']
 
 # class RegisterUserForm(forms.Form):
 #     userName = forms.CharField(max_length=50, min_length=5, required=True,

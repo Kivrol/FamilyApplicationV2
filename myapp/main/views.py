@@ -7,7 +7,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from .models import Family, UserProfile, JoinFamilyRequest, ProductListComponent
-from .forms import RegisterForm, LoginForm, AddFamily, AddFamilyRequest, AddProduct, EditProfileDefault
+from .forms import RegisterForm, LoginForm, AddFamily, AddFamilyRequest, AddProduct, EditUserForm, EditProfileForm
 
 
 @login_required
@@ -90,20 +90,27 @@ def view_logout(request):
     return redirect('profile')
 
 
+# Доработать редактирование профиля, нужно сделать проверку на пустые поля, и если они пустые, то не заменять поля в БД
 class EditProfile(View):
     def get(self, request, *args, **kwargs):
-        form = EditProfileDefault()
-        return render(request, 'main/editprofile.html', {'form': form})
+        userForm = EditUserForm()
+        profileForm = EditProfileForm()
+        return render(request, 'main/editprofile.html', {'userForm': userForm, 'profileForm': profileForm})
 
     def post(self, request, *args, **kwargs):
-        form = EditProfileDefault(request.POST, request.FILES)
-        if form.is_valid():
-            # userName = form.cleaned_data["editUserName"]
-            # name = form.cleaned_data["editName"]
-            # surname = form.cleaned_data["editSurname"]
-            # patronimic = form.cleaned_data["editPatronymic"]
-            # avatar = form.cleaned_data["editAvatar"]
-            return redirect('editprofile')
+        userForm = EditUserForm(request.POST)
+        profileForm = EditProfileForm(request.POST, request.FILES)
+        if userForm.is_valid() and profileForm.is_valid():
+            user = User.objects.get(id=request.user.id)
+            profile = UserProfile.objects.get(user=user)
+            user.username = userForm.cleaned_data['username']
+            user.first_name = userForm.cleaned_data['first_name']
+            user.last_name = userForm.cleaned_data['last_name']
+            user.save()
+            profile.patronimic = profileForm.cleaned_data['patronimic']
+            profile.profileAvatar = profileForm.cleaned_data['profileAvatar']
+            profile.save()
+            return redirect('profile')
         else:
             return redirect('profile')
 
