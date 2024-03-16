@@ -18,8 +18,4 @@ urlpatterns = [
     path('process_request/<int:id>', views.ProcessRequest.as_view(), name='process_request'),
     path('product_list/', views.ProductList.as_view(), name='product_list'),
     path('delete_product/<int:id>', views.DeleteProduct.as_view(), name='delete_product'),
-    # path('registration/', views.registration, name='registration'),
-    # path('registration/backtoregexist', views.regExist, name='regexist'),
-    # path('signin/backtologexist', views.logExist, name='logexist'),
-    # path(),
 ]
