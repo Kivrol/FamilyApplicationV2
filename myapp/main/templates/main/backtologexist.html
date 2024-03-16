@@ -7,9 +7,11 @@
     <link rel="stylesheet" href="{% static 'main/css/existregerror.css' %}">
 </head>
 <body>
-    <div class="errorblock">
-        <h2>Неверный логин или пароль</h2>
-        <a href="{% url 'signin' %}"><button>Вернуться на страницу логина</button></a>
-    </div>
+<div class="errorblock">
+    <h2>Неверный логин или пароль</h2>
+    <a href="{% url 'signin' %}">
+        <button>Вернуться на страницу логина</button>
+    </a>
+</div>
 </body>
 </html>

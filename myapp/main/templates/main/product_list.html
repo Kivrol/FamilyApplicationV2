@@ -7,12 +7,13 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
 <link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
 <div class="main-content-padding">
-{%  if products|length > 0 %}
-<table class="table">
-    <thead>
+    {% if products|length > 0 %}
+    <table class="table">
+        <thead>
         <tr>
             <td>Взял</td>
             <td>Название</td>
@@ -20,9 +21,9 @@
             <td>Дата добавления</td>
             <td>Действия</td>
         </tr>
-    </thead>
+        </thead>
 
-    {% for pr in products %}
+        {% for pr in products %}
         <tr>
             <td><input type="checkbox"></td>
             <td>{{ pr.name }}</td>
@@ -30,16 +31,16 @@
             <td>{{ pr.date }}</td>
             <td><a class="btn btn-success" href="{%  url 'delete_product' id=pr.id %}">Куплено</a></td>
         </tr>
-    {% endfor %}
+        {% endfor %}
 
-</table>
-    {%  else %}
+    </table>
+    {% else %}
     Список покупок пуст!
-{%  endif %}
-<form method="POST" action="">
-    {% csrf_token %}
-    {{  form.as_p }}
-    <input type="submit" value="Добавить">
-</form>
+    {% endif %}
+    <form method="POST" action="">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Добавить">
+    </form>
 </div>
 {% endblock %}

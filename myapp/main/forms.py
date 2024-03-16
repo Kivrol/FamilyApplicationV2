@@ -44,17 +44,17 @@ class AddProduct(forms.ModelForm):
 
 class EditUserForm(forms.Form):
     username = forms.CharField(max_length=191, required=False,
-                                   error_messages={
-                                       'max_length': 'Длина должна быть меньше 191 символов'
-                                   })
-    first_name = forms.CharField(max_length=191, required=False,
                                error_messages={
                                    'max_length': 'Длина должна быть меньше 191 символов'
                                })
+    first_name = forms.CharField(max_length=191, required=False,
+                                 error_messages={
+                                     'max_length': 'Длина должна быть меньше 191 символов'
+                                 })
     last_name = forms.CharField(max_length=191, required=False,
-                                  error_messages={
-                                      'max_length': 'Длина должна быть меньше 191 символов'
-                                  })
+                                error_messages={
+                                    'max_length': 'Длина должна быть меньше 191 символов'
+                                })
 
     class Meta:
         model = User
@@ -63,9 +63,9 @@ class EditUserForm(forms.Form):
 
 class EditProfileForm(forms.Form):
     patronimic = forms.CharField(max_length=191, required=False,
-                                     error_messages={
-                                         'max_length': 'Длина должна быть меньше 191 символов'
-                                     })
+                                 error_messages={
+                                     'max_length': 'Длина должна быть меньше 191 символов'
+                                 })
     profileAvatar = forms.ImageField(
         required=False,
         validators=[FileExtensionValidator(allowed_extensions=['jpg', 'png', 'ico'])],

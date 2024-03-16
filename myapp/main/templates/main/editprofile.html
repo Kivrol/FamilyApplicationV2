@@ -11,7 +11,11 @@
 <div class="container rounded bg-white mt-5 mb-5">
     <div class="row">
         <div class="col-md-3 border-right">
-            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="100px" height="100px" src="{{ BASE_DIR }}/media/{{user.userprofile.profileAvatar}}"><span class="font-weight-bold">{{ user.username }}</span><span class="text-black-50">{{ user.email }}</span><span> </span></div>
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5"
+                                                                                         width="100px" height="100px"
+                                                                                         src="{{ BASE_DIR }}/media/{{user.userprofile.profileAvatar}}"><span
+                    class="font-weight-bold">{{ user.username }}</span><span
+                    class="text-black-50">{{ user.email }}</span><span> </span></div>
             <h1></h1>
         </div>
         <form method="post" enctype='multipart/form-data'>
@@ -23,47 +27,95 @@
                     </div>
                     <div class="row mt-2">
                         {% if user.username is not None %}
-                        <div class="col-md-12"><label class="labels">Никнейм</label><input type="text" class="form-control" value="" placeholder="{{user.username}}"  name="username"></div>
+                        <div class="col-md-12"><label class="labels">Никнейм</label><input type="text"
+                                                                                           class="form-control" value=""
+                                                                                           placeholder="{{user.username}}"
+                                                                                           name="username"></div>
                         {% else %}
-                        <div class="col-md-12"><label class="labels">Никнейм</label><input type="text" class="form-control" value="" placeholder="Введите никнейм" name="username"></div>
+                        <div class="col-md-12"><label class="labels">Никнейм</label><input type="text"
+                                                                                           class="form-control" value=""
+                                                                                           placeholder="Введите никнейм"
+                                                                                           name="username"></div>
                         {% endif %}
                     </div>
                     <div class="row mt-2">
                         {% if user.last_name is not None %}
-                        <div class="col-md-12"><label class="labels">Фамилия</label><input type="text" class="form-control" value="" placeholder="{{ user.last_name }}" name="last_name"></div>
+                        <div class="col-md-12"><label class="labels">Фамилия</label><input type="text"
+                                                                                           class="form-control" value=""
+                                                                                           placeholder="{{ user.last_name }}"
+                                                                                           name="last_name"></div>
                         {% else %}
-                        <div class="col-md-12"><label class="labels">Фамилия</label><input type="text" class="form-control" value="" placeholder="Введите фамилию" name="last_name"></div>
+                        <div class="col-md-12"><label class="labels">Фамилия</label><input type="text"
+                                                                                           class="form-control" value=""
+                                                                                           placeholder="Введите фамилию"
+                                                                                           name="last_name"></div>
                         {% endif %}
 
                         {% if user.first_name is not None %}
-                        <div class="col-md-12"><label class="labels">Имя</label><input type="text" class="form-control" value="" placeholder="{{user.first_name}}"  name="first_name"></div>
+                        <div class="col-md-12"><label class="labels">Имя</label><input type="text" class="form-control"
+                                                                                       value=""
+                                                                                       placeholder="{{user.first_name}}"
+                                                                                       name="first_name"></div>
                         {% else %}
-                        <div class="col-md-12"><label class="labels">Имя</label><input type="text" class="form-control" value="" placeholder="Введите имя" name="first_name"></div>
+                        <div class="col-md-12"><label class="labels">Имя</label><input type="text" class="form-control"
+                                                                                       value=""
+                                                                                       placeholder="Введите имя"
+                                                                                       name="first_name"></div>
                         {% endif %}
 
                         {% if user.userprofile.patronimic is not None %}
-                        <div class="col-md-12"><label class="labels">Отчество</label><input type="text" class="form-control" value="" placeholder="{{ user.userprofile.patronimic }}" name="patronimic"></div>
+                        <div class="col-md-12"><label class="labels">Отчество</label><input type="text"
+                                                                                            class="form-control"
+                                                                                            value=""
+                                                                                            placeholder="{{ user.userprofile.patronimic }}"
+                                                                                            name="patronimic"></div>
                         {% else %}
-                        <div class="col-md-12"><label class="labels">Отчество</label><input type="text" class="form-control" value="" placeholder="Введите отчество" name="patronimic"></div>
+                        <div class="col-md-12"><label class="labels">Отчество</label><input type="text"
+                                                                                            class="form-control"
+                                                                                            value=""
+                                                                                            placeholder="Введите отчество"
+                                                                                            name="patronimic"></div>
                         {% endif %}
 
                     </div>
                     <div class="row mt-3">
                         {% if user.email is not None %}
-                        <div class="col-md-12"><label class="labels">Электронная почта</label><input type="tel" class="form-control" placeholder="{{user.email}}" value="" name=""></div>
+                        <div class="col-md-12"><label class="labels">Электронная почта</label><input type="tel"
+                                                                                                     class="form-control"
+                                                                                                     placeholder="{{user.email}}"
+                                                                                                     value="" name="">
+                        </div>
                         {% else %}
-                        <div class="col-md-12"><label class="labels">Электронная почта</label><input type="tel" class="form-control" placeholder="Введите электронную почту" value="" name=""></div>
+                        <div class="col-md-12"><label class="labels">Электронная почта</label><input type="tel"
+                                                                                                     class="form-control"
+                                                                                                     placeholder="Введите электронную почту"
+                                                                                                     value="" name="">
+                        </div>
                         {% endif %}
 
                         {% if user.userprofile.phoneNumber is not None %}
-                        <div class="col-md-12"><label class="labels">Номер телефона</label><input type="tel" class="form-control" placeholder="{{user.userprofile.phoneNumber}}" value="" name=""></div>
+                        <div class="col-md-12"><label class="labels">Номер телефона</label><input type="tel"
+                                                                                                  class="form-control"
+                                                                                                  placeholder="{{user.userprofile.phoneNumber}}"
+                                                                                                  value="" name="">
+                        </div>
                         {% else %}
-                        <div class="col-md-12"><label class="labels">Номер телефона</label><input type="tel" class="form-control" placeholder="Введите номер телефона" value="" name=""></div>
+                        <div class="col-md-12"><label class="labels">Номер телефона</label><input type="tel"
+                                                                                                  class="form-control"
+                                                                                                  placeholder="Введите номер телефона"
+                                                                                                  value="" name="">
+                        </div>
                         {% endif %}
 
-                        <div class="col-md-12"><label class="labels">Аватар</label><input type="file" class="form-control" value="" name="profileAvatar" accept=".png, .jpg, .ico"></div>
+                        <div class="col-md-12"><label class="labels">Аватар</label><input type="file"
+                                                                                          class="form-control" value=""
+                                                                                          name="profileAvatar"
+                                                                                          accept=".png, .jpg, .ico">
+                        </div>
                     </div>
-                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="submit">Save Profile</button></div>
+                    <div class="mt-5 text-center">
+                        <button class="btn btn-primary profile-button" type="submit">Save Profile</button>
+                    </div>
                 </div>
             </div>
         </form>

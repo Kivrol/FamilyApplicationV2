@@ -7,38 +7,40 @@
     <link rel="stylesheet" href="{% static 'main/css/login.css' %}">
 </head>
 <body>
-    <div class="container" id="container">
-        <div class="form-container sign-in-container">
-            <form method="post">
-                {%  csrf_token %}
-                <h1>Войдите</h1>
-                <span>or use your account</span>
-                <input type="text" name="username" id="username" placeholder="Username" />
-                <input type="password" name="password" id="pwd" placeholder="Password" />
-                <a href="#">Forgot your password?</a>
-                <button>Войти</button>
-                {{ form.errors }}
-            </form>
-        </div>
-        <div class="overlay-container">
-            <div class="overlay">
-                <div class="overlay-panel overlay-right">
-                    <h1>Рады вас снова приветствовать!</h1>
-                    <p></p>
-                    <p>Если вы её не зарегистрированы, нажмите на Зарегистрироваться</p>
-                    <a href="{% url 'registration' %}"><button class="signUpButton">Зареистрироваться</button></a>
-                </div>
+<div class="container" id="container">
+    <div class="form-container sign-in-container">
+        <form method="post">
+            {% csrf_token %}
+            <h1>Войдите</h1>
+            <span>or use your account</span>
+            <input type="text" name="username" id="username" placeholder="Username"/>
+            <input type="password" name="password" id="pwd" placeholder="Password"/>
+            <a href="#">Forgot your password?</a>
+            <button>Войти</button>
+            {{ form.errors }}
+        </form>
+    </div>
+    <div class="overlay-container">
+        <div class="overlay">
+            <div class="overlay-panel overlay-right">
+                <h1>Рады вас снова приветствовать!</h1>
+                <p></p>
+                <p>Если вы её не зарегистрированы, нажмите на Зарегистрироваться</p>
+                <a href="{% url 'registration' %}">
+                    <button class="signUpButton">Зареистрироваться</button>
+                </a>
             </div>
         </div>
     </div>
+</div>
 
 <footer>
-	<p>
-		Created with <i class="fa fa-heart"></i> by
-		<a target="_blank" href="https://florin-pop.com">Florin Pop</a>
-		- Read how I created this and how you can join the challenge
-		<a target="_blank" href="https://www.florin-pop.com/blog/2019/03/double-slider-sign-in-up-form/">here</a>.
-	</p>
+    <p>
+        Created with <i class="fa fa-heart"></i> by
+        <a target="_blank" href="https://florin-pop.com">Florin Pop</a>
+        - Read how I created this and how you can join the challenge
+        <a target="_blank" href="https://www.florin-pop.com/blog/2019/03/double-slider-sign-in-up-form/">here</a>.
+    </p>
 </footer>
 </body>
 </html>

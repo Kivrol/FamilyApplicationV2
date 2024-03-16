@@ -7,9 +7,11 @@
     <link rel="stylesheet" href="{% static 'main/css/existregerror.css' %}">
 </head>
 <body>
-    <div class="errorblock">
-        <h2>Пользователь с таким именем пользователя уже существует</h2>
-        <a href="{% url 'registration' %}"><button>Вернуться на страницу регистрации</button></a>
-    </div>
+<div class="errorblock">
+    <h2>Пользователь с таким именем пользователя уже существует</h2>
+    <a href="{% url 'registration' %}">
+        <button>Вернуться на страницу регистрации</button>
+    </a>
+</div>
 </body>
 </html>

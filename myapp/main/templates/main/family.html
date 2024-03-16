@@ -7,21 +7,26 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
 <link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
 <div class="main-content-padding">
-    <a href=" {% url 'process_request' %} "><button class="btn btn-primary">Запросы</button></a>
-{% if family %}
-{{ family.name }}
+    <a href=" {% url 'process_request' %} ">
+        <button class="btn btn-primary">Запросы</button>
+    </a>
+    {% if family %}
+    {{ family.name }}
     <ul>
-    {%  for member in family.userprofile_set.all %}
+        {% for member in family.userprofile_set.all %}
         <li>{{ member.user.username }}</li>
-    {%  endfor %}</ul>
+        {% endfor %}
+    </ul>
     <a href="{% url 'delete_family' id=family.id %}">Удалить</a>
-{% else %}
-    
-Семьи не добавлено. <a href="{% url 'add_family' %}">Добавить</a> или <a href="{%  url 'join_family' %}">Вступить</a>
-{% endif %}
+    {% else %}
+
+    Семьи не добавлено. <a href="{% url 'add_family' %}">Добавить</a> или <a
+        href="{%  url 'join_family' %}">Вступить</a>
+    {% endif %}
 
 </div>
 {% endblock %}

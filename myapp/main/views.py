@@ -183,6 +183,7 @@ class ProductList(View):
             new_prod.save()
         return redirect('product_list')
 
+
 class DeleteProduct(View):
     def get(self, request, *args, **kwargs):
         ProductListComponent.objects.filter(id=kwargs['id']).delete()

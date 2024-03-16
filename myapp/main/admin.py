@@ -7,6 +7,7 @@ class UserProfile(admin.ModelAdmin):
     list_display = ('user', 'phoneNumber', 'birthDate', 'patronimic', 'profileAvatar')
     list_display_links = ('user',)
 
+
 # @admin.register(models.AuthUserData)
 # class AuthUserAdmin(admin.ModelAdmin):
 #     list_display = ('userName', 'password', 'email', 'phoneNumber', 'birthDate', 'joinDate', 'name', 'surname', 'patronimic', 'avatar')

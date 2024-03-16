@@ -20,7 +20,7 @@ header .logo {
     align-items: center;
 }
 
- header .profile {
+header .profile {
     float: right;
     width: 300px;
     height: 50px;
@@ -86,7 +86,7 @@ aside ul li:hover {
 
 .iconList {
     width: 20px;
-    margin-right:10px;
+    margin-right: 10px;
 }
 
 .linkMenu {

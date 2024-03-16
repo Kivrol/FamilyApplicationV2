@@ -2,7 +2,7 @@ body {
     background-color: #f9f9fa
 }
 
-.main-content-padding{
+.main-content-padding {
     padding-top: 250px;
     padding-left: 450px;
 }
@@ -13,8 +13,8 @@ body {
 
 .card {
     border-radius: 5px;
-    -webkit-box-shadow: 0 1px 20px 0 rgba(69,90,100,0.08);
-    box-shadow: 0 1px 20px 0 rgba(69,90,100,0.08);
+    -webkit-box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
     border: none;
     margin-bottom: 30px;
 }
@@ -32,7 +32,7 @@ body {
 }
 
 .bg-c-lite-green {
-        background: -webkit-gradient(linear, left top, right top, from(#f29263), to(#ee5a6f));
+    background: -webkit-gradient(linear, left top, right top, from(#f29263), to(#ee5a6f));
     background: linear-gradient(to right, #ee5a6f, #f29263);
 }
 
@@ -56,10 +56,10 @@ h6 {
     line-height: 25px;
 }
 
-@media only screen and (min-width: 1400px){
-p {
-    font-size: 14px;
-}
+@media only screen and (min-width: 1400px) {
+    p {
+        font-size: 14px;
+    }
 }
 
 .card-block {
