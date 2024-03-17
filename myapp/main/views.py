@@ -1,10 +1,11 @@
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView
 from django.views.generic import View
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse_lazy
 from .models import Family, UserProfile, JoinFamilyRequest, ProductListComponent
 from .forms import RegisterForm, LoginForm, AddFamily, AddFamilyRequest, AddProduct, EditUserForm, EditProfileForm
@@ -23,24 +24,28 @@ def profileView(request):
 
 class LoginView(View):
     def get(self, request):
-        form = LoginForm()
+        form = AuthenticationForm()
         return render(request, 'registration/login.html', {'form': form})
 
     def post(self, request):
-        form = LoginForm(request.POST)
+        form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = authenticate(request, username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if user is not None:
                 login(request, user)
-                return redirect(reverse_lazy('profile'))
-        else:
-            return redirect('login')
+                return redirect('profile')
+
+        return render(request, 'registration/login.html', {'form': form})
 
 
 class FamilyView(View):
     def get(self, request):
         family = UserProfile.objects.get(user=request.user).family
-        return render(request, 'main/family.html', {'family': family})
+        is_creator = False
+        for f in Family.objects.all():
+            if request.user == f.creator:
+                is_creator = True
+        return render(request, 'main/family.html', {'family': family, 'is_creator': is_creator})
 
 
 class CreateFamily(View):
@@ -66,8 +71,25 @@ class CreateFamily(View):
 
 class DeleteFamily(View):
     def get(self, request, *args, **kwargs):
-        Family.objects.get(id=kwargs['id']).delete()
+        family = Family.objects.get(id=kwargs['id'])
+        if family.creator == request.user:
+            family.delete()
         return redirect('profile')
+
+
+class ExitFromGroup(View):
+    def get(self, request, *args, **kwargs):
+        up = UserProfile.objects.get(user=request.user)
+        family = Family.objects.get(id=kwargs['id'])
+        if family.creator == request.user:
+            if len(family.userprofile_set.all()) >= 2:
+                family.creator = family.userprofile_set.all()[1].user
+                family.save()
+            else:
+                family.delete()
+        up.family = None
+        up.save()
+        return redirect('family')
 
 
 class RegistrationView(View):
@@ -81,8 +103,7 @@ class RegistrationView(View):
             form.save()
             return redirect('login')
         else:
-            print(form.errors)
-            return redirect('registration')
+            return render(request, 'main/registration.html', {'form': form})
 
 
 def view_logout(request):
@@ -93,48 +114,41 @@ def view_logout(request):
 # Доработать редактирование профиля, нужно сделать проверку на пустые поля, и если они пустые, то не заменять поля в БД
 class EditProfile(View):
     def get(self, request, *args, **kwargs):
-        userForm = EditUserForm()
-        profileForm = EditProfileForm()
+        userForm = EditUserForm(instance=request.user)
+
+        up = UserProfile.objects.get(user=request.user)
+        profileForm = EditProfileForm(instance=UserProfile.objects.get(user=request.user))
+
         return render(request, 'main/editprofile.html', {'userForm': userForm, 'profileForm': profileForm})
 
     def post(self, request, *args, **kwargs):
-        userForm = EditUserForm(request.POST)
-        profileForm = EditProfileForm(request.POST, request.FILES)
+        user = request.user
+        userForm = EditUserForm(request.POST, instance=user)
+        profileForm = EditProfileForm(request.POST, request.FILES, instance=UserProfile.objects.get(user=user))
         if userForm.is_valid() and profileForm.is_valid():
-            user = User.objects.get(id=request.user.id)
-            profile = UserProfile.objects.get(user=user)
-            if userForm.cleaned_data['username']:
-                user.username = userForm.cleaned_data['username']
-            if userForm.cleaned_data['first_name']:
-                user.first_name = userForm.cleaned_data['first_name']
-            if userForm.cleaned_data['last_name']:
-                user.last_name = userForm.cleaned_data['last_name']
-            if user.username or user.first_name or user.last_name:
-                user.save()
-
-            if profileForm.cleaned_data['patronimic']:
-                profile.patronimic = profileForm.cleaned_data['patronimic']
-            if profileForm.cleaned_data['profileAvatar']:
-                profile.profileAvatar = profileForm.cleaned_data['profileAvatar']
-            if profile.patronimic or profile.profileAvatar:
-                profile.save()
-
+            userForm.save()
+            profileForm.save()
             return redirect('profile')
         else:
-            return redirect('profile')
+            return render(request, 'main/editprofile.html', {'userForm': userForm, 'profileForm': profileForm})
 
 
 class JoinFamilyRequestView(View):
     def get(self, request, *args, **kwargs):
+        req_list = JoinFamilyRequest.objects.filter(user=request.user, accepted=False)
         form = AddFamilyRequest()
         form.user = request.user
         form.fields['family'].queryset = Family.objects
-        return render(request, 'main/join_family_request.html', {'form': form})
+        return render(request, 'main/join_family_request.html', {'form': form, 'req_list': req_list})
 
     def post(self, request, *args, **kwargs):
         form = AddFamilyRequest(request.POST)
         form.fields['family'].queryset = Family.objects
         if form.is_valid():
+            for f in JoinFamilyRequest.objects.all():
+                if f.family == form.cleaned_data['family'] and f.user == request.user and f.accepted == False:
+                    messages.error(request, 'Запрос в эту группу уже отправлен')
+                    return redirect('join_family')
             JoinFamilyRequest(user=request.user, family=form.cleaned_data['family']).save()
             return redirect('family')
         return redirect('join_family')
@@ -143,7 +157,7 @@ class JoinFamilyRequestView(View):
 class ProcessRequest(View):
     def get(self, request, *args, **kwargs):
         try:
-            requests = JoinFamilyRequest.objects.filter(family=Family.objects.filter(creator=request.user)[0])
+            requests = JoinFamilyRequest.objects.filter(family=Family.objects.filter(creator=request.user)[0], accepted=False)
         except:
             requests = None
         return render(request, 'main/accept_family_request.html', {'requests': requests})
@@ -155,6 +169,10 @@ class AcceptRequest(View):
             req = JoinFamilyRequest.objects.filter(id=kwargs['id'])[0]
         except IndexError:
             return redirect('process_request')
+        req.accepted = True
+        req.save()
+        for req in JoinFamilyRequest.objects.filter(user=request.user, accepted=False):
+            req.delete()
         profile = UserProfile.objects.get(user=req.user)
         profile.family = req.family
         profile.save()

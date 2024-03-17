@@ -15,7 +15,8 @@ urlpatterns = [
     path('family_request/', views.JoinFamilyRequestView.as_view(), name='join_family'),
     path('process_request/', views.ProcessRequest.as_view(), name='process_request'),
     path('accept_request/<int:id>', views.AcceptRequest.as_view(), name='accept_request'),
-    path('process_request/<int:id>', views.ProcessRequest.as_view(), name='process_request'),
+    path('decline_request/<int:id>', views.DeclineRequest.as_view(), name='decline_request'),
     path('product_list/', views.ProductList.as_view(), name='product_list'),
     path('delete_product/<int:id>', views.DeleteProduct.as_view(), name='delete_product'),
+    path('exit_from_group/<int:id>', views.ExitFromGroup.as_view(), name='exit_from_group'),
 ]

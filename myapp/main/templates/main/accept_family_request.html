@@ -26,10 +26,10 @@
 
         {% for req in requests %}
         <tr>
-            <td>1</td>
+            <td>{{forloop.counter}}</td>
             <td>{{ req.user }}</td>
-            <td><a class="btn btn-success" href="{%  url 'accept_request' id=req.id %}">Добавить</a><a
-                    class="btn btn-danger">Отклонить</a></td>
+            <td><a class="btn btn-success" href="{%  url 'accept_request' id=req.id %}">Добавить</a>
+                <a class="btn btn-danger" href="{% url 'decline_request' id=req.id %}">Отклонить</a></td>
         </tr>
         {% endfor %}
 

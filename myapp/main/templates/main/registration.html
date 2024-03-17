@@ -7,7 +7,13 @@
     <link rel="stylesheet" href="{% static 'main/css/login.css' %}">
 </head>
 <body>
+{%  if form.errors %}
+    <div class="alert alert-danger">
+    {{ form.errors }}
+    </div>
+    {%  endif %}
 <div class="container" id="container">
+
     <div class="form-container sign-in-container">
         <form method="post">
             {% csrf_token %}

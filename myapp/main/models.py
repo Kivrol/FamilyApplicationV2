@@ -55,7 +55,10 @@ class JoinFamilyRequest(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return f"{self.user} хочет вступить в {self.family}"
+        if self.accepted:
+            return f"{self.user} принят в {self.family}"
+        else:
+            return f"{self.user} хочет вступить в {self.family}"
 
     class Meta:
         verbose_name = 'Запрос'

@@ -11,9 +11,11 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
 <link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
 <div class="main-content-padding">
+{% if is_creator %} 
     <a href=" {% url 'process_request' %} ">
         <button class="btn btn-primary">Запросы</button>
     </a>
+{% endif %}
     {% if family %}
     {{ family.name }}
     <ul>
@@ -21,7 +23,10 @@
         <li>{{ member.user.username }}</li>
         {% endfor %}
     </ul>
+        {% if family.creator == request.user %}
     <a href="{% url 'delete_family' id=family.id %}">Удалить</a>
+            {%  endif %}
+       <a href="{% url 'exit_from_group' id=family.id %}">Выйти</a>
     {% else %}
 
     Семьи не добавлено. <a href="{% url 'add_family' %}">Добавить</a> или <a
