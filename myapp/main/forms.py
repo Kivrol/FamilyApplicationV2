@@ -4,7 +4,7 @@ from .models import UserProfile
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
-
+from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError
 from .models import Family, ProductListComponent
 
@@ -73,3 +73,13 @@ class EditProfileForm(forms.Form):
     class Meta:
         model = UserProfile
         fields = ['patronimic', 'profileAvatar']
+
+
+class MyAuthenticationForm(AuthenticationForm):
+    error_messages = {
+        'invalid_login': (
+            "Please enter a correct %(username)s and password. Note that both "
+            "fields may be case-sensitive."
+        ),
+        'inactive': "This account is inactive.",
+    }

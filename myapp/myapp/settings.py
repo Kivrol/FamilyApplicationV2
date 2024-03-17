@@ -126,6 +126,8 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AUTHENTICATION_FORM = 'myapp.forms.MyAuthenticationForm'
+
 # LOGIN_REDIRECT_URL = reverse_lazy('main:profile')
 # LOGOUT_REDIRECT_URL = '/login/'
 # REGISTER_REDIRECT_URL = reverse_lazy('main:login')

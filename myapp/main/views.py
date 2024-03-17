@@ -111,12 +111,14 @@ class EditProfile(View):
                 user.last_name = userForm.cleaned_data['last_name']
             if user.username or user.first_name or user.last_name:
                 user.save()
+
             if profileForm.cleaned_data['patronimic']:
                 profile.patronimic = profileForm.cleaned_data['patronimic']
             if profileForm.cleaned_data['profileAvatar']:
                 profile.profileAvatar = profileForm.cleaned_data['profileAvatar']
             if profile.patronimic or profile.profileAvatar:
                 profile.save()
+
             return redirect('profile')
         else:
             return redirect('profile')
