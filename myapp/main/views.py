@@ -8,7 +8,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse_lazy
 from .models import Family, UserProfile, JoinFamilyRequest, ProductListComponent
-from .forms import RegisterForm, LoginForm, AddFamily, AddFamilyRequest, AddProduct, EditUserForm, EditProfileForm
+from .forms import RegisterForm, AddFamily, AddFamilyRequest, AddProduct, EditUserForm, EditProfileForm
 
 
 @login_required
