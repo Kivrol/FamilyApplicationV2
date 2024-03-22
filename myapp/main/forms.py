@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from .models import Family, ProductListComponent
+from .models import Family, ProductListComponent, WishListComponent
 
 
 class RegisterForm(UserCreationForm):
@@ -85,3 +85,14 @@ class MyAuthenticationForm(AuthenticationForm):
         ),
         'inactive': "This account is inactive.",
     }
+
+
+class WishListForm(forms.ModelForm):
+    class Meta:
+        model = WishListComponent
+        exclude = ['date', 'user_profile']
+
+    # TODO подумать, надо ли оно вообще
+    def clean_custom_reason(self):
+        if self.cleaned_data['reason'] == 'другое' and self.cleaned_data['custom_reason'] is None:
+            return "Другое"

@@ -19,4 +19,10 @@ urlpatterns = [
     path('product_list/', views.ProductList.as_view(), name='product_list'),
     path('delete_product/<int:id>', views.DeleteProduct.as_view(), name='delete_product'),
     path('exit_from_group/<int:id>', views.ExitFromGroup.as_view(), name='exit_from_group'),
+    path('wishlist/<int:user>', views.WishListUser.as_view(), name='wishlistuser'),
+    path('wishlist/', views.WishListMainPage.as_view(), name='wishlist'),
+    path('wishlist/delete/<int:id>', views.WishDelete.as_view(), name='delete_wish'),
+    path('wishlist/change_active/<int:id>', views.WishChangeActive.as_view(), name='wish_change_active'),
+    path('wishlist/change_wish/<int:pk>', views.WishEdit.as_view(), name='wish_change_wish'),
+
 ]

@@ -2,13 +2,13 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView
-from django.views.generic import View
+from django.views.generic import View, UpdateView
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse_lazy
-from .models import Family, UserProfile, JoinFamilyRequest, ProductListComponent
-from .forms import RegisterForm, AddFamily, AddFamilyRequest, AddProduct, EditUserForm, EditProfileForm
+from .models import Family, UserProfile, JoinFamilyRequest, ProductListComponent, WishListComponent
+from .forms import RegisterForm, AddFamily, AddFamilyRequest, AddProduct, EditUserForm, EditProfileForm, WishListForm
 
 
 @login_required
@@ -157,7 +157,8 @@ class JoinFamilyRequestView(View):
 class ProcessRequest(View):
     def get(self, request, *args, **kwargs):
         try:
-            requests = JoinFamilyRequest.objects.filter(family=Family.objects.filter(creator=request.user)[0], accepted=False)
+            requests = JoinFamilyRequest.objects.filter(family=Family.objects.filter(creator=request.user)[0],
+                                                        accepted=False)
         except:
             requests = None
         return render(request, 'main/accept_family_request.html', {'requests': requests})
@@ -208,53 +209,72 @@ class DeleteProduct(View):
     def get(self, request, *args, **kwargs):
         ProductListComponent.objects.filter(id=kwargs['id']).delete()
         return redirect('product_list')
-# def login(request):
-#     template_name = 'main/signin.html'
-#     form = AuthUserForm()
-#     if request.method == 'POST':
-#         form = AuthUserForm(request.POST)
-#         if form.is_valid():
-#             userName = form.cleaned_data['userName']
-#             password = form.cleaned_data['password']
-#             if AuthUserData.objects.filter(userName=userName).exists():
-#                 user = AuthUserData.objects.get(userName=userName)
-#                 if password == user.password:
-#                     return redirect('profile')
-#                 else:
-#                     return render(request, 'main/backtologexist.html')
-#             else:
-#                 return render(request, 'main/backtologexist.html')
-#         else:
-#             form = AuthUserForm()
-#             return render(request, template_name, {'form': form})
-#     return render(request, template_name, {'form': form})
-#
-#
-# def logExist(request):
-#     return render(request, 'main/backtologexist.html')
-#
-#
-# def registration(request):
-#     template_name = 'main/registration.html'
-#     form = RegisterUserForm()
-#     if request.method == 'POST':
-#         form = RegisterUserForm(request.POST)
-#         if form.is_valid():
-#             userName = form.cleaned_data['userName']
-#             password = form.cleaned_data['password']
-#             name = form.cleaned_data['name']
-#             isNewUsername = AuthUserData.objects.filter(userName=userName).exists()
-#             if not isNewUsername:
-#                 AuthUserData.objects.create(userName=userName, password=password, name=name)
-#                 return redirect('signin')
-#             else:
-#                 return render(request, 'main/backtoregexist.html')
-#         else:
-#             form = RegisterUserForm()
-#             return render(request, template_name, {'form': form})
-#
-#     return render(request, template_name, {'form': form})
-#
-#
-# def regExist(request):
-#     return render(request, 'main/backtoregexist.html')
+
+
+class WishListMainPage(View):
+    def get(self, request, *args, **kwargs):
+        wishes = WishListComponent.objects.filter(
+            user_profile__family=UserProfile.objects.get(user=request.user).family)
+        users = [w.user_profile.user for w in wishes]
+        users = list(set(users))
+        if request.user in users:
+            users.insert(0, users.pop(users.index(request.user)))
+        return render(request, 'main/wishlist.html', {'users': users})
+
+
+class WishListUser(View):
+    def get(self, request, *args, **kwargs):
+        user = UserProfile.objects.get(user=kwargs['user'])
+        showform = (request.user == user.user)
+        if showform:
+            wishes = WishListComponent.objects.filter(user_profile=user)
+        else:
+            wishes = WishListComponent.objects.filter(user_profile=user, active=True)
+        form = WishListForm()
+
+        return render(request, 'main/wishlist_user.html',
+                      {'wishes': wishes, 'user_': user, 'form': form, 'showform': showform})
+
+    def post(self, request, *args, **kwargs):
+        form = WishListForm(request.POST)
+        user = UserProfile.objects.get(user=request.user)
+        wishes = WishListComponent.objects.filter(user_profile=user)
+        showform = True
+        if form.is_valid():
+            print(form.cleaned_data['custom_reason'])
+            wish = form.save(commit=False)
+            print(wish.custom_reason)
+            wish.user_profile = UserProfile.objects.get(user=request.user)
+            wish.save()
+            return redirect('wishlistuser', user=request.user.id)
+        else:
+            return render(request, 'main/wishlist_user.html',
+                          {'wishes': wishes, 'user_': user, 'form': form, 'showform': showform})
+
+
+class WishChangeActive(View):
+    def get(self, request, *args, **kwargs):
+        wish = WishListComponent.objects.get(id=kwargs['id'])
+        wish.active = not wish.active
+        wish.save()
+        return redirect('wishlistuser', user=request.user.id)
+
+
+class WishDelete(View):
+    def get(self, request, *args, **kwargs):
+        WishListComponent.objects.get(id=kwargs['id']).delete()
+        return redirect('wishlistuser', user=request.user.id)
+
+
+class WishEdit(View):
+    def get(self, request, *args, **kwargs):
+        wish = WishListComponent.objects.get(id=kwargs['pk'])
+        form = WishListForm(instance=wish)
+        return render(request, 'main/wishlist_user.html', {'form': form, 'showform': True, 'wish': wish})
+
+    def post(self, request, *args, **kwargs):
+        wish = WishListComponent.objects.get(id=request.POST['wid'])
+        form = WishListForm(request.POST, instance=wish)
+        if form.is_valid():
+            form.save()
+        return redirect('wishlistuser', user=request.user.id)

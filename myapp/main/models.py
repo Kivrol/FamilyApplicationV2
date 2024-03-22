@@ -7,7 +7,7 @@ from django.utils import timezone
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="userprofile")
     phoneNumber = models.DecimalField(max_digits=10, decimal_places=0, null=True, blank=True, name='phoneNumber')
     birthDate = models.DateField(null=True, blank=True, name='birthDate')
     patronimic = models.CharField(max_length=50, null=True, blank=True, name='patronimic')
@@ -80,6 +80,36 @@ class ProductListComponent(models.Model):
     class Meta:
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
+
+
+class WishListComponent(models.Model):
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50, verbose_name='Наименование')
+    picture = models.ImageField(
+        upload_to=f'wishImg/',
+        null=True,
+        blank=True,
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'png', 'ico'])],
+        verbose_name='Картинка',
+        name='wish_picture'
+    )
+    url = models.URLField(verbose_name='Ссылка', null=True, blank=True)
+    date = models.DateField(verbose_name='Дата добавления', default=timezone.now)
+    active = models.BooleanField(default=True)
+    reason = models.CharField(max_length=100, verbose_name='Причина', null=True, choices=(('нг', 'Новый год'), ('св', 'Свадьба'), ('другое', 'Другое')), default="другое")
+    custom_reason = models.CharField(max_length=100, verbose_name='Своя причина', null=True, blank=True)
+    objects = models.Manager()
+
+    def __str__(self):
+        if self.active:
+            return f" {self.user_profile.user.username} хочет {self.name}"
+        else:
+            return f" {self.user_profile.user.username} скрыл, что хочет {self.name}"
+
+    class Meta:
+        verbose_name = 'Желание'
+        verbose_name_plural = 'Желания'
+
 
 
 @receiver(post_save, sender=User)

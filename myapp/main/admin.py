@@ -17,3 +17,4 @@ class UserProfile(admin.ModelAdmin):
 admin.site.register(models.Family)
 admin.site.register(models.JoinFamilyRequest)
 admin.site.register(models.ProductListComponent)
+admin.site.register(models.WishListComponent)

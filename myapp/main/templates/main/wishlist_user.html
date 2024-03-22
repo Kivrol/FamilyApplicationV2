@@ -1,0 +1,45 @@
+{% extends 'main/htmlpatterns.html' %}
+{% load static %}
+
+{% block title %} Вишлист {{ user_ }} {% endblock %}
+
+{% block mainContent %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
+<link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
+<div class="main-content-padding">
+<table class="table">
+    {%  for w in wishes %}
+    <tr>
+        <td>{{ w.name }}</td>
+        <td>
+        {% if showform %}
+            {% if w.active %}
+            <a class="btn btn-secondary" href="{%  url 'wish_change_active' id=w.id %}">Скрыть</a>
+
+               {%  else %}
+                <a class="btn btn-primary" href="{%  url 'wish_change_active' id=w.id %}">Показать</a>
+            {%  endif %}
+        <a class="btn btn-warning" href="{%  url 'wish_change_wish' pk=w.id %}">Изменить</a>
+        <a class="btn btn-danger" href="{%  url 'delete_wish' id=w.id %}">Удалить</a>
+        {%  endif %}
+        </td>
+    </tr>
+
+
+{% endfor %}
+</table>
+
+    {%  if showform %}
+        <form method="post">
+        {%  csrf_token %}
+        {{  form.as_p }}
+            <input type="hidden" value="{{ wish.id }}" name="wid">
+        <input type="submit" value="Добавить">
+        </form>
+    {%  endif %}
+</div>
+{% endblock %}
