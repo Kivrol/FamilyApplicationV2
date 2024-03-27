@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
+from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
     path('', views.index, name='calendar'),
@@ -24,5 +25,9 @@ urlpatterns = [
     path('wishlist/delete/<int:id>', views.WishDelete.as_view(), name='delete_wish'),
     path('wishlist/change_active/<int:id>', views.WishChangeActive.as_view(), name='wish_change_active'),
     path('wishlist/change_wish/<int:pk>', views.WishEdit.as_view(), name='wish_change_wish'),
+    path('cloud/', views.Cloud.as_view(), name='cloud'),
+    path('cloud/video/', views.CloudVideo.as_view(), name='cloud_video'),
+    path('cloud/delete/<int:id>', views.DeleteFile.as_view(), name='delete_cloud'),
+    path('cloud/delete/', csrf_exempt(views.DeleteFile.as_view()), name='delete_cloud_batch'),
 
 ]

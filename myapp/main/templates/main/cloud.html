@@ -1,7 +1,7 @@
 {% extends 'main/htmlpatterns.html' %}
 {% load static %}
 
-{% block title %} Вишлист вашей группы {% endblock %}
+{% block title %} Облако вашей группы {% endblock %}
 
 {% block mainContent %}
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
@@ -11,13 +11,8 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
 <link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
 <div class="main-content-padding">
-{%  for u in users %}
-    <p>
-    <b>{{ u.username }}</b>
-    <img src="/media/{{ u.userprofile.profileAvatar }}">
-    <a href="{%  url 'wishlistuser' user=u.id %}">К вишлисту</a>
-    </p>
-{% endfor %}
+
+<a href="{% url 'cloud_video'    %}"><img src="{% static 'main/img/video.png' %}"></a>
 
 </div>
 {% endblock %}
