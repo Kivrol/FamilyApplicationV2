@@ -35,7 +35,6 @@ class AddFamilyRequest(forms.Form):
     family = forms.ModelChoiceField(queryset=None)
 
 
-
 class AddProduct(forms.ModelForm):
     class Meta:
         model = ProductListComponent
@@ -94,5 +93,5 @@ class WishListForm(forms.ModelForm):
 
     # TODO подумать, надо ли оно вообще
     def clean_custom_reason(self):
-        if self.cleaned_data['reason'] == 'другое' and self.cleaned_data['custom_reason'] is None:
+        if self.cleaned_data['reason'] == 'др' and self.cleaned_data['custom_reason'] is None:
             return "Другое"
