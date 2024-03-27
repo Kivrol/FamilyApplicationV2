@@ -1,0 +1,50 @@
+{% extends 'main/htmlpatterns.html' %}
+{% load static %}
+
+{% block title %} Облако вашей группы - видео {% endblock %}
+
+{% block mainContent %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
+
+    <script>
+    window.onload = function (){
+            $('#file_delete').click(function (){
+                var todelete = new Map()
+            console.log('clicked')
+            $('input[type=checkbox]').each(function(index,element){
+                todelete.set(element.id, element.checked)
+            })
+                console.log(JSON.stringify(Object.fromEntries(todelete), null,  '\t'))
+                $.post('{% url 'delete_cloud_batch' %}', { 'data':JSON.stringify(Object.fromEntries(todelete)) }, function(data){
+                    window.location.reload()
+                })
+        })
+    }
+
+    </script>
+<div class="main-content-padding">
+
+{%  for f in files %}
+    <p>
+        <input type="checkbox" id="{{ f.id }}">
+        <a href="/media/{{ f.video_file }}" download>
+            <img src="{% static 'main/img/video.png' %}">{{ f }}
+        </a>
+        <a  href="/media/{{ f.video_file }}">
+            <i class="material-icons">slideshow</i>
+        </a>
+        <a href="">
+            <i class="material-icons">delete_forever</i>
+        </a>
+    </p>
+{%  endfor %}
+<button class="btn btn-outline-danger" id= "file_delete">Удалить выбранные</button>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Загрузить">
+</form>
+</div>
+{% endblock %}
