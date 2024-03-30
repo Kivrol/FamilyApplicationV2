@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import FileExtensionValidator
+from django.core.validators import FileExtensionValidator, MinValueValidator
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -149,6 +149,23 @@ class CloudFile(models.Model):
             return f'{self.doc_file.name}'
         elif self.archive_file:
             return f'{self.archive_file.name}'
+
+
+class CalendarItem(models.Model):
+    group = models.ForeignKey(Family, on_delete=models.CASCADE, verbose_name='Группа')
+    creator = models.ForeignKey(UserProfile, on_delete=models.CASCADE, verbose_name='Создатель')
+    title = models.CharField(max_length=100, verbose_name='Название')
+    start = models.DateTimeField(default=timezone.now, verbose_name='Начало', validators=[MinValueValidator(timezone.now()-timezone.timedelta(hours=1))])
+    end = models.DateTimeField(null=True, blank=True, verbose_name='Конец')
+    notification = models.DateTimeField(null=True, blank=True, verbose_name='Дата уведомления')
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = 'Событие календаря'
+        verbose_name_plural = 'События календаря'
 
 
 @receiver(post_save, sender=User)

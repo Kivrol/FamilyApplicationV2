@@ -29,5 +29,8 @@ urlpatterns = [
     path('cloud/video/', views.CloudVideo.as_view(), name='cloud_video'),
     path('cloud/delete/<int:id>', views.DeleteFile.as_view(), name='delete_cloud'),
     path('cloud/delete/', csrf_exempt(views.DeleteFile.as_view()), name='delete_cloud_batch'),
+    path('calendar/', views.Calendar.as_view(), name='calendar'),
+    path('calendar/api/<int:month>/<int:year>/', views.CalendarApi.as_view(), name='calendar_api'),
+    path('calendar/add/', views.AddCalendarItem.as_view(), name='add_calendar_item'),
 
 ]
