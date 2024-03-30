@@ -1,21 +1,14 @@
 {% extends 'main/htmlpatterns.html' %}
 {% load static %}
 
-<<<<<<< HEAD
-{% block title %} Облако вашей группы - видео {% endblock %}
-=======
-{% block title %} Облако вашей группы - видеофайлы{% endblock %}
->>>>>>> origin/master
+{% block title %} Облако вашей группы - фотографии {% endblock %}
 
 {% block mainContent %}
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
-<<<<<<< HEAD
-=======
 
 <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
->>>>>>> origin/master
 <link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
 
     <script>
@@ -37,22 +30,18 @@
 <div class="main-content-padding">
 
 {%  for f in files %}
-<<<<<<< HEAD
     <p>
         <input type="checkbox" id="{{ f.id }}">
-        <a href="/media/{{ f.video_file }}" download>
-            <img src="{% static 'main/img/video.png' %}">{{ f }}
+        <a href="/media/{{ f.photo_file }}" download>
+            <span class="material-symbols-outlined">photo_library</span>
+            {{ f }}
         </a>
-        <a  href="/media/{{ f.video_file }}">
-            <i class="material-icons">slideshow</i>
-        </a>
+        <a  href="/media/{{ f.photo_file }}">
+            <i class="material-icons">slideshow</i></a>
         <a href="">
             <i class="material-icons">delete_forever</i>
         </a>
     </p>
-=======
-    <p><input type="checkbox" id="{{ f.id }}"> <a href="/media/{{ f.video_file }}" download><img src="{% static 'main/img/video.png' %}">{{ f }}</a> <a  href="/media/{{ f.video_file }}"><i class="material-icons">slideshow</i></a><a href=""><i class="material-icons">delete_forever</i></a> </p>
->>>>>>> origin/master
 {%  endfor %}
 <button class="btn btn-outline-danger" id= "file_delete">Удалить выбранные</button>
 <form method="POST" enctype="multipart/form-data">

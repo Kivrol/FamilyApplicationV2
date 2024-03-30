@@ -20,6 +20,7 @@
     direction: ltr;
     -webkit-font-feature-settings: 'liga';
     -webkit-font-smoothing: antialiased;
+<<<<<<< HEAD
 }
 
 .material-icons-size-2 {
@@ -36,4 +37,6 @@
     direction: ltr;
     -webkit-font-feature-settings: 'liga';
     -webkit-font-smoothing: antialiased;
+=======
+>>>>>>> origin/master
 }

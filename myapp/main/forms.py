@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from .models import Family, ProductListComponent, WishListComponent, CloudFile
+from .models import Family, ProductListComponent, WishListComponent
 
 
 class RegisterForm(UserCreationForm):
@@ -95,17 +95,3 @@ class WishListForm(forms.ModelForm):
     def clean_custom_reason(self):
         if self.cleaned_data['reason'] == 'др' and self.cleaned_data['custom_reason'] is None:
             return "Другое"
-
-
-class UploadVideoFile(forms.ModelForm):
-    class Meta:
-        model = CloudFile
-        fields = ['video_file']
-
-
-class UploadPhotoFile(forms.ModelForm):
-    class Meta:
-        model = CloudFile
-        fields = ['photo_file']
-
-

@@ -1,5 +1,3 @@
-import json
-
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -9,10 +7,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse_lazy
-from .models import Family, UserProfile, JoinFamilyRequest, ProductListComponent, WishListComponent, CloudFile
-from .forms import RegisterForm, AddFamily, AddFamilyRequest, AddProduct, EditUserForm, EditProfileForm, WishListForm, \
-    UploadVideoFile, UploadPhotoFile
-from django.views.decorators.csrf import csrf_exempt
+from .models import Family, UserProfile, JoinFamilyRequest, ProductListComponent, WishListComponent
+from .forms import RegisterForm, AddFamily, AddFamilyRequest, AddProduct, EditUserForm, EditProfileForm, WishListForm
 
 
 @login_required
@@ -217,8 +213,10 @@ class DeleteProduct(View):
 
 class WishListMainPage(View):
     def get(self, request, *args, **kwargs):
-        ups = UserProfile.objects.filter(family=UserProfile.objects.get(user=request.user).family)
-        users = [up.user for up in ups]
+        wishes = WishListComponent.objects.filter(
+            user_profile__family=UserProfile.objects.get(user=request.user).family)
+        users = [w.user_profile.user for w in wishes]
+        users = list(set(users))
         if request.user in users:
             users.insert(0, users.pop(users.index(request.user)))
         return render(request, 'main/wishlist.html', {'users': users})
@@ -280,62 +278,3 @@ class WishEdit(View):
         if form.is_valid():
             form.save()
         return redirect('wishlistuser', user=request.user.id)
-
-
-class Cloud(View):
-    def get(self, request, *args, **kwargs):
-        return render(request, 'main/cloud.html')
-
-
-class CloudVideo(View):
-    def get(self, request, *args, **kwargs):
-        files = CloudFile.objects.filter(category='video', family=UserProfile.objects.get(user=request.user).family)
-        form = UploadVideoFile()
-        return render(request, 'main/cloud_video.html', {'files': files, 'form': form})
-
-    def post(self, request, *args, **kwargs):
-        form = UploadVideoFile(request.POST, request.FILES)
-        files = CloudFile.objects.filter(category='video', family=UserProfile.objects.get(user=request.user).family)
-        if form.is_valid():
-            new_file = form.save(commit=False)
-            new_file.family = UserProfile.objects.get(user=request.user).family
-            new_file.owner = request.user
-            new_file.category = 'video'
-            new_file.save()
-        else:
-            return render(request, 'main/cloud_video.html', {'files': files, 'form': form})
-        return redirect('cloud_video')
-
-
-class DeleteFile(View):
-    def get(self, request, *args, **kwargs):
-        CloudFile.objects.get(id=kwargs['id']).delete()
-        print(request)
-        return redirect('cloud_video')
-
-    def post(self, request, *args, **kwargs):
-        todel = json.loads(request.POST['data'])
-        for i, v in todel.items():
-            if v:
-                CloudFile.objects.get(id=i).delete()
-        return redirect('cloud_video')
-
-
-class CloudPhoto(View):
-    def get(self, request, *args, **kwargs):
-        files = CloudFile.objects.filter(category='img', family=UserProfile.objects.get(user=request.user).family)
-        form = UploadPhotoFile()
-        return render(request, 'main/cloud_photo.html', {'files': files, 'form': form})
-
-    def post(self, request, *args, **kwargs):
-        form = UploadPhotoFile(request.POST, request.FILES)
-        files = CloudFile.objects.filter(category='img', family=UserProfile.objects.get(user=request.user).family)
-        if form.is_valid():
-            new_file = form.save(commit=False)
-            new_file.family = UserProfile.objects.get(user=request.user).family
-            new_file.owner = request.user
-            new_file.category = 'img'
-            new_file.save()
-        else:
-            return render(request, 'main/cloud_photo.html', {'files': files, 'form': form})
-        return redirect('cloud_photo')
