@@ -306,16 +306,16 @@ class CloudVideo(View):
             return render(request, 'main/cloud_video.html', {'files': files, 'form': form})
         return redirect('cloudvideo')
 
+
 class DeleteFile(View):
     def get(self, request, *args, **kwargs):
         CloudFile.objects.get(id=kwargs['id']).delete()
         print(request)
         return redirect('cloudvideo')
 
-
     def post(self, request, *args, **kwargs):
         todel = json.loads(request.POST['data'])
         for i, v in todel.items():
-           if v:
-               CloudFile.objects.get(id=i).delete()
+            if v:
+                CloudFile.objects.get(id=i).delete()
         return redirect('cloudvideo')
