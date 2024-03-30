@@ -1,6 +1,7 @@
 import json
 
 from django.contrib import messages
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView
@@ -9,10 +10,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse_lazy
-from .models import Family, UserProfile, JoinFamilyRequest, ProductListComponent, WishListComponent, CloudFile
+from .models import Family, UserProfile, JoinFamilyRequest, ProductListComponent, WishListComponent, CloudFile, \
+    CalendarItem
 from .forms import RegisterForm, AddFamily, AddFamilyRequest, AddProduct, EditUserForm, EditProfileForm, WishListForm, \
-    UploadVideoFile
+    UploadVideoFile, AddCalendarItemForm
 from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import calendar
 
 
 @login_required
@@ -319,3 +323,53 @@ class DeleteFile(View):
             if v:
                 CloudFile.objects.get(id=i).delete()
         return redirect('cloudvideo')
+
+
+class Calendar(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'main/calendar.html', {'items': CalendarItem.objects.all()})
+
+
+class CalendarApi(View):
+    def get(self, request, *args, **kwargs):
+        print(kwargs['month'], kwargs['year'])
+        month = int(kwargs['month'])
+        year = int(kwargs['year'])
+        items = CalendarItem.objects.filter(
+            Q(start__year=year) & Q(start__month=month)
+        )
+        base = calendar.monthcalendar(year, month)
+        print(base)
+        new_base = []
+        for i in base:
+            for j in i:
+                new_base.append(j)
+        future_json = []
+        for day in new_base:
+            future_json.append(dict({'active':day != 0, 'day': day, 'dow': calendar.weekday(year, month, day) if day != 0 else 0, 'items': list()}))
+        for item in items:
+            print("ITEM ", item)
+            print("START DAY ", item.start.day)
+            for day in range(item.start.day, item.end.day+1):
+                future_json[day-1+calendar.weekday(year, month, 1)]['items'].append(item.title)
+            print("END DAY ", item.end.day)
+            #future_json[item.start.day+calendar.weekday(year, month, 1)-1]['items'].append(item.title)
+        print(json.dumps(future_json, indent=4, sort_keys=True))
+        return JsonResponse(future_json, safe=False)
+
+
+class AddCalendarItem(View):
+    def get(self, request):
+        form = AddCalendarItemForm()
+        return render(request, 'main/add_calendar_item.html', {'form': form})
+
+    def post(self, request):
+        form = AddCalendarItemForm(request.POST)
+        if form.is_valid():
+            item = form.save(commit=False)
+            item.creator = UserProfile.objects.get(user=request.user)
+            item.group = item.creator.family
+            item.save()
+            return redirect('calendar')
+        else:
+            return render(request, 'main/add_calendar_item.html', {'form': form})
