@@ -10,18 +10,24 @@
 <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
 <link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
+
 <div class="main-content-padding">
-
-<<<<<<< HEAD
-<a href="{% url 'cloud_video'    %}">
-    <img src="{% static 'main/img/video.png' %}">
-</a>
-<a href="{% url 'cloud_photo'    %}">
-    <i class="material-icons-size-2">image</i>
-</a>
-=======
-<a href="{% url 'cloud_video'    %}"><img src="{% static 'main/img/video.png' %}"></a>
->>>>>>> origin/master
-
+    <a href="{% url 'cloud_photo' %}">
+        <i class="material-icons-size-2">image</i>
+        <p>Фотогалерея</p>
+    </a>
+    <br>
+    <a href="{% url 'cloud_video' %}">
+        <img src="{% static 'main/img/video.png' %}">
+        <p>Видеогалерея</p>
+    </a>
+    <br>
+    <a href="{% url 'cloud_doc' %}">
+        <p>Документы</p>
+    </a>
+    <br>
+    <a href="{% url 'cloud_archive' %}">
+        <p>Архивы</p>
+    </a>
 </div>
 {% endblock %}

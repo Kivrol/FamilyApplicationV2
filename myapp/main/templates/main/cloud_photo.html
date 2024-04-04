@@ -1,12 +1,10 @@
 {% extends 'main/htmlpatterns.html' %}
 {% load static %}
 
-{% block title %} Облако вашей группы - фотографии {% endblock %}
+{% block title %} Облако вашей группы - фотогалерея {% endblock %}
 
 {% block mainContent %}
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-
-
 <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
 <link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
@@ -20,12 +18,11 @@
                 todelete.set(element.id, element.checked)
             })
                 console.log(JSON.stringify(Object.fromEntries(todelete), null,  '\t'))
-                $.post('{% url 'delete_cloud_batch' %}', { 'data':JSON.stringify(Object.fromEntries(todelete)) }, function(data){
+                $.post('{% url "delete_cloud_batch_photo" %}', { 'data':JSON.stringify(Object.fromEntries(todelete)) }, function(data){
                     window.location.reload()
                 })
         })
     }
-
     </script>
 <div class="main-content-padding">
 
@@ -34,16 +31,15 @@
         <input type="checkbox" id="{{ f.id }}">
         <a href="/media/{{ f.photo_file }}" download>
             <span class="material-symbols-outlined">photo_library</span>
-            {{ f }}
         </a>
         <a  href="/media/{{ f.photo_file }}">
             <i class="material-icons">slideshow</i></a>
-        <a href="">
+        <a href="{% url 'delete_cloud_photo' f.id %}">
             <i class="material-icons">delete_forever</i>
         </a>
     </p>
 {%  endfor %}
-<button class="btn btn-outline-danger" id= "file_delete">Удалить выбранные</button>
+<button class="btn btn-outline-danger" id="file_delete">Удалить выбранные</button>
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}

@@ -130,7 +130,7 @@ class CloudFile(models.Model):
         FileExtensionValidator(allowed_extensions=['doc', 'docx', 'pdf', 'odt', 'rtf', 'txt', 'ppt', 'pptx', 'xls', 'xlsx'])])
     archive_file = models.FileField(upload_to='files/', null=True, blank=True, validators=[
         FileExtensionValidator(allowed_extensions=['zip', 'rar', '7z', 'tar', 'gz'])])
-    category = models.CharField(max_length=50, null=True, blank=True, choices=(('img', 'Изображение'),
+    category = models.CharField(max_length=50, null=True, blank=True, choices=(('photo', 'Изображение'),
                                                                                ('doc', 'Документ'),
                                                                                ('archive', 'Архив'),
                                                                                ('video', 'Видео')))

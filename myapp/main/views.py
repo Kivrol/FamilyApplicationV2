@@ -13,7 +13,7 @@ from django.urls import reverse_lazy
 from .models import Family, UserProfile, JoinFamilyRequest, ProductListComponent, WishListComponent, CloudFile, \
     CalendarItem
 from .forms import RegisterForm, AddFamily, AddFamilyRequest, AddProduct, EditUserForm, EditProfileForm, WishListForm, \
-    UploadVideoFile, AddCalendarItemForm
+    UploadVideoFile, UploadPhotoFile, UploadDocFile, UploadArchiveFile, AddCalendarItemForm
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import calendar
@@ -308,21 +308,123 @@ class CloudVideo(View):
             new_file.save()
         else:
             return render(request, 'main/cloud_video.html', {'files': files, 'form': form})
-        return redirect('cloudvideo')
+        return redirect('cloud_video')
 
 
-class DeleteFile(View):
+class DeleteVideoFile(View):
     def get(self, request, *args, **kwargs):
         CloudFile.objects.get(id=kwargs['id']).delete()
         print(request)
-        return redirect('cloudvideo')
+        return redirect('cloud_video')
 
     def post(self, request, *args, **kwargs):
         todel = json.loads(request.POST['data'])
         for i, v in todel.items():
             if v:
                 CloudFile.objects.get(id=i).delete()
-        return redirect('cloudvideo')
+        return redirect('cloud_video')
+
+
+class CloudPhoto(View):
+    def get(self, request, *args, **kwargs):
+        files = CloudFile.objects.filter(category='photo', family=UserProfile.objects.get(user=request.user).family)
+        form = UploadPhotoFile()
+        return render(request, 'main/cloud_photo.html', {'files': files, 'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = UploadPhotoFile(request.POST, request.FILES)
+        files = CloudFile.objects.filter(category='photo', family=UserProfile.objects.get(user=request.user).family)
+        if form.is_valid():
+            new_file = form.save(commit=False)
+            new_file.family = UserProfile.objects.get(user=request.user).family
+            new_file.owner = request.user
+            new_file.category = 'photo'
+            new_file.save()
+        else:
+            return render(request, 'main/cloud_photo.html', {'files': files, 'form': form})
+        return redirect('cloud_photo')
+
+
+class DeletePhotoFile(View):
+    def get(self, request, *args, **kwargs):
+        CloudFile.objects.get(id=kwargs['id']).delete()
+        print(request)
+        return redirect('cloud_photo')
+
+    def post(self, request, *args, **kwargs):
+        todel = json.loads(request.POST['data'])
+        for i, v in todel.items():
+            if v:
+                CloudFile.objects.get(id=i).delete()
+        return redirect('cloud_photo')
+
+
+class CloudDoc(View):
+    def get(self, request, *args, **kwargs):
+        files = CloudFile.objects.filter(category='doc', family=UserProfile.objects.get(user=request.user).family)
+        form = UploadDocFile()
+        return render(request, 'main/cloud_doc.html', {'files': files, 'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = UploadDocFile(request.POST, request.FILES)
+        files = CloudFile.objects.filter(category='doc', family=UserProfile.objects.get(user=request.user).family)
+        if form.is_valid():
+            new_file = form.save(commit=False)
+            new_file.family = UserProfile.objects.get(user=request.user).family
+            new_file.owner = request.user
+            new_file.category = 'doc'
+            new_file.save()
+        else:
+            return render(request, 'main/cloud_doc.html', {'files': files, 'form': form})
+        return redirect('cloud_doc')
+
+
+class DeleteDocFile(View):
+    def get(self, request, *args, **kwargs):
+        CloudFile.objects.get(id=kwargs['id']).delete()
+        print(request)
+        return redirect('cloud_doc')
+
+    def post(self, request, *args, **kwargs):
+        todel = json.loads(request.POST['data'])
+        for i, v in todel.items():
+            if v:
+                CloudFile.objects.get(id=i).delete()
+        return redirect('cloud_doc')
+
+
+class CloudArchive(View):
+    def get(self, request, *args, **kwargs):
+        files = CloudFile.objects.filter(category='archive', family=UserProfile.objects.get(user=request.user).family)
+        form = UploadArchiveFile()
+        return render(request, 'main/cloud_archive.html', {'files': files, 'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = UploadArchiveFile(request.POST, request.FILES)
+        files = CloudFile.objects.filter(category='archive', family=UserProfile.objects.get(user=request.user).family)
+        if form.is_valid():
+            new_file = form.save(commit=False)
+            new_file.family = UserProfile.objects.get(user=request.user).family
+            new_file.owner = request.user
+            new_file.category = 'archive'
+            new_file.save()
+        else:
+            return render(request, 'main/cloud_archive.html', {'files': files, 'form': form})
+        return redirect('cloud_archive')
+
+
+class DeleteArchiveFile(View):
+    def get(self, request, *args, **kwargs):
+        CloudFile.objects.get(id=kwargs['id']).delete()
+        print(request)
+        return redirect('cloud_archive')
+
+    def post(self, request, *args, **kwargs):
+        todel = json.loads(request.POST['data'])
+        for i, v in todel.items():
+            if v:
+                CloudFile.objects.get(id=i).delete()
+        return redirect('cloud_archive')
 
 
 class Calendar(View):
@@ -346,14 +448,16 @@ class CalendarApi(View):
                 new_base.append(j)
         future_json = []
         for day in new_base:
-            future_json.append(dict({'active':day != 0, 'day': day, 'dow': calendar.weekday(year, month, day) if day != 0 else 0, 'items': list()}))
+            future_json.append(dict(
+                {'active': day != 0, 'day': day, 'dow': calendar.weekday(year, month, day) if day != 0 else 0,
+                 'items': list()}))
         for item in items:
             print("ITEM ", item)
             print("START DAY ", item.start.day)
-            for day in range(item.start.day, item.end.day+1):
-                future_json[day-1+calendar.weekday(year, month, 1)]['items'].append(item.title)
+            for day in range(item.start.day, item.end.day + 1):
+                future_json[day - 1 + calendar.weekday(year, month, 1)]['items'].append(item.title)
             print("END DAY ", item.end.day)
-            #future_json[item.start.day+calendar.weekday(year, month, 1)-1]['items'].append(item.title)
+            # future_json[item.start.day+calendar.weekday(year, month, 1)-1]['items'].append(item.title)
         print(json.dumps(future_json, indent=4, sort_keys=True))
         return JsonResponse(future_json, safe=False)
 

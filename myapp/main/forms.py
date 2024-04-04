@@ -108,6 +108,24 @@ class UploadVideoFile(forms.ModelForm):
         fields = ['video_file']
 
 
+class UploadPhotoFile(forms.ModelForm):
+    class Meta:
+        model = CloudFile
+        fields = ['photo_file']
+
+
+class UploadDocFile(forms.ModelForm):
+    class Meta:
+        model = CloudFile
+        fields = ['doc_file']
+
+
+class UploadArchiveFile(forms.ModelForm):
+    class Meta:
+        model = CloudFile
+        fields = ['archive_file']
+
+
 class AddCalendarItemForm(forms.ModelForm):
     class Meta:
         model = CalendarItem
