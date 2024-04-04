@@ -1,0 +1,49 @@
+{% extends 'main/htmlpatterns.html' %}
+{% load static %}
+
+{% block title %} Облако вашей группы - Документы {% endblock %}
+
+{% block mainContent %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
+<link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
+
+    <script>
+    window.onload = function (){
+            $('#file_delete').click(function (){
+                var todelete = new Map()
+            console.log('clicked')
+            $('input[type=checkbox]').each(function(index,element){
+                todelete.set(element.id, element.checked)
+            })
+                console.log(JSON.stringify(Object.fromEntries(todelete), null,  '\t'))
+                $.post('{% url "delete_cloud_batch_doc" %}', { 'data':JSON.stringify(Object.fromEntries(todelete)) }, function(data){
+                    window.location.reload()
+                })
+        })
+    }
+    </script>
+<div class="main-content-padding">
+
+{%  for f in files %}
+    <p>
+        <input type="checkbox" id="{{ f.id }}">
+        <a href="/media/{{ f.doc_file }}" download>
+            <span class="material-symbols-outlined">photo_library</span>
+        </a>
+        <a  href="/media/{{ f.doc_file }}">
+            <i class="material-icons">slideshow</i></a>
+        <a href="{% url 'delete_cloud_doc' f.id %}">
+            <i class="material-icons">delete_forever</i>
+        </a>
+    </p>
+{%  endfor %}
+<button class="btn btn-outline-danger" id="file_delete">Удалить выбранные</button>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Загрузить">
+</form>
+</div>
+{% endblock %}
