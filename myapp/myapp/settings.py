@@ -136,4 +136,4 @@ AUTHENTICATION_FORM = 'myapp.forms.MyAuthenticationForm'
 # LOGIN_REDIRECT_URL = reverse_lazy('main:profile')
 # LOGOUT_REDIRECT_URL = '/login/'
 # REGISTER_REDIRECT_URL = reverse_lazy('main:login')
-LOGIN_URL = '/login'
+LOGIN_URL = 'login'
