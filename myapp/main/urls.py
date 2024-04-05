@@ -1,14 +1,12 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
-from django.contrib.auth import views as auth_views
+
 from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
     path('', views.index, name='calendar'),
     path('profile', views.profileView, name='profile'),
-    path('registration/', views.RegistrationView.as_view(), name='registration'),
-    path('login/', views.LoginView.as_view(), name='login'),
-    path('logout/', views.view_logout, name='logout'),
+    path('/', include('lightlist_auth.urls')),
     path('family/', views.FamilyView.as_view(), name='family'),
     path('add_family', views.CreateFamily.as_view(), name='add_family'),
     path('delete_family/<int:id>', views.DeleteFamily.as_view(), name='delete_family'),
@@ -17,29 +15,9 @@ urlpatterns = [
     path('process_request/', views.ProcessRequest.as_view(), name='process_request'),
     path('accept_request/<int:id>', views.AcceptRequest.as_view(), name='accept_request'),
     path('decline_request/<int:id>', views.DeclineRequest.as_view(), name='decline_request'),
-    path('product_list/', views.ProductList.as_view(), name='product_list'),
-    path('delete_product/<int:id>', views.DeleteProduct.as_view(), name='delete_product'),
+    path('productlist/', include('product_list.urls')),
     path('exit_from_group/<int:id>', views.ExitFromGroup.as_view(), name='exit_from_group'),
-    path('wishlist/<int:user>', views.WishListUser.as_view(), name='wishlistuser'),
-    path('wishlist/', views.WishListMainPage.as_view(), name='wishlist'),
-    path('wishlist/delete/<int:id>', views.WishDelete.as_view(), name='delete_wish'),
-    path('wishlist/change_active/<int:id>', views.WishChangeActive.as_view(), name='wish_change_active'),
-    path('wishlist/change_wish/<int:pk>', views.WishEdit.as_view(), name='wish_change_wish'),
-    path('cloud/', views.Cloud.as_view(), name='cloud'),
-    path('cloud/video/', views.CloudVideo.as_view(), name='cloud_video'),
-    path('cloud/deletevideo/<int:id>', views.DeleteVideoFile.as_view(), name='delete_cloud_video'),
-    path('cloud/deletevideo/', csrf_exempt(views.DeleteVideoFile.as_view()), name='delete_cloud_batch_video'),
-    path('cloud/photo/', views.CloudPhoto.as_view(), name='cloud_photo'),
-    path('cloud/deletephoto/<int:id>', views.DeletePhotoFile.as_view(), name='delete_cloud_photo'),
-    path('cloud/deletephoto/', csrf_exempt(views.DeletePhotoFile.as_view()), name='delete_cloud_batch_photo'),
-    path('cloud/doc/', views.CloudDoc.as_view(), name='cloud_doc'),
-    path('cloud/deletedoc/<int:id>', views.DeleteDocFile.as_view(), name='delete_cloud_doc'),
-    path('cloud/deletedoc/', csrf_exempt(views.DeleteDocFile.as_view()), name='delete_cloud_batch_doc'),
-    path('cloud/archive/', views.CloudArchive.as_view(), name='cloud_archive'),
-    path('cloud/deletearchive/<int:id>', views.DeleteArchiveFile.as_view(), name='delete_cloud_archive'),
-    path('cloud/deletearchive/', csrf_exempt(views.DeleteArchiveFile.as_view()), name='delete_cloud_batch_archive'),
-    path('calendar/', views.Calendar.as_view(), name='calendar'),
-    path('calendar/api/<int:month>/<int:year>/', views.CalendarApi.as_view(), name='calendar_api'),
-    path('calendar/add/', views.AddCalendarItem.as_view(), name='add_calendar_item'),
-
+    path('wishlist/', include('wishlist.urls')),
+    path('cloud/', include('cloud.urls')),
+    path('calendar/', include('lightlist_calendar.urls')),
 ]
