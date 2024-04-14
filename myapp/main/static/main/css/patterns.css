@@ -45,4 +45,5 @@ a.sidebar-text:active,
 a.sidebar-text:hover,
 a.sidebar-text {
     text-decoration: none !important;
+    color: #3c3c3c !important;
 }

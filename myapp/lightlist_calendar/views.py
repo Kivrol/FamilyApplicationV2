@@ -51,13 +51,13 @@ class CalendarApi(View):
             print("START DAY ", item.start.day)
             if item.start.month == month and item.end.month == month:
                 for day in range(item.start.day, item.end.day + 1):
-                    future_json[day - 1 + calendar.weekday(year, month, 1)]['items'].append(item.title)
+                    future_json[day - 1 + calendar.weekday(year, month, 1)]['items'].append({'title': item.title, 'id': item.id, 'icon': item.icon})
             elif item.end.month == month:
                 for day in range(1, item.end.day + 1):
-                    future_json[day - 1 + calendar.weekday(year, month, 1)]['items'].append(item.title)
+                    future_json[day - 1 + calendar.weekday(year, month, 1)]['items'].append({'title': item.title, 'id': item.id, 'icon': item.icon})
             elif item.end.month == next_month:
                 for day in range(item.start.day, calendar.monthrange(year, month)[1] + 1):
-                    future_json[day - 1 + calendar.weekday(year, month, 1)]['items'].append(item.title)
+                    future_json[day - 1 + calendar.weekday(year, month, 1)]['items'].append({'title': item.title, 'id': item.id, 'icon': item.icon})
             print("END DAY ", item.end.day)
         print(json.dumps(future_json, indent=4, sort_keys=True))
         return JsonResponse(future_json, safe=False)
