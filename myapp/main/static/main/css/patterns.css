@@ -1,0 +1,48 @@
+.navbar.background-color-dark {
+    background-color: #3c3c3c !important;
+}
+
+.navbar.background-color-light {
+    background-color: #fef5ef !important;
+}
+
+.text-color-dark {
+    color: #3c3c3c !important;
+}
+
+.navbar-brand.text-color-light {
+    color: #fef5ef !important;
+}
+
+.text-color-light {
+    color: #fef5ef !important;
+}
+
+.main-content-settings {
+    margin-top: 70px !important;
+}
+
+.sidebar-block-hover:hover {
+    background-color: #3c3c3c !important;
+    color:  #fef5ef !important;
+    transition: all .3s;
+    text-decoration: none;
+}
+
+div.sidebar-bg-color {
+    background-color: #fef5ef !important;
+}
+
+/*a.sidebar-text:active,*/
+/*a.sidebar-text:hover,*/
+/*a.sidebar-text {*/
+/*    font-size: 22px;*/
+/*    text-decoration: none;*/
+/*    color: #3c3c3c;*/
+/*}*/
+
+a.sidebar-text:active,
+a.sidebar-text:hover,
+a.sidebar-text {
+    text-decoration: none !important;
+}

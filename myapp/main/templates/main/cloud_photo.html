@@ -8,6 +8,7 @@
 <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
 <link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
+<link rel="stylesheet" href="{% static 'main/css/material_font.css' %}">
 
     <script>
     window.onload = function (){
@@ -23,14 +24,15 @@
                 })
         })
     }
+
     </script>
 <div class="main-content-padding">
 
-{%  for f in files %}
+{% for f in files %}
     <p>
         <input type="checkbox" id="{{ f.id }}">
         <a href="/media/{{ f.photo_file }}" download>
-            <span class="material-symbols-outlined">photo_library</span>
+            <span class="material-symbols-outlined">{{ f }}</span>
         </a>
         <a  href="/media/{{ f.photo_file }}">
             <i class="material-icons">slideshow</i></a>

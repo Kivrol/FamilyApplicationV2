@@ -11,6 +11,8 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
 <link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
 <div class="main-content-padding">
+
+    <a href="{% url 'add_calendar_item' %}"><button class="btn btn-primary">Добавить событие</button></a>
    {%  for item in items %}
        <p>{{ item }}</p>
 {%  endfor %}
