@@ -12,221 +12,534 @@
     {#<link rel="stylesheet" href="{% static 'main/css/profile.css' %}">#}
 
     <script>
-    
-    function update(){
-        $.getJSON("{% url 'calendar_api' 4 2024 %}", function(data){
-           for(let i =0;i<data.length;i++){
-               console.log(data[i]);
-               if(data[i]['day']!==0)
-                   $('#t'+i).html(data[i]['day'])
-               for(let event in data[i]['items']){
-                   $('#c'+i).append(`<span class="badge bg-success calendar_event align-items-center" 
-                                    id="event_${data[i]['items'][event]['id']}" style="width: 100%;">
-                                    <i class="material-icons-size-2">${data[i]['items'][event]['icon']}</i>
-                                    ${data[i]['items'][event]['title']}
-                                    <img src="{{ BASE_DIR }}/media/{{user.userprofile.profileAvatar}}"
-                                    class="rounded-circle" alt="/static/main/img/profileDefault.jpg"
-                                    width="16px" height="16px">
-                                    </span>`)
-               }
-           }
-       });
-    }
-    $(document).ready(function (){
-        var myModal = new bootstrap.Modal($('#eventModal'), {})
-       update();
-      $(document).on("click", ".calendar_event", function(){
-          let i = this.id.split('_')[1]
-          $.getJSON("/calendar/api/detail/"+i, function(data){
-              $('#eventModalTitle').html(data['title'])
-              $('#eventModalBody').html(data['description'])
-              console.log(data)
-          })
-          myModal.show();
-}); 
-       
 
-    })
+        function update(month, year) {
+            $('#monthyear').html(`${new Date(year, month-1, 1).toLocaleString('default', { month: 'long' })} ${year}`)
+            for(let i =0;i<42;i++){
+                $('#c'+i).html("")
+            }
+            $.getJSON(`/calendar/api/${month}/${year}`, function (data) {
+                for (let i = 0; i < data.length; i++) {
+                    console.log(data[i]);
+                    if (data[i]['day'] !== 0)
+                    {
+                       $('#t' + i).html(data[i]['day']) 
+                        $('#c'+i).removeClass("d-none d-sm-inline-block bg-light text-muted")
+                    }
+                    else
+                    {
+                        $('#c'+i).addClass("d-none d-sm-inline-block bg-light text-muted")
+                        $('#t' + i).html("")
+                    }
+
+                    for (let event in data[i]['items']) {
+                        $('#c' + i).append(`<a class="event d-block p-1 pl-2 pr-2 mb-1 rounded text-truncate small bg-success text-white calendar_event"
+                   title="Test Event 2" id="event_${data[i]['items'][event]['id']}"><i class="material-icons-size-2">${data[i]['items'][event]['icon']}</i>${data[i]['items'][event]['title']}</a>`)
+                        
+                    }
+                    if (data[i]['items'].length===0)
+                            $('#c'+i).append('<p class="d-sm-none">Нет событий</p>')
+                        
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            var d = new Date()
+            let month = d.getMonth()+1
+            let year = d.getFullYear()
+
+            console.log(d.getFullYear(), d.getMonth())
+            $('#prevmonth').click(function (){
+                month -=1
+                if (month < 0)
+                {
+                    month = 11
+                    year -=1
+                }
+                update(month, year)
+            })
+            $('#nextmonth').click(function (){
+                month +=1
+                if (month >11)
+                {
+                    month = 0
+                    year +=1
+                }
+                update(month, year)
+            })
+            var myModal = new bootstrap.Modal($('#eventModal'), {})
+            var dayModal = new bootstrap.Modal($('#dayModal'), {})
+            update(d.getMonth()+1, d.getFullYear());
+            $(document).on("click", ".day .row", function () {
+                console.log("day clicker")
+                console.log(self.id)
+                console.log($('span', this).attr("id").substring(1,3))
+                let index = $('span', this).attr("id").substring(1,3)
+                $.getJSON(`/calendar/api/${month}/${year}`, function (data) {
+                    console.log(data[index])
+                    $('#dayModalTitle').html(`${data[index]['day']}.${month}.${year}`)
+                    $('#dayModalBody').html("")
+                    for (let event in data[index]['items']){
+                       $('#dayModalBody').append(`<a class="event d-block p-1 pl-2 pr-2 mb-1 rounded text-truncate small bg-success text-white calendar_event"
+                   title="Test Event 2" id="event_${data[index]['items'][event]['id']}"><i class="material-icons-size-2">${data[index]['items'][event]['icon']}</i>${data[index]['items'][event]['title']}</a>`)
+                    }
+                    dayModal.show()
+                })
+                
+            })
+            $(document).on("click", ".calendar_event", function () {
+                let i = this.id.split('_')[1]
+                $.getJSON("/calendar/api/detail/" + i, function (data) {
+                    $('#eventModalTitle').html(`${data['title']} <i class="material-icons">${data['icon']}</i>`)
+                    $('#modal_desc').html(data['description'])
+                    $('#modal_start').html(new Date(data['start']).toLocaleString("ru", {}))
+                    $('#modal_end').html(new Date(data['end']).toLocaleString("ru", {}))
+                    $('#modal_delete').attr("href", `/calendar/delete/${data['id']}`)
+                    console.log(data['notify'])
+                    // TODO что-то не так с пустым нотифай
+                    if (typeof data['notify'] === undefined)
+                        $('#modal_notify').html("не запланировано")
+                    else
+                        $('#modal_notify').html(data['notify'])
+                    console.log(data)
+                })
+                myModal.show();
+            });
+
+
+        })
 
     </script>
+    <style>
+    @media (max-width:575px) {
+    .display-4 {
+        font-size: 1.5rem;
+    }
+    .day h5 {
+        background-color: #f8f9fa;
+        padding: 3px 5px 5px;
+        margin: -8px -8px 8px -8px;
+    }
+    .date {
+        padding-left: 4px;
+        align-items: center;
+    }
+}
+
+@media (min-width: 576px) {
+    .day {
+        height: 5.2857vw;
+    }
+}
+    </style>
     <div class="main-content-padding">
-
-        <a href="{% url 'add_calendar_item' %}"><button class="btn btn-primary">Добавить событие</button></a>
-        {%  for item in items %}
-            <p>{{ item }}</p>
-        {%  endfor %}
         <div class="row">
-            <div class="col border">
-                <p class="text-center">Понедельник</p>
+            <div class="col text-center">
+                <button id="prevmonth" class="btn btn-outline-primary ">Назад</button>
             </div>
-            <div class="col border">
-                <p class="text-center">Вторник</p>
+            <div class="col">
+                <h4 class="display-4 mb-4 text-center" id="monthyear"> </h4>
             </div>
-            <div class="col border">
-                <p class="text-center">Среда</p>
-            </div>
-            <div class="col border">
-                <p class="text-center">Четверг</p>
-            </div>
-            <div class="col border">
-                <p class="text-center">Пятница</p>
-            </div>
-            <div class="col border">
-                <p class="text-center">Суббота</p>
-            </div>
-            <div class="col border">
-                <p class="text-center">Воскресенье</p>
+            <div class="col text-center">
+                <button id="nextmonth" class="btn btn-outline-primary">Вперёд</button>
             </div>
         </div>
-        <div class="row">
-            <div class="col border">
-                <p class="text-center" id="t0"></p>
-                <p class="text-left" id="c0">
-
-                </p>
-            </div>
-            <div class="col border">
-                <p class="text-center" id="t1"></p>
-                <p class="text-left" id="c1">
-
-                </p>
-            </div>
-            <div class="col border">
-                <p class="text-center" id="t2"></p>
-                <p class="text-left" id="c2">
-
-                </p>
-            </div>
-            <div class="col border">
-                <p class="text-center" id="t3"></p>
-                <p class="text-left" id="c3">
-
-                </p>
-            </div>
-            <div class="col border">
-                <p class="text-center" id="t4"></p>
-                <p class="text-left" id="c4">
-
-                </p>
-            </div>
-            <div class="col border">
-                <p class="text-center" id="t5"></p>
-                <p class="text-left" id="c5">
-
-                </p>
-            </div>
-            <div class="col border">
-                <p class="text-center" id="t6"></p>
-                <p class="text-left" id="c6">
-
-                </p>
-            </div>
+        <div class="row d-none d-sm-flex p-1 bg-dark text-white">
+            <h5 class="col-sm p-1 text-center">Понедельник</h5>
+            <h5 class="col-sm p-1 text-center">Вторник</h5>
+            <h5 class="col-sm p-1 text-center">Среда</h5>
+            <h5 class="col-sm p-1 text-center">Четверг</h5>
+            <h5 class="col-sm p-1 text-center">Пятница</h5>
+            <h5 class="col-sm p-1 text-center">Суббота</h5>
+            <h5 class="col-sm p-1 text-center">Воскресенье</h5>
         </div>
-    <div class="row">
-            <div class="col border">
-                <p class="text-center" id="t7"></p>
-                <p class="text-left" id="c7">
-
-                </p>
+        <div class="row border border-right-0 border-bottom-0">
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t0"></span>
+                    <small class="col d-sm-none text-center text-muted">Понедельник</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c0"></div>
             </div>
-            <div class="col border">
-                <p class="text-center" id="t8"></p>
-                <p class="text-left" id="c8">
-
-                </p>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t1"></span>
+                    <small class="col d-sm-none text-center text-muted">Вторник</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c1"></div>
             </div>
-            <div class="col border">
-                <p class="text-center" id="t9"></p>
-                <p class="text-left" id="c9">
-
-                </p>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t2"></span>
+                    <small class="col d-sm-none text-center text-muted">Среда</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c2"></div>
             </div>
-            <div class="col border">
-                <p class="text-center" id="t10"></p>
-                <p class="text-left" id="c10">
-
-                </p>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate ">
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t3"></span>
+                    <small class="col d-sm-none text-center text-muted">Четверг</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div  id="c3"></div>
             </div>
-            <div class="col border">
-                <p class="text-center" id="t11"></p>
-                <p class="text-left" id="c11">
-
-                </p>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate ">
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t4"></span>
+                    <small class="col d-sm-none text-center text-muted">Пятница</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div  id="c4"></div>
             </div>
-            <div class="col border">
-                <p class="text-center" id="t12"></p>
-                <p class="text-left" id="c12">
-
-                </p>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate ">
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t5"></span>
+                    <small class="col d-sm-none text-center text-muted">Суббота</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div  id="c5"></div>
             </div>
-            <div class="col border">
-                <p class="text-center" id="t13"></p>
-                <p class="text-left" id="c13">
-
-                </p>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t6"></span>
+                    <small class="col d-sm-none text-center text-muted">Воскресенье</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c6"></div>
             </div>
-        </div>
-    <div class="row">
-            <div class="col border">
-                <p class="text-center" id="t14"></p>
-                <p class="text-left" id="c14">
-
-                </p>
+            <div class="w-100"></div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t7"></span>
+                    <small class="col d-sm-none text-center text-muted">Понедельник</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c7"></div>
             </div>
-            <div class="col border">
-                <p class="text-center" id="t15"></p>
-                <p class="text-left" id="c15">
-
-                </p>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t8"></span>
+                    <small class="col d-sm-none text-center text-muted">Вторник</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c8"></div>
             </div>
-            <div class="col border">
-                <p class="text-center" id="t16"></p>
-                <p class="text-left" id="c16">
-
-                </p>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t9"></span>
+                    <small class="col d-sm-none text-center text-muted">Среда</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c9"></div>
             </div>
-            <div class="col border">
-                <p class="text-center" id="t17"></p>
-                <p class="text-left" id="c17">
-
-                </p>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t10"></span>
+                    <small class="col d-sm-none text-center text-muted">Четверг</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c10"></div>
             </div>
-            <div class="col border">
-                <p class="text-center" id="t18"></p>
-                <p class="text-left" id="c18">
-
-                </p>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t11"></span>
+                    <small class="col d-sm-none text-center text-muted">Пятница</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c11"></div>
             </div>
-            <div class="col border">
-                <p class="text-center" id="t19"></p>
-                <p class="text-left" id="c19">
-
-                </p>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t12"></span>
+                    <small class="col d-sm-none text-center text-muted">Суббота</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c12"></div>
             </div>
-            <div class="col border">
-                <p class="text-center" id="t20"></p>
-                <p class="text-left" id="c20">
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate ">
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t13"></span>
+                    <small class="col d-sm-none text-center text-muted">Воскресенье</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c13">
 
-                </p>
+                </div>
+                
+            </div>
+            <div class="w-100"></div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t14"></span>
+                    <small class="col d-sm-none text-center text-muted">Понедельник</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c14"></div>
+            </div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t15"></span>
+                    <small class="col d-sm-none text-center text-muted">Вторник</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c15"></div>
+            </div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t16"></span>
+                    <small class="col d-sm-none text-center text-muted">Среда</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c16"></div>
+            </div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t17"></span>
+                    <small class="col d-sm-none text-center text-muted">Четверг</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c17"></div>
+            </div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t18"></span>
+                    <small class="col d-sm-none text-center text-muted">Пятница</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c18"></div>
+            </div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t19"></span>
+                    <small class="col d-sm-none text-center text-muted">Суббота</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c19"></div>
+            </div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t20"></span>
+                    <small class="col d-sm-none text-center text-muted">Воскресенье</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c20"></div>
+            </div>
+            <div class="w-100"></div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t21"></span>
+                    <small class="col d-sm-none text-center text-muted">Понедельник</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c21"></div>
+            </div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate ">
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t22"></span>
+                    <small class="col d-sm-none text-center text-muted">Вторник</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div  id="c22"></div>
+            </div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t23"></span>
+                    <small class="col d-sm-none text-center text-muted">Среда</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c23"></div>
+            </div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t24"></span>
+                    <small class="col d-sm-none text-center text-muted">Четверг</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c24"></div>
+            </div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate ">
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t25"></span>
+                    <small class="col d-sm-none text-center text-muted">Пятница</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div  id="c25"></div>
+            </div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t26"></span>
+                    <small class="col d-sm-none text-center text-muted">Суббота</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c26"></div>
+            </div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t27"></span>
+                    <small class="col d-sm-none text-center text-muted">Воскресенье</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c27"></div>
+            </div>
+            <div class="w-100"></div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t28"></span>
+                    <small class="col d-sm-none text-center text-muted">Понедельник</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c28"></div>
+            </div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t29"></span>
+                    <small class="col d-sm-none text-center text-muted">Вторник</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c29"></div>
+            </div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t30"></span>
+                    <small class="col d-sm-none text-center text-muted">Среда</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c30"></div>
+            </div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t31"></span>
+                    <small class="col d-sm-none text-center text-muted">Четверг</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c31"></div>
+            </div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate " >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t32"></span>
+                    <small class="col d-sm-none text-center text-muted">Пятница</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c32"></div>
+            </div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate d-none d-sm-inline-block bg-light text-muted" >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t33"></span>
+                    <small class="col d-sm-none text-center text-muted">Суббота</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c33"></div>
+            </div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate d-none d-sm-inline-block bg-light text-muted" >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t34"></span>
+                    <small class="col d-sm-none text-center text-muted">Воскресенье</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c34"></div>
+            </div>
+            <div class="w-100"></div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate d-none d-sm-inline-block bg-light text-muted" >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t35"></span>
+                    <small class="col d-sm-none text-center text-muted">Понедельник</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c35"></div>
+            </div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate d-none d-sm-inline-block bg-light text-muted" >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t36"></span>
+                    <small class="col d-sm-none text-center text-muted">Вторник</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c36"></div>
+            </div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate d-none d-sm-inline-block bg-light text-muted" >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t37"></span>
+                    <small class="col d-sm-none text-center text-muted">Среда</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c37"></div>
+            </div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate d-none d-sm-inline-block bg-light text-muted" >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t38"></span>
+                    <small class="col d-sm-none text-center text-muted">Четверг</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c38"></div>
+            </div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate d-none d-sm-inline-block bg-light text-muted" >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t39"></span>
+                    <small class="col d-sm-none text-center text-muted">Пятница</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c39"></div>
+            </div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate d-none d-sm-inline-block bg-light text-muted" >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t40"></span>
+                    <small class="col d-sm-none text-center text-muted">Суббота</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c40"></div>
+            </div>
+            <div class="day col-sm p-2 border border-left-0 border-top-0 text-truncate d-none d-sm-inline-block bg-light text-muted" >
+                <h5 class="row align-items-center">
+                    <span class="date col-1" id="t41"></span>
+                    <small class="col d-sm-none text-center text-muted">Воскресенье</small>
+                    <span class="col-1"></span>
+                </h5>
+                <div id="c41"></div>
             </div>
         </div>
     </div>
-    
+
     <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="eventModalTitle">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body" id="eventModalBody">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventModalTitle">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="eventModalBody">
+                    <p><b>Описание:</b> <span id="modal_desc"></span></p>
+                    <p><b>Начало:</b> <span id="modal_start"></span></p>
+                    <p><b>Окончание:</b> <span id="modal_end"></span></p>
+                    <p><b>Уведомление:</b> <span id="modal_notify"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <a class="btn btn-warning"  href="">Изменить</a>
+                    <a class="btn btn-danger" id="modal_delete">Удалить</a>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
+
+    <div class="modal fade" id="dayModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="dayModalTitle">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="dayModalBody">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <a class="btn btn-warning"  href="">Изменить</a>
+                    <a class="btn btn-danger" >Удалить</a>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
