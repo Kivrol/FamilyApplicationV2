@@ -23,7 +23,11 @@
                    $('#c'+i).append(`<span class="badge bg-success calendar_event align-items-center" 
                                     id="event_${data[i]['items'][event]['id']}" style="width: 100%;">
                                     <i class="material-icons-size-2">${data[i]['items'][event]['icon']}</i>
-                                    ${data[i]['items'][event]['title']}<img src="/media/UserProfileImg/adminNem_Oj8oDAD.jpg" class="rounded-circle" alt="/static/main/img/profileDefault.jpg" width="16px" height="16px"></span>`)
+                                    ${data[i]['items'][event]['title']}
+                                    <img src="{{ BASE_DIR }}/media/{{user.userprofile.profileAvatar}}"
+                                    class="rounded-circle" alt="/static/main/img/profileDefault.jpg"
+                                    width="16px" height="16px">
+                                    </span>`)
                }
            }
        });

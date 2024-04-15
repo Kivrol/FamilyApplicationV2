@@ -33,14 +33,6 @@ div.sidebar-bg-color {
     background-color: #fef5ef !important;
 }
 
-/*a.sidebar-text:active,*/
-/*a.sidebar-text:hover,*/
-/*a.sidebar-text {*/
-/*    font-size: 22px;*/
-/*    text-decoration: none;*/
-/*    color: #3c3c3c;*/
-/*}*/
-
 a.sidebar-text:active,
 a.sidebar-text:hover,
 a.sidebar-text {
