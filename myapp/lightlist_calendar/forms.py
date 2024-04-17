@@ -55,4 +55,6 @@ class EditCalendarItemForm(forms.ModelForm):
     def clean_notification(self):
         if self.cleaned_data['notification'] is not None and self.cleaned_data['notification'] > self.cleaned_data['end']:
             raise ValidationError("Напоминание не может быть позже конца события")
+        if self.cleaned_data['notification'] is not None and self.cleaned_data['notification'] < self.cleaned_data['start']:
+            return None
         return self.cleaned_data['notification']

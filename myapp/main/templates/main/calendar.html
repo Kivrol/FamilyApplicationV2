@@ -106,9 +106,11 @@
                 $('#modal_start').html(new Date(data['start']).toLocaleString("ru", {}))
                 $('#modal_end').html(new Date(data['end']).toLocaleString("ru", {}))
                 $('#modal_delete').attr("href", `/calendar/delete/${data['id']}`)
-                console.log(data['notify'])
                 // TODO что-то не так с пустым нотифай
-                $('#modal_notify').html(data['notify']?data['notify']:"")
+                if (data['notification'])
+                    $('#modal_notify').html(new Date(data['notification']).toLocaleString("ru", {}))
+                else
+                    $('#modal_notify').html("не  запланировано")
                 console.log(data)
                 $('#event_id').val(i)
                 $('#modal_delete').attr('hidden', 'hidden')
@@ -156,7 +158,7 @@
                 $('#id_end').val(new Date(new Date(data['end'])- new Date().getTimezoneOffset() * 60 * 1000).toISOString().slice(0, -1))
                 $('#modal_notify').html(`<input type="datetime-local" class="form-control" name="notification" id="id_notification">`)
                 try {
-                    $('#id_notify').val(new Date(new Date(data['notify'])- new Date().getTimezoneOffset() * 60 * 1000).toISOString().slice(0, -1))
+                    $('#id_notification').val(new Date(new Date(data['notification'])- new Date().getTimezoneOffset() * 60 * 1000).toISOString().slice(0, -1))
                 }catch (e){}
                 $('#change_event').attr('hidden', 'hidden')
                 $('#modal_delete').removeAttr('hidden')
