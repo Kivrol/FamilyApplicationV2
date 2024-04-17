@@ -34,12 +34,12 @@
     </head>
     <body>
         <header>
-            <nav class="navbar navbar-expand-lg bg-body-tertiary background-color-dark align-items-center fixed-top">
+            <nav class="navbar navbar-expand-lg navbar-expand-md navbar-expand-sm bg-body-tertiary background-color-dark align-items-center fixed-top">
                 <div class="container-fluid">
-                    <div class="collapse navbar-collapse col-lg-4">
+                    <div class="col-lg-4 col-md-4 col-sm-4">
                         <a class="navbar-brand order-lg-2 mb-0 text-color-light" href="{% url 'calendar' %}">LightList</a>
                     </div>
-                    <div class="collapse navbar-collapse col-lg-8 d-flex justify-content-end">
+                    <div class="col-lg-8 col-md-8 col-sm-8 d-flex justify-content-end">
                         <ul class="navbar-nav align-items-center">
                             <li class="nav-item">
                                 <a class="nav-link active" aria-current="page" href="{% url 'profile' %}">
@@ -64,7 +64,7 @@
         <main>
         <div class="container-fluid main-content-settings">
             <div class="row">
-                <div class="col-lg-2 sidebar-bg-color p-0" style="height: 93vh">
+                <div class="col-lg-2 col-md-2 col-sm-2 sidebar-bg-color p-0" style="height: 93vh">
                     <a class="sidebar-text" href="{%  url 'calendar' %}">
                         <div class="d-flex justify-content-center sidebar-block-hover p-4">
                             <p class="fs-4 m-0">Календарь</p>
@@ -75,25 +75,24 @@
                             <p class="fs-4 m-0">Список продуктов</p>
                         </div>
                     </a>
-
-                    <a class="sidebar-text" href="{% url 'cloud' %}">
-                        <div class="d-flex justify-content-center sidebar-block-hover sidebar-text pt-4 pb-4">
-                            <i class="fa-regular fa-cloud iconList fa-sm">>Облако</i>
+                    <a class="sidebar-text" href="{%  url 'cloud' %}">
+                        <div class="d-flex justify-content-center sidebar-block-hover p-4">
+                            <p class="fs-4 m-0">Облако</p>
                         </div>
                     </a>
-                    <a class="sidebar-text" href="{% url 'wishlist' %}">
-                        <div class="d-flex justify-content-center sidebar-block-hover sidebar-text pt-4 pb-4">
-                            <i class="fa-regular fa-gifts iconList fa-sm">Список подарков</i>
+                    <a class="sidebar-text" href="{%  url 'wishlist' %}">
+                        <div class="d-flex justify-content-center sidebar-block-hover p-4">
+                            <p class="fs-4 m-0">Список подарков</p>
                         </div>
                     </a>
-                    <a class="sidebar-text" href="{% url 'family' %}">
-                        <div class="d-flex justify-content-center sidebar-block-hover sidebar-text pt-4 pb-4">
-                            <i class="fa-regular fa-people-roof iconList fa-sm">Ваша группа</i>
+                    <a class="sidebar-text" href="{%  url 'family' %}">
+                        <div class="d-flex justify-content-center sidebar-block-hover p-4">
+                            <p class="fs-4 m-0">Группа</p>
                         </div>
                     </a>
-                    <a class="sidebar-text" href="{% url 'profile' %}">
-                        <div class="d-flex justify-content-center sidebar-block-hover sidebar-text pt-4 pb-4">
-                            <i class="fa-regular fa-user iconList fa-sm">Профиль</i>
+                    <a class="sidebar-text" href="{%  url 'profile' %}">
+                        <div class="d-flex justify-content-center sidebar-block-hover p-4">
+                            <p class="fs-4 m-0">Профиль</p>
                         </div>
                     </a>
 
@@ -104,7 +103,7 @@
                     </a>
                 </div>
 
-                <div class="col-lg-10 bg-light p-5">
+                <div class="col-lg-10 col-md-10 col-sm-10 bg-light px-4 py-0">
                     {% block mainContent%}
 
                     {% endblock %}

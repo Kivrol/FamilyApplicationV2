@@ -32,7 +32,7 @@ class CalendarApi(View):
             next_month = 1
         items = CalendarItem.objects.filter(
             Q(start__year=year) & Q(start__month=month) | (
-                        Q(start__year=prev_year) & Q(start__month=prev_month) & Q(end__month=month))
+                    Q(start__year=prev_year) & Q(start__month=prev_month) & Q(end__month=month))
         )
         base = calendar.monthcalendar(year, month)
         print(base)
@@ -51,13 +51,16 @@ class CalendarApi(View):
             print("START DAY ", item.start.day)
             if item.start.month == month and item.end.month == month:
                 for day in range(item.start.day, item.end.day + 1):
-                    future_json[day - 1 + calendar.weekday(year, month, 1)]['items'].append({'title': item.title, 'id': item.id, 'icon': item.icon})
+                    future_json[day - 1 + calendar.weekday(year, month, 1)]['items'].append(
+                        {'title': item.title, 'id': item.id, 'icon': item.icon})
             elif item.end.month == month:
                 for day in range(1, item.end.day + 1):
-                    future_json[day - 1 + calendar.weekday(year, month, 1)]['items'].append({'title': item.title, 'id': item.id, 'icon': item.icon})
+                    future_json[day - 1 + calendar.weekday(year, month, 1)]['items'].append(
+                        {'title': item.title, 'id': item.id, 'icon': item.icon})
             elif item.end.month == next_month:
                 for day in range(item.start.day, calendar.monthrange(year, month)[1] + 1):
-                    future_json[day - 1 + calendar.weekday(year, month, 1)]['items'].append({'title': item.title, 'id': item.id, 'icon': item.icon})
+                    future_json[day - 1 + calendar.weekday(year, month, 1)]['items'].append(
+                        {'title': item.title, 'id': item.id, 'icon': item.icon})
             print("END DAY ", item.end.day)
         print(json.dumps(future_json, indent=4, sort_keys=True))
         return JsonResponse(future_json, safe=False)
@@ -100,3 +103,19 @@ class DeleteCalendarItem(View):
     def get(self, request, *args, **kwargs):
         CalendarItem.objects.get(id=kwargs['id']).delete()
         return redirect('calendar')
+
+
+class EditCalendarItem(View):
+    def get(self, request, *args, **kwargs):
+        item = CalendarItem.objects.get(id=kwargs['id'])
+        form = AddCalendarItemForm(instance=item)
+        return render(request, 'main/edit_calendar_item.html', {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        item = CalendarItem.objects.get(id=kwargs['id'])
+        form = AddCalendarItemForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+            return redirect('calendar')
+        else:
+            return render(request, 'main/edit_calendar_item.html', {'form': form})
