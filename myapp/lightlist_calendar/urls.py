@@ -7,4 +7,5 @@ urlpatterns = [
     path('api/detail/<int:id>', views.CalendarDetailApi.as_view(), name='calendar_detail_api'),
     path('add/', views.AddCalendarItem.as_view(), name='add_calendar_item'),
     path('delete/<int:id>', views.DeleteCalendarItem.as_view(), name='delete_calendar_item'),
+    path('edit/<int:id>', views.EditCalendarItem.as_view(), name='edit_calendar_item'),
 ]

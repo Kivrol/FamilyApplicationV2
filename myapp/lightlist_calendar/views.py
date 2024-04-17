@@ -7,14 +7,15 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views.generic import View
 
-from .forms import AddCalendarItemForm
+from .forms import AddCalendarItemForm, EditCalendarItemForm
 from .models import CalendarItem
 from main.models import UserProfile
 
 
 class Calendar(View):
     def get(self, request, *args, **kwargs):
-        return render(request, 'main/calendar.html', {'items': CalendarItem.objects.all()})
+        f = AddCalendarItemForm
+        return render(request, 'main/calendar.html', {'items': CalendarItem.objects.all(), 'form': f})
 
 
 class CalendarApi(View):
@@ -106,16 +107,12 @@ class DeleteCalendarItem(View):
 
 
 class EditCalendarItem(View):
-    def get(self, request, *args, **kwargs):
-        item = CalendarItem.objects.get(id=kwargs['id'])
-        form = AddCalendarItemForm(instance=item)
-        return render(request, 'main/edit_calendar_item.html', {'form': form})
 
     def post(self, request, *args, **kwargs):
         item = CalendarItem.objects.get(id=kwargs['id'])
-        form = AddCalendarItemForm(request.POST, instance=item)
+        form = EditCalendarItemForm(request.POST, instance=item)
         if form.is_valid():
             form.save()
-            return redirect('calendar')
+            return JsonResponse({'status': 'ok'}, safe=False)
         else:
-            return render(request, 'main/edit_calendar_item.html', {'form': form})
+            return JsonResponse({'status': 'error', 'errors': form.errors}, safe=False)  # JsonResponse(form.errors, safe=False)

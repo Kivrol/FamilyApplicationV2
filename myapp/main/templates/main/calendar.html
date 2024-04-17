@@ -69,7 +69,12 @@
             update(month, year)
         })
         var myModal = new bootstrap.Modal($('#eventModal'), {})
+        $('#eventModal').on('hidden.bs.modal', function () {
+    update(month, year)
+})
         var dayModal = new bootstrap.Modal($('#dayModal'), {})
+
+        var addEventCollapse = new bootstrap.Collapse($('#addEventForm'),{toggle:false})
         update(d.getMonth()+1, d.getFullYear());
         $(document).on("click", ".day .row", function () {
             console.log("day clicker")
@@ -90,6 +95,11 @@
         })
         $(document).on("click", ".calendar_event", function () {
             let i = this.id.split('_')[1]
+           renderEventModal(i)
+        });
+
+        function renderEventModal(id){
+             let i = id
             $.getJSON("/calendar/api/detail/" + i, function (data) {
                 $('#eventModalTitle').html(`${data['title']} <i class="material-icons">${data['icon']}</i>`)
                 $('#modal_desc').html(data['description'])
@@ -98,14 +108,98 @@
                 $('#modal_delete').attr("href", `/calendar/delete/${data['id']}`)
                 console.log(data['notify'])
                 // TODO что-то не так с пустым нотифай
-                if (typeof data['notify'] === undefined)
-                    $('#modal_notify').html("не запланировано")
-                else
-                    $('#modal_notify').html(data['notify'])
+                $('#modal_notify').html(data['notify']?data['notify']:"")
                 console.log(data)
+                $('#event_id').val(i)
+                $('#modal_delete').attr('hidden', 'hidden')
+                $('#save_event').attr('hidden', 'hidden')
+                $('#decline_event').attr('hidden', 'hidden')
+                $('#change_event').removeAttr('hidden')
+                $('#icon_selector').remove()
             })
             myModal.show();
+        }
+
+        $(document).on("click", "#change_event", function () {
+            let i = $('#event_id').val()
+            $.getJSON("/calendar/api/detail/" + i, function (data) {
+                $('#eventModalTitle').html(`<input type="text" class="form-control" name="title" value="${data['title']}">`)
+                $('#eventModalBody').prepend(`<p id="icon_selector"><b>Иконка:</b><select name="icon" id="id_icon" class="form-control">
+  <option value="" selected="">---------</option>
+
+  <option value="work">Другое</option>
+
+  <option value="directions_walk">Прогулка</option>
+
+  <option value="apartment">Работа</option>
+
+  <option value="holiday_village">Дача</option>
+
+  <option value="celebration">День рождения</option>
+
+  <option value="park">Новый год</option>
+
+  <option value="favorite">День святого валентина</option>
+
+  <option value="woman">8 Марта</option>
+
+  <option value="military_tech">23 Февраля</option>
+
+  <option value="partner_exchange">Свадьба</option>
+
+</select></p>`)
+                $('#modal_desc').html(`<p><textarea name="description" class="form-control"> ${data['description']}</textarea></p>`)
+                $('#modal_start').html(`<input type="datetime-local" class="form-control" name="start" id="id_start">`)
+                $('#modal_end').html(`<input type="datetime-local" class="form-control" name="end" id="id_end">`)
+                $('#modal_delete').attr("href", `/calendar/delete/${data['id']}`)
+                $('#id_start').val(new Date(new Date(data['start'])- new Date().getTimezoneOffset() * 60 * 1000).toISOString().slice(0, -1))
+                $('#id_end').val(new Date(new Date(data['end'])- new Date().getTimezoneOffset() * 60 * 1000).toISOString().slice(0, -1))
+                $('#modal_notify').html(`<input type="datetime-local" class="form-control" name="notification" id="id_notification">`)
+                try {
+                    $('#id_notify').val(new Date(new Date(data['notify'])- new Date().getTimezoneOffset() * 60 * 1000).toISOString().slice(0, -1))
+                }catch (e){}
+                $('#change_event').attr('hidden', 'hidden')
+                $('#modal_delete').removeAttr('hidden')
+                $('#save_event').removeAttr('hidden')
+                $('#decline_event').removeAttr('hidden')
+                $('#id_icon').val(data['icon'])
+                console.log(data)
+            })
         });
+
+         $(document).on("click", "#decline_event", function () {
+             let i = $('#event_id').val()
+             renderEventModal(i)
+         })
+
+        $(document).on("click", "#add_event", function () {
+             addEventCollapse.show()
+         })
+
+        $(document).on("click", "#save_event", function () {
+             let form = $('#form_event')
+            console.log("Saving")
+                var form_data = form.serialize();
+            $.ajax({
+                type: "POST",
+                url: "/calendar/edit/"+$('#event_id').val(),
+                data: form_data,
+                success: function (data) {
+                    if(data['status'] == 'ok'){
+                        renderEventModal($('#event_id').val())
+                    }
+                    else{
+                        console.log(data)
+                        $('.invalid-feedback').remove()
+                        for(let e in data['errors'])
+                        {
+                            $('#id_'+e).addClass('is-invalid')
+                            $('#id_'+e).after(`<div class="invalid-feedback">${data['errors'][e]}</div>`)
+                        }
+                    }
+                }
+            })
+         })
 
 
     })
@@ -502,7 +596,9 @@
 <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <form method="post" id="form_event">
+                {% csrf_token %}
+            <div class="modal-header" id="eventModalHeader">
                 <h5 class="modal-title" id="eventModalTitle">Modal title</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -511,12 +607,15 @@
                 <p><b>Начало:</b> <span id="modal_start"></span></p>
                 <p><b>Окончание:</b> <span id="modal_end"></span></p>
                 <p><b>Уведомление:</b> <span id="modal_notify"></span></p>
+                <input type="hidden" id="event_id">
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                <a class="btn btn-warning"  href="">Изменить</a>
-                <a class="btn btn-danger" id="modal_delete">Удалить</a>
+            <div class="modal-footer" id="event_footer">
+                <a class="btn btn-warning" id="change_event">Изменить</a>
+                <a class="btn btn-danger" id="modal_delete" hidden="hidden">Удалить</a>
+                <a class="btn btn-outline-secondary" id="decline_event" hidden="hidden">Отменить</a>
+                <a class="btn btn-outline-success" id="save_event" hidden="hidden">Сохранить</a>
             </div>
+            </form>
         </div>
     </div>
 </div>
@@ -528,12 +627,17 @@
                 <h5 class="modal-title" id="dayModalTitle">Modal title</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" id="dayModalBody">
+            <div class="modal-body">
+                <div id="dayModalBody">
 
+                </div>
+                <div id="addEventForm" class="collapse">
+                    {{ form.as_p }}
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                <a class="btn btn-warning"  href="">Изменить</a>
+                <b class="btn btn-warning"  id="add_event">Добавить</b>
                 <a class="btn btn-danger" >Удалить</a>
             </div>
         </div>
