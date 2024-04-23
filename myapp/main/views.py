@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 from django.views.generic import View
 
 from .models import Family, UserProfile, JoinFamilyRequest
@@ -86,7 +87,9 @@ class EditProfile(View):
         up = UserProfile.objects.get(user=request.user)
         profileForm = EditProfileForm(instance=UserProfile.objects.get(user=request.user))
 
-        return render(request, 'main/editprofile.html', {'userForm': userForm, 'profileForm': profileForm})
+        changePass = PasswordChangeForm(request.user)
+
+        return render(request, 'main/editprofile.html', {'userForm': userForm, 'profileForm': profileForm, "changePass": changePass})
 
     def post(self, request, *args, **kwargs):
         user = request.user

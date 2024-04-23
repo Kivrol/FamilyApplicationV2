@@ -4,43 +4,120 @@
 {% block title %} Запрос на добавление в группу {% endblock %}
 
 {% block mainContent %}
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
-<link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
-<div class="main-content-padding">
-    {% if products|length > 0 %}
-    <table class="table">
+
+    <div class="container justify-content-center mt-5">
+<h4 class="display-5 text-center">Список покупок</h4>
+    <link rel="stylesheet" href="{% static 'main/css/customtable.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/customfont.css' %}">
+    <script>
+        $(document).ready(function(){
+            $('.js-check-all').on('click', function() {
+                if ($(this).prop('checked')) {
+                    $('td input[type="checkbox"]').each(function () {
+                        $(this).prop('checked', true);
+                        $(this).closest('tr').addClass('table-warning');
+                    })
+                } else {
+                    $('td input[type="checkbox"]').each(function () {
+                        $(this).prop('checked', false);
+                        $(this).closest('tr').removeClass('table-warning');
+                    })
+                }
+            })
+
+
+
+      $('input[type="checkbox"]').change(function(){
+            $('td input[type="checkbox"]').each(function() {
+                if($(this).prop('checked'))
+                    $(this).closest('tr').addClass('table-warning');
+                else
+                    $(this).closest('tr').removeClass('table-warning');
+            })
+
+
+        })
+
+
+            $('#delete_bought').on('click', function() {
+                $('td input[type="checkbox"]').each(function() {
+                    if( $(this).prop('checked'))
+                    {
+                        let i = $(this).attr('id').substr(1,3)
+                        $.get("delete/"+i)
+                    }
+                })
+                location.reload()
+	  	})
+            });
+
+
+    </script>
+
+    <table class="table table-responsive ">
         <thead>
         <tr>
-            <td>Взял</td>
+            <th>{% if products|length > 0%}<label class="control control--checkbox">
+<input type="checkbox" class="js-check-all">
+<div class="control__indicator"></div>
+</label>{% endif %}</th>
             <td>Название</td>
             <td>Количество</td>
             <td>Дата добавления</td>
-            <td>Действия</td>
         </tr>
         </thead>
 
         {% for pr in products %}
         <tr>
-            <td><input type="checkbox"></td>
+            <td><label class="control control--checkbox">
+<input type="checkbox" id="c{{ pr.id }}">
+<div class="control__indicator"></div>
+</label></td>
             <td>{{ pr.name }}</td>
             <td>{{ pr.amount }} {{ pr.unit }}</td>
             <td>{{ pr.date }}</td>
-            <td><a class="btn btn-success" href="{%  url 'delete_product' id=pr.id %}">Куплено</a></td>
         </tr>
         {% endfor %}
+    <tr><form method="POST" action="">
+        <td></td>
+        <td>
+            <input class="form-control" name="name" id="id_name" required="" placeholder="Наименование">
+        </td>
+        <td>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col">
+                        <input type="number" name="amount" step="any" required="" id="id_amount" class="form-control" placeholder="Количество">
+                    </div>
+                    <div class="col">
+                        <select name="unit" required="" id="id_unit" class="form-control" >
+  <option value="" selected="">Мера измерения</option>
+
+  <option value="шт">шт</option>
+
+  <option value="кг">кг</option>
+
+  <option value="мл">мл</option>
+
+</select>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </td>
+        <td>
+            <button class="btn btn-outline-success" id="add_new" type="submit">Добавить</button>
+        </td>
+        {% csrf_token %}
+    </form>
+    </tr>
 
     </table>
-    {% else %}
-    Список покупок пуст!
-    {% endif %}
-    <form method="POST" action="">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Добавить">
-    </form>
-</div>
+    <p></p>
+    <button class="btn btn-outline-danger" id="delete_bought">Удалить купленное</button>
+
+
+    </div>
 {% endblock %}

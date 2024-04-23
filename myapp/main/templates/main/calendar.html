@@ -31,7 +31,8 @@
                     $('#c'+i).addClass("d-none d-sm-inline-block bg-light text-muted")
                     $('#t' + i).html("")
                 }
-
+                
+                //TODO аватар создателя
                 for (let event in data[i]['items']) {
                     $('#c' + i).append(`<a class="event d-block p-1 pl-2 pr-2 mb-1 rounded text-truncate small bg-success text-white calendar_event"
                    title="Test Event 2" id="event_${data[i]['items'][event]['id']}"><i class="material-icons-size-2">${data[i]['items'][event]['icon']}</i>${data[i]['items'][event]['title']}</a>`)
@@ -48,6 +49,8 @@
         var d = new Date()
         let month = d.getMonth()+1
         let year = d.getFullYear()
+        let day_index= 0;
+        let sel_day = 0;
 
         console.log(d.getFullYear(), d.getMonth())
         $('#prevmonth').click(function (){
@@ -74,6 +77,8 @@
 })
         var dayModal = new bootstrap.Modal($('#dayModal'), {})
 
+
+
         var addEventCollapse = new bootstrap.Collapse($('#addEventForm'),{toggle:false})
         update(d.getMonth()+1, d.getFullYear());
         $(document).on("click", ".day .row", function () {
@@ -81,6 +86,8 @@
             console.log(self.id)
             console.log($('span', this).attr("id").substring(1,3))
             let index = $('span', this).attr("id").substring(1,3)
+            day_index = index
+            sel_day = $('span', this).html()
             $.getJSON(`/calendar/api/${month}/${year}`, function (data) {
                 console.log(data[index])
                 $('#dayModalTitle').html(`${data[index]['day']}.${month}.${year}`)
@@ -162,10 +169,79 @@
              let i = $('#event_id').val()
              renderEventModal(i)
          })
+        
+        $(document).on("blur", "#id_start", function () {
+             let start = new Date($('#id_start').val())
+            $('#id_end').val(new Date(start - new Date().getTimezoneOffset() * 60 * 1000+600*1000).toISOString().slice(0, -1))
+         })
 
         $(document).on("click", "#add_event", function () {
-             addEventCollapse.show()
+            addEventCollapse.show()
+            let now = new Date()
+            $('#id_start').val(new Date(new Date(year, month-1, sel_day, now.getHours(), now.getMinutes())- new Date().getTimezoneOffset() * 60 * 1000).toISOString().slice(0, -1))
+            $('#add_event').attr('hidden', 'hidden')
+            $('#day_cancel').removeAttr('hidden')
+            $('#day_success').removeAttr('hidden')
          })
+
+        $('#dayModal').on('hidden.bs.modal', function () {
+            addEventCollapse.hide()
+            $('#add_event').removeAttr('hidden')
+            $('#day_cancel').attr('hidden', 'hidden')
+            $('#day_success').attr('hidden', 'hidden')
+            $('#id_start').val("")
+            $('#id_end').val("")
+        })
+
+        $(document).on("click", '#day_cancel', function(){
+            addEventCollapse.hide()
+            $('#add_event').removeAttr('hidden')
+            $('#day_cancel').attr('hidden', 'hidden')
+            $('#day_success').attr('hidden', 'hidden')
+            $('#id_start').val("")
+            $('#id_end').val("")
+        })
+
+        $(document).on("click", '#day_success', function(){
+
+            $('#add_event').removeAttr('hidden')
+            $('#day_cancel').attr('hidden', 'hidden')
+            $('#day_success').attr('hidden', 'hidden')
+            let form = $('#day_form')
+            console.log("Saving")
+                var form_data = form.serialize();
+            $.ajax({
+                type: "POST",
+                url: "/calendar/add/",
+                data: form_data,
+                success: function (data) {
+                    if(data['status'] == 'ok'){
+                        addEventCollapse.hide()
+                        $.getJSON(`/calendar/api/${month}/${year}`, function (data) {
+                        console.log(data[index])
+                        $('#dayModalTitle').html(`${data[day_index]['day']}.${month}.${year}`)
+                        $('#dayModalBody').html("")
+                        for (let event in data[day_index]['items']){
+                            $('#dayModalBody').append(`<a class="event d-block p-1 pl-2 pr-2 mb-1 rounded text-truncate small bg-success text-white calendar_event"
+                           title="Test Event 2" id="event_${data[index]['items'][event]['id']}"><i class="material-icons-size-2">${data[index]['items'][event]['icon']}</i>${data[index]['items'][event]['title']}</a>`)
+                        }
+                dayModal.show()
+            })
+                        update(month, year)
+                    }
+                    else{
+                        console.log(data)
+                        $('.invalid-feedback').remove()
+                        for(let e in data['errors'])
+                        {
+                            $('#id_'+e).addClass('is-invalid')
+                            $('#id_'+e).after(`<div class="invalid-feedback">${data['errors'][e]}</div>`)
+                        }
+                    }
+                }
+            })
+        })
+
 
         $(document).on("click", "#save_event", function () {
              let form = $('#form_event')
@@ -583,7 +659,33 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="dayModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dayModalTitle">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="dayModalBody">
 
+                </div>
+                <div id="addEventForm" class="collapse">
+                    <form id="day_form">
+                        {% csrf_token %}
+                       {{ form.as_p }}
+                    </form>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" id="day_cancel" hidden="hidden">Отменить</button>
+                <button type="button" class="btn btn-outline-success" id="day_success" hidden="hidden">Сохранить</button>
+                <button class="btn btn-warning"  id="add_event">Добавить</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -611,27 +713,5 @@
     </div>
 </div>
 
-<div class="modal fade" id="dayModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="dayModalTitle">Modal title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div id="dayModalBody">
 
-                </div>
-                <div id="addEventForm" class="collapse">
-                    {{ form.as_p }}
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                <b class="btn btn-warning"  id="add_event">Добавить</b>
-                <a class="btn btn-danger" >Удалить</a>
-            </div>
-        </div>
-    </div>
-</div>
 {% endblock %}

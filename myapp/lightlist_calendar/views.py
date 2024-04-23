@@ -14,7 +14,7 @@ from main.models import UserProfile
 
 class Calendar(View):
     def get(self, request, *args, **kwargs):
-        f = AddCalendarItemForm
+        f = AddCalendarItemForm()
         return render(request, 'main/calendar.html', {'items': CalendarItem.objects.all(), 'form': f})
 
 
@@ -31,9 +31,14 @@ class CalendarApi(View):
         next_month = month + 1
         if next_month > 12:
             next_month = 1
+        up = UserProfile.objects.get(user=request.user)
+        group_members = UserProfile.objects.filter(family=up.family)
         items = CalendarItem.objects.filter(
+            (
             Q(start__year=year) & Q(start__month=month) | (
-                    Q(start__year=prev_year) & Q(start__month=prev_month) & Q(end__month=month))
+                    Q(start__year=prev_year) & Q(start__month=prev_month) & Q(end__month=month))) & (
+                        Q(creator__in=group_members)
+                    )
         )
         base = calendar.monthcalendar(year, month)
         print(base)
@@ -79,9 +84,9 @@ class AddCalendarItem(View):
             item.creator = UserProfile.objects.get(user=request.user)
             item.group = item.creator.family
             item.save()
-            return redirect('calendar')
+            return JsonResponse({'status': 'ok'}, safe=False)
         else:
-            return render(request, 'main/add_calendar_item.html', {'form': form})
+            return JsonResponse({'status': 'error', 'errors': form.errors}, safe=False)
 
 
 class CalendarDetailApi(View):
