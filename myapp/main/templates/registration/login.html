@@ -35,15 +35,30 @@
     </div>
     {%  endif %}
 
-    <div class="container d-flex justify-content-center position-absolute top-50 start-50 translate-middle border rounded">
-        <div class="col-sm-8 col-md-6 col-lg-4">
-            <form method="post">
+    <div class="container d-flex justify-content-center position-absolute top-50 start-50 translate-middle">
+        <div class="card shadow col-sm-8 col-md-6 col-lg-4">
+            <div class="card-header text-center bg-color">
+                <div class="row d-flex justify-content-center mb-2">
+                    <p class="h2">Добро пожаловать</p>
+                </div>
+            </div>
+            <div class="card-body">
+                <form method="post">
                 {% csrf_token %}
                 <label for="username">Логин:</label>
                 <input class="form-control" type="text" name="username" placeholder="Логин">
                 <label for="username">Пароль:</label>
-                <input class="form-control" type="password" name="password" placeholder="Логин">
-                <button type="submit">Войти</button>
+                <input class="form-control" type="password" name="password" placeholder="Пароль">
+                <div class="d-grid gap-2 col-6 mx-auto text-center">
+                    <button class="button btn btn-success mt-4" type="submit">Войти</button>
+                    <a href="" class="underline-one">Забыли пароль?</a>
+                </div>
+                </form>
+            </div>
+            <div class="card-footer text-center bg-color">
+                <p class="mb-0">Мы ещё не знакомы?</p>
+                <a href="{% url 'registration' %}"><button class="button-animate">Зарегистрироваться</button></a>
+            </div>
         </div>
     </div>
 </body>

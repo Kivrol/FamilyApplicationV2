@@ -5,56 +5,110 @@
 
 {% block mainContent %}
 <link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
-<div class="main-content-padding">
-    <div class="page-content page-container" id="page-content">
-        <div>
-            <div class="row container d-flex justify-content-center">
-                <div class="col-xl-6 col-md-12">
-                    <div class="card user-card-full">
-                        <div class="row m-l-0 m-r-0">
-                            <div class="col-sm-4 bg-c-lite-green user-profile">
-                                <div class="card-block text-center text-white img-center">
-                                    <div class="m-b-25">
-                                        <img src="{{ BASE_DIR }}/media/{{user.userprofile.profileAvatar}}"
-                                             class="rounded-circle" alt="User-Profile-Image" width="100px"
-                                             height="100px">
-                                    </div>
-                                    <h6 class="f-w-600">{{ user.username }}</h6>
-                                    <a href="{% url 'editprofile' %}"><i
-                                            class=" mdi mdi-square-edit-outline feather icon-edit m-t-10 f-16"></i></a>
-                                </div>
+
+<div class="container d-flex justify-content-center position-relative top-50 start-50 translate-middle">
+    <div class="card border-1 rounded-2 shadow col-sm-10 col-md-8 col-xl-6">
+        <div class="row">
+            <div class="col-4">
+                <div class="card-block bg-color d-flex justify-content-center p-2 align-items-center">
+                    <div class="container-fluid">
+                        <div class="row px-3">
+                            {% if user.userprofile.profileAvatar %}
+                            <img src="{{ BASE_DIR }}/media/{{user.userprofile.profileAvatar}}" class="rounded-circle" alt="Лого">
+                            {% else %}
+                            <img src="{% static 'main/img/profileDefault.png' %}" class="rounded-circle" alt="Лого">
+                            {% endif %}
+                        </div>
+                        <div class="row text-center">
+                            <p class="h4 mt-1 text-color">{{ user.username }}</p>
+                        </div>
+                        <div class="row text-center mt-2">
+                            <a class="material-icons-size-3 text-color" href="{% url 'editprofile' %}">edit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="card-block">
+                    <div class="container mx-0 p-2">
+                        <div class="row items-align-center mt-3">
+                            <p class="h4 text-color">Информация</p>
+                        </div>
+                        <div class="row">
+                            <hr class="hr-shelf"/>
+                        </div>
+
+                        <div class="row items-align-center">
+                            <div class="col-3">
+                                <p class="h6 text-color">ФИО:</p>
                             </div>
-                            <div class="col-sm-8">
-                                <div class="card-block">
-                                    <h6 class="m-b-20 p-b-5 b-b-default f-w-600">Информация</h6>
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <p class="m-b-10 f-w-600">ФИО</p>
-                                            <h6 class="text-muted f-w-400">{{ user.last_name }} {{ user.first_name }} 
-                                                {{ user.userprofile.patronimic }}</h6>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <p class="m-b-10 f-w-600">Почта</p>
-                                            <h6 class="text-muted f-w-400">{{ user.email }}</h6>
-                                        </div>
-                                    </div>
-                                    <h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600">Семья</h6>
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <p class="m-b-10 f-w-600">Название семьи</p>
-                                            <h6 class="text-muted f-w-400">{{user.userprofile.family.name}}</h6>
-                                        </div>
-                                        <!--                                        <div class="col-sm-6">-->
-                                        <!--                                            <p class="m-b-10 f-w-600">Подумать что сюда добавить</p>-->
-                                        <!--                                            <h6 class="text-muted f-w-400">Сюда тоже</h6>-->
-                                        <!--                                        </div>-->
-                                    </div>
-                                </div>
+                            <div class="col-9">
+                                {% if user.first_name and user.last_name %}
+                                <p class="h6 text-color">{{ user.last_name }} {{ user.first_name }} {{ user.userprofile.patronimic }}</p>
+                                {% else %}
+                                <p class="h6 text-color opacity-25">Не заполнено</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row items-align-center">
+                            <div class="col-3">
+                                <p class="h6 text-color">E-mail:</p>
+                            </div>
+                            <div class="col-9">
+                                <p class="h6 text-color">{{ user.email }}</p>
+                            </div>
+                        </div>
+
+                        <div class="row items-align-center">
+                            <div class="col-3">
+                                <p class="h6 text-color">Номер телефона:</p>
+                            </div>
+                            <div class="col-9">
+                                {% if user.userprofile.phoneNumber %}
+                                <p></p>
+                                <p class="h6 text-color">{{ user.userprofile.phoneNumber }}</p>
+                                {% else %}
+                                <p></p>
+                                <p class="h6 text-color opacity-25">Не заполнено</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row items-align-center">
+                            <div class="col-3">
+                                <p class="h6 text-color">Дата рождения:</p>
+                            </div>
+                            <div class="col-9">
+                                {% if user.userprofile.birthDate %}
+                                <p></p>
+                                <p class="h6 text-color">{{ user.userprofile.birthDate }}</p>
+                                {% else %}
+                                <p></p>
+                                <p class="h6 text-color opacity-25">Не заполнено</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row items-align-center mt-4">
+                            <p class="h4 text-color">Группа</p>
+                        </div>
+                        <div class="row">
+                            <hr class="hr-shelf"/>
+                        </div>
+
+                        <div class="row items-align-center mb-3">
+                            <div class="col-3">
+                                <p class="h6 text-color">Ваша группа:</p>
+                            </div>
+                            <div class="col-9">
+                                {% if user.family %}
+                                <p></p>
+                                <p class="h6 text-color">{{ user.family.name }}</p>
+                                {% else %}
+                                <p></p>
+                                <p class="h6 text-color opacity-25">Не заполнено</p>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

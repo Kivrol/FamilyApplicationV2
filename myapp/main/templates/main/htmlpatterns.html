@@ -43,11 +43,11 @@
                         <ul class="navbar-nav align-items-center">
                             <li class="nav-item">
                                 <a class="nav-link active" aria-current="page" href="{% url 'profile' %}">
-                                    <img src="{{ BASE_DIR }}/media/{{user.userprofile.profileAvatar}}"
-                                         class="rounded-circle"
-                                         alt="{% static 'main/img/profileDefault.jpg' %}"
-                                         width="32px"
-                                         height="32px">
+                                    {% if user.userprofile.profileAvatar %}
+                                    <img src="{{ BASE_DIR }}/media/{{user.userprofile.profileAvatar}}" class="rounded-circle" alt="Лого" width="32px" height="32px">
+                                    {% else %}
+                                    <img src="{% static 'main/img/profileDefault.png' %}" class="rounded-circle" alt="Лого" width="32px" height="32px">
+                                    {% endif %}
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -96,14 +96,14 @@
                         </div>
                     </a>
 
-                    <a class="sidebar-text" href="">
-                        <div class="d-flex justify-content-center sidebar-block-hover p-4 fixed-bottom">
-                            <p class="fs-4 m-0">Для теста</p>
-                        </div>
-                    </a>
+<!--                    <a class="sidebar-text" href="">-->
+<!--                        <div class="d-flex justify-content-center sidebar-block-hover p-4 fixed-bottom">-->
+<!--                            <p class="fs-4 m-0">Для теста</p>-->
+<!--                        </div>-->
+<!--                    </a>-->
                 </div>
 
-                <div class="col-lg-10 col-md-10 col-sm-10 bg-light px-4 py-0">
+                <div class="col-lg-10 col-md-10 col-sm-10 px-4 py-0">
                     {% block mainContent%}
 
                     {% endblock %}
