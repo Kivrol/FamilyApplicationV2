@@ -2,7 +2,7 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('', views.index, name='calendar'),
+    path('', views.index),
     path('profile', views.profileView, name='profile'),
     path('/', include('lightlist_auth.urls')),
     path('family/', views.FamilyView.as_view(), name='family'),
@@ -18,4 +18,5 @@ urlpatterns = [
     path('wishlist/', include('wishlist.urls')),
     path('cloud/', include('cloud.urls')),
     path('calendar/', include('lightlist_calendar.urls')),
+    path('change_password/', views.ChangePassword.as_view(), name='change_password'),
 ]

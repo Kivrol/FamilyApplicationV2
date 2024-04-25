@@ -63,7 +63,7 @@ class EditProfileForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ['patronimic', 'profileAvatar', 'birthDate']
+        fields = ['patronimic', 'profileAvatar', 'birthDate', 'phoneNumber']
 
 
 

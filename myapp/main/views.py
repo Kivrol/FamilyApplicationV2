@@ -103,6 +103,14 @@ class EditProfile(View):
         else:
             return render(request, 'main/editprofile.html', {'userForm': userForm, 'profileForm': profileForm})
 
+class ChangePassword(View):
+    def post(self, request, *args, **kwargs):
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'status': 'ok'}, safe=False)
+        else:
+            return JsonResponse({'status': 'error', 'errors': form.errors}, safe=False)
 
 class JoinFamilyRequestView(View):
     def get(self, request, *args, **kwargs):

@@ -4,116 +4,201 @@
 {% block title %} Редактирование профиля {% endblock %}
 
 {% block mainContent %}
-<link rel="stylesheet" href="{% static 'main/css/editprofile.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/editprofile.css' %}">
 
-<div class="container d-flex justify-content-center">
-    <div class="card border rounded-2 shadow col-sm-12 col-md-10 col-lg-10 col-xl-10 col-xxl-10">
-        <div class="card-header bg-color">
-            <p class="display-6 text-color text-center">Редактирование профиля</p>
-        </div>
-        <div class="row">
-            <div class="col-3">
-                <div class="card-block bg-color d-flex justify-content-center p-3">
-                    <div class="container-fluid">
-                        <div class="row px-3 pt-4">
-                            {% if user.userprofile.profileAvatar %}
-                            <img src="{{ BASE_DIR }}/media/{{user.userprofile.profileAvatar}}" class="rounded-circle" alt="Лого">
-                            {% else %}
-                            <img src="{% static 'main/img/profileDefault.png' %}" class="rounded-circle" alt="Лого">
-                            {% endif %}
-                        </div>
-                        <div class="row pt-4 text-center">
-                            <p class="h4 text-color">{{ user.username }}</p>
+    <div class="container d-flex justify-content-center">
+        <div class="card border rounded-2 shadow col-sm-12 col-md-10 col-lg-10 col-xl-10 col-xxl-10">
+            <div class="card-header bg-color">
+                <p class="display-6 text-color text-center">Редактирование профиля</p>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    <div class="card-block bg-color d-flex justify-content-center p-3">
+                        <div class="container-fluid">
+                            <div class="row px-3 pt-4">
+                                {% if user.userprofile.profileAvatar %}
+                                    <img src="{{ BASE_DIR }}/media/{{ user.userprofile.profileAvatar }}"
+                                         class="rounded-circle" alt="Лого">
+                                {% else %}
+                                    <img src="{% static 'main/img/profileDefault.png' %}" class="rounded-circle"
+                                         alt="Лого">
+                                {% endif %}
+                            </div>
+                            <div class="row pt-4 text-center">
+                                <p class="h4 text-color">{{ user.username }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-9">
-                <form action="" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="card-block d-flex align-items-center">
-                        <div class="container-fluid">
-                            <div class="row pt-3">
-                                <div class="col-3 align-self-center">
-                                    <p class="h5 col">Никнейм:</p>
-                                </div>
-                                <div class="col-9">
-                                    <div class="col-11">
-                                        <input class="form-control" type="text" name="username" id="username" value="{{ user.username }}">
+                <div class="col-9">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="card-block d-flex align-items-center">
+                            <div class="container-fluid">
+                                <div class="row pt-3">
+                                    <div class="col-3 align-self-center">
+                                        <p class="h5 col">Никнейм:</p>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="col-11">
+                                            <input class="form-control" type="text" name="username" id="id_username"
+                                                   value="{{ user.username }}">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row pt-3">
-                                <div class="col-3 align-self-center">
-                                    <p class="h5 col">Фамилия:</p>
-                                </div>
-                                <div class="col-9">
-                                    <div class="col-11">
-                                        <input class="form-control" type="text" name="last_name" id="last_name" value="{{ user.last_name }}">
+                                <div class="row pt-3">
+                                    <div class="col-3 align-self-center">
+                                        <p class="h5 col">Фамилия:</p>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="col-11">
+                                            <input class="form-control" type="text" name="last_name" id="id_last_name"
+                                                   value="{{ user.last_name }}">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row pt-3">
-                                <div class="col-3 align-self-center">
-                                    <p class="h5 col">Имя:</p>
-                                </div>
-                                <div class="col-9">
-                                    <div class="col-11">
-                                        <input class="form-control" type="text" name="first_name" id="first_name" value="{{ user.first_name }}">
+                                <div class="row pt-3">
+                                    <div class="col-3 align-self-center">
+                                        <p class="h5 col">Имя:</p>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="col-11">
+                                            <input class="form-control" type="text" name="first_name" id="id_first_name"
+                                                   value="{{ user.first_name }}">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row pt-3">
-                                <div class="col-3 align-self-center">
-                                    <p class="h5 col">Отчество:</p>
-                                </div>
-                                <div class="col-9">
-                                    <div class="col-11">
-                                        <input class="form-control" type="text" name="patronimic" id="patronimic" value="{{ user.userprofile.patronimic }}">
+                                <div class="row pt-3">
+                                    <div class="col-3 align-self-center">
+                                        <p class="h5 col">Отчество:</p>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="col-11">
+                                            <input class="form-control" type="text" name="patronimic" id="id_patronimic"
+                                                   value="{{ user.userprofile.patronimic }}">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            // TODO: Добавть отображение даты рождения
-                            <div class="row pt-3">
-                                <div class="col-3 align-self-center">
-                                    <p class="h5 col">Дата рождения:</p>
-                                </div>
-                                <div class="col-9">
-                                    <div class="col-11">
-                                        <input class="form-control" type="date" name="birthDate" id="birthDate" value="{{ user.userprofile.birthDate }}">
+                                <div class="row pt-3">
+                                    <div class="col-3 align-self-center">
+                                        <p class="h5 col">Дата рождения:</p>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="col-11">
+                                            <input class="form-control" type="date" name="birthDate" id="id_birthDate"
+                                                   value="{{ user.userprofile.birthDate|date:'Y-m-d' }}">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row pt-3">
-                                <div class="col-3 align-self-center">
-                                    <p class="h5 col">Номер телефона:</p>
-                                </div>
-                                <div class="col-9">
-                                    <div class="col-11">
-                                        <input class="form-control" type="text" name="phoneNumber" id="phoneNumber" value="{{ user.userprofile.phoneNumber }}">
+                                <div class="row pt-3">
+                                    <div class="col-3 align-self-center">
+                                        <p class="h5 col">Номер телефона:</p>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="col-11">
+                                            <input class="form-control" type="text" name="phoneNumber"
+                                                   id="id_phoneNumber" value="{{ user.userprofile.phoneNumber }}">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row pt-3">
-                                <div class="col-3 align-self-center">
-                                    <p class="h5 col">Аватар:</p>
-                                </div>
-                                <div class="col-9">
-                                    <div class="col-11">
-                                        <input class="form-control" type="file" name="patronimic" id="patronimic">
+                                <div class="row pt-3">
+                                    <div class="col-3 align-self-center">
+                                        <p class="h5 col">Аватар:</p>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="col-11">
+                                            <input class="form-control" type="file" name="profileAvatar"
+                                                   id="id_profileAvatar">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row pt-3 pb-3">
-                                <div class="col-11 d-flex justify-content-center">
-                                    <button type="submit" class="btn btn-outline-primary">Сохранить</button>
+                                <div class="row pt-3 pb-3">
+                                    <div class="col-11 d-flex justify-content-center">
+                                        <button type="submit" class="btn btn-outline-primary">Сохранить</button>
+                                        <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
+                                                data-bs-target="#exampleModal">
+                                            Сменить пароль
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Смена пароля</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="change_password_form">
+                        {% csrf_token %}
+                    <label for="id_old_password">Старый пароль:</label>
+                    <input type="password" name="old_password" autocomplete="current-password" autofocus="" required=""
+                           id="id_old_password" class="form-control">
+                    <label for="id_new_password1">Новый пароль:</label>
+                    <input type="password" name="new_password1" autocomplete="new-password" required=""
+                           aria-describedby="id_new_password1_helptext" id="id_new_password1" class="form-control">
+
+                    <span class="helptext" id="id_new_password1_helptext"></span>
+                    <ul class="list-group">
+                        <li class="list-group-item">Пароль не должен быть слишком похож на другую вашу личную
+                            информацию.
+                        </li>
+                        <li class="list-group-item">Ваш пароль должен содержать как минимум 8 символов.</li>
+                        <li class="list-group-item">Пароль не должен быть слишком простым и распространенным.</li>
+                        <li class="list-group-item">Пароль не может состоять только из цифр.</li>
+                    </ul>
+                    <label for="id_new_password2">Подтверждение нового пароля:</label>
+                    <input type="password" name="new_password2" autocomplete="new-password" required=""
+                           id="id_new_password2" class="form-control">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="change_password">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    $(document).ready(function(){
+        $('#change_password').click(function (){
+            let form_data = $('#change_password_form').serialize()
+        
+            $.ajax({
+                type: "POST",
+                url: "{% url 'change_password' %}",
+                data: form_data,
+                success: function (data) {
+                    $('.invalid-feedback').remove()
+                    $('.is-invalid').removeClass('is-invalid')
+                    if(data['status']=='ok')
+                    {
+                        $('#id_old_password').val("")
+                        $('#id_new_password1').val("")
+                        $('#id_new_password2').val("")
+                        location.replace("/%2Flogin")
+                    }
+                    else{
+                        
+                        for(let e in data['errors'])
+                        {
+                            $('#id_'+e).addClass('is-invalid')
+                            $('#id_'+e).after(`<div class="invalid-feedback">${data['errors'][e]}</div>`)
+                        }
+                    }
+                }
+            })
+            
+        })
+    })
+
+    </script>
 {% endblock %}
