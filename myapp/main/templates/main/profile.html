@@ -6,7 +6,7 @@
 {% block mainContent %}
 <link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
 
-<div class="container d-flex justify-content-center position-relative top-50 start-50 translate-middle">
+<div class="container d-flex justify-content-center">
     <div class="card border-1 rounded-2 shadow col-sm-10 col-md-8 col-xl-6">
         <div class="row">
             <div class="col-4">
@@ -31,7 +31,7 @@
             <div class="col-8">
                 <div class="card-block">
                     <div class="container mx-0 p-2">
-                        <div class="row items-align-center mt-3">
+                        <div class="row mt-3">
                             <p class="h4 text-color">Информация</p>
                         </div>
                         <div class="row">
@@ -39,10 +39,10 @@
                         </div>
 
                         <div class="row items-align-center">
-                            <div class="col-3">
+                            <div class="col-4">
                                 <p class="h6 text-color">ФИО:</p>
                             </div>
-                            <div class="col-9">
+                            <div class="col-8">
                                 {% if user.first_name and user.last_name %}
                                 <p class="h6 text-color">{{ user.last_name }} {{ user.first_name }} {{ user.userprofile.patronimic }}</p>
                                 {% else %}
@@ -52,19 +52,19 @@
                         </div>
 
                         <div class="row items-align-center">
-                            <div class="col-3">
+                            <div class="col-4">
                                 <p class="h6 text-color">E-mail:</p>
                             </div>
-                            <div class="col-9">
+                            <div class="col-8">
                                 <p class="h6 text-color">{{ user.email }}</p>
                             </div>
                         </div>
 
                         <div class="row items-align-center">
-                            <div class="col-3">
+                            <div class="col-4">
                                 <p class="h6 text-color">Номер телефона:</p>
                             </div>
-                            <div class="col-9">
+                            <div class="col-8">
                                 {% if user.userprofile.phoneNumber %}
                                 <p></p>
                                 <p class="h6 text-color">{{ user.userprofile.phoneNumber }}</p>
@@ -76,10 +76,10 @@
                         </div>
 
                         <div class="row items-align-center">
-                            <div class="col-3">
+                            <div class="col-4">
                                 <p class="h6 text-color">Дата рождения:</p>
                             </div>
-                            <div class="col-9">
+                            <div class="col-8">
                                 {% if user.userprofile.birthDate %}
                                 <p></p>
                                 <p class="h6 text-color">{{ user.userprofile.birthDate }}</p>
@@ -98,15 +98,13 @@
                         </div>
 
                         <div class="row items-align-center mb-3">
-                            <div class="col-3">
+                            <div class="col-4">
                                 <p class="h6 text-color">Ваша группа:</p>
                             </div>
-                            <div class="col-9">
-                                {% if user.family %}
-                                <p></p>
-                                <p class="h6 text-color">{{ user.family.name }}</p>
+                            <div class="col-8">
+                                {% if family %}
+                                <p class="h6 text-color">{{ family.name }}</p>
                                 {% else %}
-                                <p></p>
                                 <p class="h6 text-color opacity-25">Не заполнено</p>
                                 {% endif %}
                             </div>
@@ -117,4 +115,5 @@
         </div>
     </div>
 </div>
+
 {% endblock %}

@@ -4,123 +4,116 @@
 {% block title %} Редактирование профиля {% endblock %}
 
 {% block mainContent %}
+<link rel="stylesheet" href="{% static 'main/css/editprofile.css' %}">
 
-
-<div class="container rounded bg-white mt-5 mb-5">
-    <div class="row">
-        <div class="col-md-3 border-right">
-            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5"
-                                                                                         width="100px" height="100px"
-                                                                                         src="{{ BASE_DIR }}/media/{{user.userprofile.profileAvatar}}"><span
-                    class="font-weight-bold">{{ user.username }}</span><span
-                    class="text-black-50">{{ user.email }}</span><span> </span></div>
-            <h1></h1>
+<div class="container d-flex justify-content-center">
+    <div class="card border rounded-2 shadow col-sm-12 col-md-10 col-lg-10 col-xl-10 col-xxl-10">
+        <div class="card-header bg-color">
+            <p class="display-6 text-color text-center">Редактирование профиля</p>
         </div>
-    {%  if userForm.errors or profileForm.errors %}
-    <div class="alert alert-danger">
-    {{ userForm.errors }}
-    {{ profileForm.errors    }}
-    </div>
-    {%  endif %}
-        <form method="post" enctype='multipart/form-data'>
-            {% csrf_token %}
-            <div class="col-md-5 border-right">
-                <div class="p-3 py-5">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4 class="text-right">Редактирование профиля</h4>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-md-12"><label class="labels">Никнейм</label><input type="text"
-                                                                                           class="form-control" value="{{ userForm.username.initial }}"
-                                                                                           placeholder="{{userForm.username.initial}}"
-                                                                                           name="username"></div>
-
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-md-12"><label class="labels">Фамилия</label><input type="text"
-                                                                                           class="form-control"
-                                                                                           value="{{ userForm.last_name.initial }}"
-                                                                                           name="last_name"></div>
-
-
-                        <div class="col-md-12"><label class="labels">Имя</label><input type="text" class="form-control"
-                                                                                       value="{{ userForm.first_name.initial }}"
-                                                                                       placeholder="Введите имя"
-                                                                                       name="first_name"></div>
-
-
-
-                        <div class="col-md-12"><label class="labels">Отчество</label><input type="text"
-                                                                                            class="form-control"
-                                                                                            value="{{ profileForm.patronimic.initial }}"
-                                                                                            placeholder="Введите отчество"
-                                                                                            name="patronimic"></div>
-
-                    </div>
-                    <div class="row mt-3">
-                        {% if user.email is not None %}
-                        <div class="col-md-12"><label class="labels">Электронная почта</label><input type="tel"
-                                                                                                     class="form-control"
-                                                                                                     placeholder="{{user.email}}"
-                                                                                                     value="" name="">
+        <div class="row">
+            <div class="col-3">
+                <div class="card-block bg-color d-flex justify-content-center p-3">
+                    <div class="container-fluid">
+                        <div class="row px-3 pt-4">
+                            {% if user.userprofile.profileAvatar %}
+                            <img src="{{ BASE_DIR }}/media/{{user.userprofile.profileAvatar}}" class="rounded-circle" alt="Лого">
+                            {% else %}
+                            <img src="{% static 'main/img/profileDefault.png' %}" class="rounded-circle" alt="Лого">
+                            {% endif %}
                         </div>
-                        {% else %}
-                        <div class="col-md-12"><label class="labels">Электронная почта</label><input type="tel"
-                                                                                                     class="form-control"
-                                                                                                     placeholder="Введите электронную почту"
-                                                                                                     value="" name="">
+                        <div class="row pt-4 text-center">
+                            <p class="h4 text-color">{{ user.username }}</p>
                         </div>
-                        {% endif %}
-
-                        {% if user.userprofile.phoneNumber is not None %}
-                        <div class="col-md-12"><label class="labels">Номер телефона</label><input type="tel"
-                                                                                                  class="form-control"
-                                                                                                  placeholder="{{user.userprofile.phoneNumber}}"
-                                                                                                  value="" name="">
-                        </div>
-                        {% else %}
-                        <div class="col-md-12"><label class="labels">Номер телефона</label><input type="tel"
-                                                                                                  class="form-control"
-                                                                                                  placeholder="Введите номер телефона"
-                                                                                                  value="" name="">
-                        </div>
-                        {% endif %}
-
-                        <div class="col-md-12"><label class="labels">Аватар</label><input type="file"
-                                                                                          class="form-control" value=""
-                                                                                          name="profileAvatar"
-                                                                                          accept=".png, .jpg, .ico">
-                        </div>
-                    </div>
-                    <div class="mt-5 text-center">
-                        <button class="btn btn-primary profile-button" type="submit">Save Profile</button>
-                        
-                         <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Сменить пароль
-</button>
                     </div>
                 </div>
             </div>
-        </form>
+            <div class="col-9">
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="card-block d-flex align-items-center">
+                        <div class="container-fluid">
+                            <div class="row pt-3">
+                                <div class="col-3 align-self-center">
+                                    <p class="h5 col">Никнейм:</p>
+                                </div>
+                                <div class="col-9">
+                                    <div class="col-11">
+                                        <input class="form-control" type="text" name="username" id="username" value="{{ user.username }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pt-3">
+                                <div class="col-3 align-self-center">
+                                    <p class="h5 col">Фамилия:</p>
+                                </div>
+                                <div class="col-9">
+                                    <div class="col-11">
+                                        <input class="form-control" type="text" name="last_name" id="last_name" value="{{ user.last_name }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pt-3">
+                                <div class="col-3 align-self-center">
+                                    <p class="h5 col">Имя:</p>
+                                </div>
+                                <div class="col-9">
+                                    <div class="col-11">
+                                        <input class="form-control" type="text" name="first_name" id="first_name" value="{{ user.first_name }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pt-3">
+                                <div class="col-3 align-self-center">
+                                    <p class="h5 col">Отчество:</p>
+                                </div>
+                                <div class="col-9">
+                                    <div class="col-11">
+                                        <input class="form-control" type="text" name="patronimic" id="patronimic" value="{{ user.userprofile.patronimic }}">
+                                    </div>
+                                </div>
+                            </div>
+                            // TODO: Добавть отображение даты рождения
+                            <div class="row pt-3">
+                                <div class="col-3 align-self-center">
+                                    <p class="h5 col">Дата рождения:</p>
+                                </div>
+                                <div class="col-9">
+                                    <div class="col-11">
+                                        <input class="form-control" type="date" name="birthDate" id="birthDate" value="{{ user.userprofile.birthDate }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pt-3">
+                                <div class="col-3 align-self-center">
+                                    <p class="h5 col">Номер телефона:</p>
+                                </div>
+                                <div class="col-9">
+                                    <div class="col-11">
+                                        <input class="form-control" type="text" name="phoneNumber" id="phoneNumber" value="{{ user.userprofile.phoneNumber }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pt-3">
+                                <div class="col-3 align-self-center">
+                                    <p class="h5 col">Аватар:</p>
+                                </div>
+                                <div class="col-9">
+                                    <div class="col-11">
+                                        <input class="form-control" type="file" name="patronimic" id="patronimic">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pt-3 pb-3">
+                                <div class="col-11 d-flex justify-content-center">
+                                    <button type="submit" class="btn btn-outline-primary">Сохранить</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
-    
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Смена пароля</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-          {{ changePass.as_p }}
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 {% endblock %}

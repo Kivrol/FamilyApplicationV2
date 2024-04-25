@@ -59,9 +59,12 @@ class EditProfileForm(forms.ModelForm):
         validators=[FileExtensionValidator(allowed_extensions=['jpg', 'png', 'ico'])],
     )
 
+    birthDate = forms.DateField(required=False)
+
     class Meta:
         model = UserProfile
-        fields = ['patronimic', 'profileAvatar']
+        fields = ['patronimic', 'profileAvatar', 'birthDate']
+
 
 
 class MyAuthenticationForm(AuthenticationForm):

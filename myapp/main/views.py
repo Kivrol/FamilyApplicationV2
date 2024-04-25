@@ -22,7 +22,8 @@ def index(request):
 @login_required
 def profileView(request):
     template_name = 'main/profile.html'
-    return render(request, template_name)
+    family = UserProfile.objects.get(user=request.user).family
+    return render(request, template_name, {'family': family})
 
 
 class FamilyView(View):
