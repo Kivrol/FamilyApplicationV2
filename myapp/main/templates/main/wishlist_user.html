@@ -4,180 +4,190 @@
 {% block title %} Вишлист {{ user_ }} {% endblock %}
 
 {% block mainContent %}
-    <link rel="stylesheet" href="{% static 'main/css/wishlist.css' %}">
+<link rel="stylesheet" href="{% static 'main/css/wishlist.css' %}">
 
-    <script>
-        window.addEventListener('DOMContentLoaded', function () {
-            var row = document.getElementById('rowsCount');
-            if (window.innerWidth > 1280) {
-                row.classList.add('row-cols-6');
-            } else if (window.innerWidth > 1024 && window.innerWidth <= 1280) {
-                row.classList.add('row-cols-5');
-            } else if (window.innerWidth > 768 && window.innerWidth <= 1024) {
-                row.classList.add('row-cols-4');
-            } else if (window.innerWidth > 480 && window.innerWidth <= 768) {
-                row.classList.add('row-cols-2');
-            } else if (window.innerWidth <= 480) {
-                row.classList.add('row-cols-1');
-            }
-        });
+<script>
+    window.addEventListener('DOMContentLoaded', function () {
+        var row = document.getElementById('rowsCount');
+        if (window.innerWidth > 1280) {
+            row.classList.add('row-cols-6');
+        } else if (window.innerWidth > 1024 && window.innerWidth <= 1280) {
+            row.classList.add('row-cols-5');
+        } else if (window.innerWidth > 768 && window.innerWidth <= 1024) {
+            row.classList.add('row-cols-4');
+        } else if (window.innerWidth > 480 && window.innerWidth <= 768) {
+            row.classList.add('row-cols-2');
+        } else if (window.innerWidth <= 480) {
+            row.classList.add('row-cols-1');
+        }
+    });
 
-        window.addEventListener('resize', function () {
-            var row = document.getElementById('rowsCount');
-            row.classList.remove('row-cols-2', 'row-cols-4', 'row-cols-5', 'row-cols-6', 'row-cols-1');
-            if (window.innerWidth > 1280) {
-                row.classList.add('row-cols-6');
-            } else if (window.innerWidth > 1024 && window.innerWidth <= 1280) {
-                row.classList.add('row-cols-5');
-            } else if (window.innerWidth > 768 && window.innerWidth <= 1024) {
-                row.classList.add('row-cols-4');
-            } else if (window.innerWidth > 480 && window.innerWidth <= 768) {
-                row.classList.add('row-cols-2');
-            } else if (window.innerWidth <= 480) {
-                row.classList.add('row-cols-1');
-            }
-        });
-    </script>
+    window.addEventListener('resize', function () {
+        var row = document.getElementById('rowsCount');
+        row.classList.remove('row-cols-2', 'row-cols-4', 'row-cols-5', 'row-cols-6', 'row-cols-1');
+        if (window.innerWidth > 1280) {
+            row.classList.add('row-cols-6');
+        } else if (window.innerWidth > 1024 && window.innerWidth <= 1280) {
+            row.classList.add('row-cols-5');
+        } else if (window.innerWidth > 768 && window.innerWidth <= 1024) {
+            row.classList.add('row-cols-4');
+        } else if (window.innerWidth > 480 && window.innerWidth <= 768) {
+            row.classList.add('row-cols-2');
+        } else if (window.innerWidth <= 480) {
+            row.classList.add('row-cols-1');
+        }
+    });
+</script>
 
-    <div class="container">
-        <div id="rowsCount" class="row">
-            {% for w in wishes %}
+<div class="container">
+    <div id="rowsCount" class="row">
+        {% for w in wishes %}
+        <div class="col mt-4">
+            <div class="card shadow {% if not w.active %} opacity-50 {% endif %}">
+                {% if w.wish_picture %}
+                <img class="card-img-top rounded-top border-bottom p-2 shadow-sm crop-img"
+                     src="/media/{{ w.wish_picture }}">
+                {% else %}
+                <img class="card-img-top border-bottom p-2 shadow-sm crop-img"
+                     src="{% static 'main/img/orig.webp' %}">
+                {% endif %}
+                <div class="card-title text-center fs-4 mb-0">{{ w.name }}</div>
+                <div class="card-body text-center pt-0">
+                    <p class="card-text m-0">{{ w.reason }}</p>
 
-                <div class="col mt-4">
-                    <div class="card shadow {% if not w.active %} opacity-50 {% endif %}">
-                        {% if w.wish_picture %}
-                            <img class="card-img-top rounded-top border-bottom p-2 shadow-sm crop-img"
-                                 src="/media/{{ w.wish_picture }}">
-                        {% else %}
-                            <img class="card-img-top border-bottom p-2 shadow-sm crop-img"
-                                 src="{% static 'main/img/orig.webp' %}">
-                        {% endif %}
-                        <div class="card-title text-center fs-4 mb-0">{{ w.name }}</div>
-                        <div class="card-body text-center pt-0">
-                            <p class="card-text m-0">{{ w.reason }}</p>
-                            <a class="card-text" href="{{ w.url }}">Ссылка</a>
-                            <p class="card-text opacity-75">{{ w.date }}</p>
-                        </div>
-                        {% if showform %}
-                            <div class="card-footer bg-dark">
-                                <div class="row text-center">
-                                    <a class="underline-one p-1 col-6 changer" id="ch{{ w.id }}">Изменить</a>
-                                    <a class="underline-one p-1 col-6"
-                                       href="{% url 'delete_wish' id=w.id %}">Удалить</a>
-                                </div>
-                            </div>
-                            <!--                {% if w.active %}-->
-                                <!--                <div class="card-footer bg-dark">-->
-                                <!--                    <a class="underline-one p-1" href="{%  url 'wish_change_active' id=w.id %}">Скрыть</a>-->
-                                <!--                    <a class="underline-one p-1" href="{%  url 'wish_change_wish' pk=w.id %}">Изменить</a>-->
-                                <!--                    <a class="underline-one p-1" href="{%  url 'delete_wish' id=w.id %}">Удалить</a>-->
-                                <!--                </div>-->
-                                <!--                {% else %}-->
-                                <!--                <div class="card-footer bg-dark">-->
-                                <!--                    <a class="underline-one" href="{%  url 'wish_change_active' id=w.id %}">Показать</a>-->
-                                <!--                    <a class="underline-one" href="{%  url 'wish_change_wish' pk=w.id %}">Изменить</a>-->
-                                <!--                    <a class="underline-one" href="{%  url 'delete_wish' id=w.id %}">Удалить</a>-->
-                                <!--                </div>-->
-                                <!--                {% endif %}-->
-                        {% endif %}
+                    {% if w.url %}
+                    <a class="card-text" href="{{ w.url }}">Ссылка</a>
+                    {% else %}
+                    <p class="card-text opacity-75 p-0 m-0">Ссылки нет</p>
+                    {% endif %}
+
+                    <p class="card-text opacity-75">{{ w.date }}</p>
+                </div>
+                {% if showform %}
+                <div class="card-footer bg-custom-color-dark">
+                    <div class="row text-center">
+                        <a class="underline-one p-1 col-6 changer" id="ch{{ w.id }}">Изменить</a>
+                        <a class="underline-one p-1 col-6"
+                           href="{% url 'delete_wish' id=w.id %}">Удалить</a>
                     </div>
                 </div>
-
-            {% endfor %}
+                <!--                {% if w.active %}-->
+                <!--                <div class="card-footer bg-dark">-->
+                <!--                    <a class="underline-one p-1" href="{%  url 'wish_change_active' id=w.id %}">Скрыть</a>-->
+                <!--                    <a class="underline-one p-1" href="{%  url 'wish_change_wish' pk=w.id %}">Изменить</a>-->
+                <!--                    <a class="underline-one p-1" href="{%  url 'delete_wish' id=w.id %}">Удалить</a>-->
+                <!--                </div>-->
+                <!--                {% else %}-->
+                <!--                <div class="card-footer bg-dark">-->
+                <!--                    <a class="underline-one" href="{%  url 'wish_change_active' id=w.id %}">Показать</a>-->
+                <!--                    <a class="underline-one" href="{%  url 'wish_change_wish' pk=w.id %}">Изменить</a>-->
+                <!--                    <a class="underline-one" href="{%  url 'delete_wish' id=w.id %}">Удалить</a>-->
+                <!--                </div>-->
+                <!--                {% endif %}-->
+                {% endif %}
+            </div>
         </div>
-        {% if showform %}
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#form">
-                Добавить желание
-            </button>
+        {% endfor %}
 
-        {% endif %}
-    </div>
-
-
-
-
-
-
-    <div class="modal fade" tabindex="-1" id="form">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Добавление желания</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form method="post" enctype="multipart/form-data" id="form_add">
-                            {% csrf_token %}
-                            <p>
-                                <label for="id_name">Наименование:</label>
-                                <input type="text" name="name" maxlength="50" required="" id="id_name" class="form-control">
-                            </p>
-                            <p>
-                                <label for="id_wish_picture">Картинка:</label>
-                                <input type="file" name="wish_picture" accept="image/*" id="id_wish_picture" class="form-control">
-                            </p>
-                            <p>
-                                <label for="id_url">Ссылка:</label>
-                                <input type="url" name="url" maxlength="200" id="id_url" class="form-control">
-                            </p>
-                            <p>
-                                <label for="id_active">Активно:</label>
-                                <input type="checkbox" name="active" id="id_active" class="form-check">
-                            </p>
-                            <p>
-                                <label for="id_reason">Причина:</label>
-                                <select name="reason" id="id_reason" class="form-select">
-                                    <option value="Новый год">Новый год</option>
-                                    <option value="Свадьба">Свадьба</option>
-                                    <option value="День рождения">День Рождения</option>
-                                    <option value="8 марта">8 Марта</option>
-                                    <option value="23 февраля">23 Февраля</option>
-                                    <option value="Другое" selected="">Другое</option>
-                                </select>
-                            </p>
-                            <p>
-                                <label for="id_custom_reason">Своя причина:</label>
-                                <input type="text" name="custom_reason" maxlength="100" id="id_custom_reason" class="form-control">
-                            </p>
-                            <input type="hidden" value="" name="wid">
-                        </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="add">Сохранить</button>
+        <div class="col mt-4">
+            <div class="card shadow">
+                {% if w.wish_picture %}
+                <img class="card-img-top rounded-top border-bottom p-2 shadow-sm crop-img"
+                     src="/media/{{ w.wish_picture }}">
+                {% else %}
+                <img class="card-img-top border-bottom p-2 shadow-sm crop-img"
+                     src="{% static 'main/img/orig.webp' %}">
+                {% endif %}
+                <div class="card-footer bg-custom-color-dark">
+                    <button type="button" class="fill-light py-2" data-bs-toggle="modal" data-bs-target="#form">
+                    Добавить желание</button>
                 </div>
             </div>
         </div>
-    </div>
 
-    <script>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="form">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Добавление желания</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" enctype="multipart/form-data" id="form_add">
+                    {% csrf_token %}
+                    <p>
+                        <label for="id_name">Наименование:</label>
+                        <input type="text" name="name" maxlength="50" required="" id="id_name" class="form-control">
+                    </p>
+                    <p>
+                        <label for="id_wish_picture">Картинка:</label>
+                        <input type="file" name="wish_picture" accept="image/*" id="id_wish_picture" class="form-control">
+                    </p>
+                    <p>
+                        <label for="id_url">Ссылка:</label>
+                        <input type="url" name="url" maxlength="200" id="id_url" class="form-control">
+                    </p>
+                    <p>
+                        <label for="id_active">Активно:</label>
+                        <input type="checkbox" name="active" id="id_active" class="form-check">
+                    </p>
+                    <p>
+                        <label for="id_reason">Причина:</label>
+                        <select name="reason" id="id_reason" class="form-select">
+                            <option value="Новый год">Новый год</option>
+                            <option value="Свадьба">Свадьба</option>
+                            <option value="День рождения">День Рождения</option>
+                            <option value="8 марта">8 Марта</option>
+                            <option value="23 февраля">23 Февраля</option>
+                            <option value="Другое" selected="">Другое</option>
+                        </select>
+                    </p>
+                    <p>
+                        <label for="id_custom_reason">Своя причина:</label>
+                        <input type="text" name="custom_reason" maxlength="100" id="id_custom_reason" class="form-control">
+                    </p>
+                    <input type="hidden" value="" name="wid">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="fill-success" id="add">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
     var url = '/wishlist/{{ user.id }}'
     var m = new bootstrap.Modal(document.getElementById('form'),{})
     $(document).on("click", "#add", function () {
-             let form = $('#form_add')
-            console.log("Saving")
-                var form_data = form.serialize();
-             console.log(form_data)
-            $.ajax({
-                type: "POST",
-                url: url,
-                headers: {'X-CSRFToken': "{{ csrf_token }}"},
-                data: form_data,
-                success: function (data) {
-                    if(data['status'] == 'ok'){
-                       location.reload()
-                    }
-                    else{
-                        console.log(data)
-                        $('.invalid-feedback').remove()
-                        for(let e in data['errors'])
-                        {
-                            $('#id_'+e).addClass('is-invalid')
-                            $('#id_'+e).after(`<div class="invalid-feedback">${data['errors'][e]}</div>`)
-                        }
+        let form = $('#form_add')
+        console.log("Saving")
+        var form_data = form.serialize();
+        console.log(form_data)
+        $.ajax({
+            type: "POST",
+            url: url,
+            headers: {'X-CSRFToken': "{{ csrf_token }}"},
+            data: form_data,
+            success: function (data) {
+                if(data['status'] == 'ok'){
+                    location.reload()
+                }
+                else{
+                    console.log(data)
+                    $('.invalid-feedback').remove()
+                    for(let e in data['errors'])
+                    {
+                        $('#id_'+e).addClass('is-invalid')
+                        $('#id_'+e).after(`<div class="invalid-feedback">${data['errors'][e]}</div>`)
                     }
                 }
-            })
-         })
+            }
+        })
+    })
     $(".changer").on("click", function () {
         $('.modal-title').html("Изменение желания")
         let wid = $(this).attr('id').slice(2, 10)
@@ -202,6 +212,6 @@
         $('.modal-title').html("Добавление желания")
         document.getElementById("form_add").reset();
     })
-    </script>
+</script>
 
 {% endblock %}

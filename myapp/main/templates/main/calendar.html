@@ -31,10 +31,10 @@
                     $('#c'+i).addClass("d-none d-sm-inline-block bg-light text-muted")
                     $('#t' + i).html("")
                 }
-                
+
                 //TODO аватар создателя
                 for (let event in data[i]['items']) {
-                    $('#c' + i).append(`<a class="event d-block p-1 pl-2 pr-2 mb-1 rounded text-truncate small bg-success text-white calendar_event"
+                    $('#c' + i).append(`<a class="event d-block p-1 pl-2 pr-2 mb-1 rounded text-truncate small bg-custom-color-success text-white calendar_event"
                    title="Test Event 2" id="event_${data[i]['items'][event]['id']}"><i class="material-icons-size-2">${data[i]['items'][event]['icon']}</i>${data[i]['items'][event]['title']}</a>`)
 
                 }
@@ -73,8 +73,8 @@
         })
         var myModal = new bootstrap.Modal($('#eventModal'), {})
         $('#eventModal').on('hidden.bs.modal', function () {
-    update(month, year)
-})
+            update(month, year)
+        })
         var dayModal = new bootstrap.Modal($('#dayModal'), {})
 
 
@@ -99,7 +99,7 @@
                     $('#add_event').removeAttr('hidden')
                 $('#dayModalBody').html("")
                 for (let event in data[index]['items']){
-                    $('#dayModalBody').append(`<a class="event d-block p-1 pl-2 pr-2 mb-1 rounded text-truncate small bg-success text-white calendar_event"
+                    $('#dayModalBody').append(`<a class="event d-block p-1 pl-2 pr-2 mb-1 rounded text-truncate small bg-custom-color-success text-white calendar_event"
                    title="Test Event 2" id="event_${data[index]['items'][event]['id']}"><i class="material-icons-size-2">${data[index]['items'][event]['icon']}</i>${data[index]['items'][event]['title']}</a>`)
                 }
                 dayModal.show()
@@ -108,11 +108,11 @@
         })
         $(document).on("click", ".calendar_event", function () {
             let i = this.id.split('_')[1]
-           renderEventModal(i)
+            renderEventModal(i)
         });
 
         function renderEventModal(id){
-             let i = id
+            let i = id
             $.getJSON("/calendar/api/detail/" + i, function (data) {
                 $('#eventModalTitle').html(`${data['title']} <i class="material-icons">${data['icon']}</i>`)
                 $('#modal_desc').html(data['description'])
@@ -171,15 +171,15 @@
             })
         });
 
-         $(document).on("click", "#decline_event", function () {
-             let i = $('#event_id').val()
-             renderEventModal(i)
-         })
-        
+        $(document).on("click", "#decline_event", function () {
+            let i = $('#event_id').val()
+            renderEventModal(i)
+        })
+
         $(document).on("blur", "#id_start", function () {
-             let start = new Date($('#id_start').val())
+            let start = new Date($('#id_start').val())
             $('#id_end').val(new Date(start - new Date().getTimezoneOffset() * 60 * 1000+600*1000).toISOString().slice(0, -1))
-         })
+        })
 
         $(document).on("click", "#add_event", function () {
             addEventCollapse.show()
@@ -188,7 +188,7 @@
             $('#add_event').attr('hidden', 'hidden')
             $('#day_cancel').removeAttr('hidden')
             $('#day_success').removeAttr('hidden')
-         })
+        })
 
         $('#dayModal').on('hidden.bs.modal', function () {
             addEventCollapse.hide()
@@ -217,7 +217,7 @@
             $('#day_success').attr('hidden', 'hidden')
             let form = $('#day_form')
             console.log("Saving")
-                var form_data = form.serialize();
+            var form_data = form.serialize();
             $.ajax({
                 type: "POST",
                 url: "/calendar/add",
@@ -226,15 +226,15 @@
                     if(data['status'] == 'ok'){
                         addEventCollapse.hide()
                         $.getJSON(`/calendar/api/${month}/${year}`, function (data) {
-                        console.log(data[index])
-                        $('#dayModalTitle').html(`${data[day_index]['day']}.${month}.${year}`)
-                        $('#dayModalBody').html("")
-                        for (let event in data[day_index]['items']){
-                            $('#dayModalBody').append(`<a class="event d-block p-1 pl-2 pr-2 mb-1 rounded text-truncate small bg-success text-white calendar_event"
+                            console.log(data[index])
+                            $('#dayModalTitle').html(`${data[day_index]['day']}.${month}.${year}`)
+                            $('#dayModalBody').html("")
+                            for (let event in data[day_index]['items']){
+                                $('#dayModalBody').append(`<a class="event d-block p-1 pl-2 pr-2 mb-1 rounded text-truncate small bg-custom-color-success text-white calendar_event"
                            title="Test Event 2" id="event_${data[index]['items'][event]['id']}"><i class="material-icons-size-2">${data[index]['items'][event]['icon']}</i>${data[index]['items'][event]['title']}</a>`)
-                        }
-                dayModal.show()
-            })
+                            }
+                            dayModal.show()
+                        })
                         update(month, year)
                     }
                     else{
@@ -252,9 +252,9 @@
 
 
         $(document).on("click", "#save_event", function () {
-             let form = $('#form_event')
+            let form = $('#form_event')
             console.log("Saving")
-                var form_data = form.serialize();
+            var form_data = form.serialize();
             $.ajax({
                 type: "POST",
                 url: "/calendar/edit/"+$('#event_id').val(),
@@ -274,7 +274,7 @@
                     }
                 }
             })
-         })
+        })
 
 
     })
@@ -302,19 +302,19 @@
         }
     }
 </style>
-<div class="container p-0">
+<div class="container p-0 mt-0">
     <div class="row align-items-center">
-        <div class="col text-center">
-            <button id="prevmonth" class="btn btn-outline-primary ">Назад</button>
+        <div class="col text-end">
+            <button id="prevmonth" class="fill-dark material-icons-bold py-1 ps-2 pe-0">arrow_back_ios</button>
         </div>
         <div class="col">
             <h4 class="display-5 mb-4 text-center" id="monthyear"></h4>
         </div>
-        <div class="col text-center">
-            <button id="nextmonth" class="btn btn-outline-primary">Вперёд</button>
+        <div class="col text-start">
+            <button id="nextmonth" class="fill-dark material-icons-bold p-1">arrow_forward_ios</button>
         </div>
-</div>
-    <div class="row d-none d-sm-flex p-1 bg-dark text-white">
+    </div>
+    <div class="row d-none d-sm-flex p-1 bg-custom-color-dark text-white">
         <h5 class="col-sm p-1 text-center h5">Пн</h5>
         <h5 class="col-sm p-1 text-center h5">Вт</h5>
         <h5 class="col-sm p-1 text-center h5">Ср</h5>
@@ -681,7 +681,7 @@
                 <div id="addEventForm" class="collapse">
                     <form id="day_form">
                         {% csrf_token %}
-                       {{ form.as_p }}
+                        {{ form.as_p }}
                     </form>
 
                 </div>
@@ -699,27 +699,25 @@
         <div class="modal-content">
             <form method="post" id="form_event">
                 {% csrf_token %}
-            <div class="modal-header" id="eventModalHeader">
-                <h5 class="modal-title" id="eventModalTitle">Modal title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="eventModalBody">
-                <p><b>Описание:</b> <span id="modal_desc"></span></p>
-                <p><b>Начало:</b> <span id="modal_start"></span></p>
-                <p><b>Окончание:</b> <span id="modal_end"></span></p>
-                <p><b>Уведомление:</b> <span id="modal_notify"></span></p>
-                <input type="hidden" id="event_id">
-            </div>
-            <div class="modal-footer" id="event_footer">
-                <a class="btn btn-warning" id="change_event">Изменить</a>
-                <a class="btn btn-danger" id="modal_delete" hidden="hidden">Удалить</a>
-                <a class="btn btn-outline-secondary" id="decline_event" hidden="hidden">Отменить</a>
-                <a class="btn btn-outline-success" id="save_event" hidden="hidden">Сохранить</a>
-            </div>
+                <div class="modal-header" id="eventModalHeader">
+                    <h5 class="modal-title" id="eventModalTitle">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="eventModalBody">
+                    <p><b>Описание:</b> <span id="modal_desc"></span></p>
+                    <p><b>Начало:</b> <span id="modal_start"></span></p>
+                    <p><b>Окончание:</b> <span id="modal_end"></span></p>
+                    <p><b>Уведомление:</b> <span id="modal_notify"></span></p>
+                    <input type="hidden" id="event_id">
+                </div>
+                <div class="modal-footer" id="event_footer">
+                    <a class="btn btn-warning" id="change_event">Изменить</a>
+                    <a class="btn btn-danger" id="modal_delete" hidden="hidden">Удалить</a>
+                    <a class="btn btn-outline-secondary" id="decline_event" hidden="hidden">Отменить</a>
+                    <a class="btn btn-outline-success" id="save_event" hidden="hidden">Сохранить</a>
+                </div>
             </form>
         </div>
     </div>
 </div>
-
-
 {% endblock %}

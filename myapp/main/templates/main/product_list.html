@@ -5,8 +5,8 @@
 
 {% block mainContent %}
 
-    <div class="container justify-content-center mt-5">
-<h4 class="display-5 text-center">Список покупок</h4>
+<div class="container justify-content-center mt-5">
+    <h4 class="display-5 text-center">Список покупок</h4>
     <link rel="stylesheet" href="{% static 'main/css/customtable.css' %}">
     <link rel="stylesheet" href="{% static 'main/css/customfont.css' %}">
     <script>
@@ -27,16 +27,16 @@
 
 
 
-      $('input[type="checkbox"]').change(function(){
-            $('td input[type="checkbox"]').each(function() {
-                if($(this).prop('checked'))
-                    $(this).closest('tr').addClass('table-warning');
-                else
-                    $(this).closest('tr').removeClass('table-warning');
+            $('input[type="checkbox"]').change(function(){
+                $('td input[type="checkbox"]').each(function() {
+                    if($(this).prop('checked'))
+                        $(this).closest('tr').addClass('table-warning');
+                    else
+                        $(this).closest('tr').removeClass('table-warning');
+                })
+
+
             })
-
-
-        })
 
 
             $('#delete_bought').on('click', function() {
@@ -48,19 +48,19 @@
                     }
                 })
                 location.reload()
-	  	})
-            });
+            })
+        });
 
 
     </script>
 
-    <table class="table table-responsive">
+    <table class="table table-responsive align-items-center">
         <thead>
         <tr>
             <th>{% if products|length > 0%}<label class="control control--checkbox">
-<input type="checkbox" class="js-check-all">
-<div class="control__indicator"></div>
-</label>{% endif %}</th>
+                <input type="checkbox" class="js-check-all">
+                <div class="control__indicator"></div>
+            </label>{% endif %}</th>
             <td>Название</td>
             <td>Количество</td>
             <td>Дата добавления</td>
@@ -70,54 +70,51 @@
         {% for pr in products %}
         <tr>
             <td><label class="control control--checkbox">
-<input type="checkbox" id="c{{ pr.id }}">
-<div class="control__indicator"></div>
-</label></td>
+                <input type="checkbox" id="c{{ pr.id }}">
+                <div class="control__indicator"></div>
+            </label></td>
             <td>{{ pr.name }}</td>
             <td>{{ pr.amount }} {{ pr.unit }}</td>
             <td>{{ pr.date }}</td>
         </tr>
         {% endfor %}
-    <tr><form method="POST" action="">
-        <td></td>
-        <td>
-            <input class="form-control" name="name" id="id_name" required="" placeholder="Наименование">
-        </td>
-        <td>
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col">
-                        <input type="number" name="amount" step="any" required="" id="id_amount" class="form-control" placeholder="Количество">
+        <tr>
+            <form method="POST" action="">
+            <td></td>
+            <td>
+                <input class="form-control" name="name" id="id_name" required="" placeholder="Наименование">
+            </td>
+            <td>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col">
+                            <input type="number" name="amount" step="any" required="" id="id_amount" class="form-control" placeholder="Количество">
+                        </div>
+                        <div class="col">
+                            <select name="unit" required="" id="id_unit" class="form-control" >
+                                <option value="" selected="">Мера измерения</option>
+                                <option value="шт">шт</option>
+                                <option value="кг">кг</option>
+                                <option value="мл">мл</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="col">
-                        <select name="unit" required="" id="id_unit" class="form-control" >
-  <option value="" selected="">Мера измерения</option>
 
-  <option value="шт">шт</option>
 
-  <option value="кг">кг</option>
-
-  <option value="мл">мл</option>
-
-</select>
-                    </div>
                 </div>
 
-
-            </div>
-
-        </td>
-        <td>
-            <button class="btn btn-outline-success" id="add_new" type="submit">Добавить</button>
-        </td>
-        {% csrf_token %}
-    </form>
-    </tr>
+            </td>
+            <td>
+                <button class="fill-success m-0" id="add_new" type="submit">Добавить</button>
+            </td>
+            {% csrf_token %}
+        </form>
+        </tr>
 
     </table>
     <p></p>
-    <button class="btn btn-outline-danger" id="delete_bought">Удалить купленное</button>
+    <button class="fill-danger " id="delete_bought">Удалить купленное</button>
 
 
-    </div>
+</div>
 {% endblock %}

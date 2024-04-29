@@ -4,7 +4,6 @@
 {% block title %} Облако вашей группы {% endblock %}
 
 {% block mainContent %}
-<link rel="stylesheet" href="{% static 'main/css/material_font.css' %}">
 
 <div class="container">
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4">
@@ -15,7 +14,7 @@
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Фотогалерея</h5>
-                    <a href="{% url 'cloud_photo' %}" class="btn btn-outline-success">Перейти</a>
+                    <a href="{% url 'cloud_photo' %}" class=""><button class="fill-success">Перейти</button></a>
                 </div>
             </div>
         </div>
@@ -23,7 +22,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Видеогалерея</h5>
-                    <a href="{% url 'cloud_video' %}" class="btn btn-outline-success">Перейти</a>
+                    <a href="{% url 'cloud_video' %}" class="fill-primary">Перейти</a>
                 </div>
             </div>
         </div>
@@ -31,7 +30,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Документы</h5>
-                    <a href="{% url 'cloud_doc' %}" class="btn btn-outline-success">Перейти</a>
+                    <a href="{% url 'cloud_doc' %}" class="fill-primary">Перейти</a>
                 </div>
             </div>
         </div>
@@ -39,7 +38,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Архивы</h5>
-                    <a href="{% url 'cloud_archive' %}" class="btn btn-outline-success">Перейти</a>
+                    <a href="{% url 'cloud_archive' %}" class="fill-primary">Перейти</a>
                 </div>
             </div>
         </div>
