@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     "product_list",
     "wishlist",
     "cloud",
-    "lightlist_calendar"
+    "lightlist_calendar",
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

@@ -18,13 +18,13 @@ class WishListComponent(models.Model):
     url = models.URLField(verbose_name='Ссылка', null=True, blank=True)
     date = models.DateField(verbose_name='Дата добавления', default=timezone.now)
     active = models.BooleanField(default=True)
-    reason = models.CharField(max_length=100, verbose_name='Причина', null=True, choices=(('нг', 'Новый год'),
-                                                                                          ('св', 'Свадьба'),
-                                                                                          ('др!', 'День Рождения'),
-                                                                                          ('wd', '8 Марта'),
-                                                                                          ('md', '23 Февраля'),
-                                                                                          ('др', 'Другое')),
-                              default="другое")
+    reason = models.CharField(max_length=100, verbose_name='Причина', null=True, choices=(('Новый год', 'Новый год'),
+                                                                                          ('Свадьба', 'Свадьба'),
+                                                                                          ('День рождения', 'День Рождения'),
+                                                                                          ('8 марта', '8 Марта'),
+                                                                                          ('23 февраля', '23 Февраля'),
+                                                                                          ('Другое', 'Другое')),
+                              default="Другое")
     custom_reason = models.CharField(max_length=100, verbose_name='Своя причина', null=True, blank=True)
     objects = models.Manager()
 

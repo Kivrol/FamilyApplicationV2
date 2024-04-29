@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from main.models import UserProfile
@@ -23,25 +24,21 @@ class WishListUser(View):
         else:
             wishes = WishListComponent.objects.filter(user_profile=user, active=True)
         form = WishListForm()
-
         return render(request, 'main/wishlist_user.html',
                       {'wishes': wishes, 'user_': user, 'form': form, 'showform': showform})
 
     def post(self, request, *args, **kwargs):
-        form = WishListForm(request.POST)
+        form = WishListForm(request.POST, request.FILES)
         user = UserProfile.objects.get(user=request.user)
         wishes = WishListComponent.objects.filter(user_profile=user)
         showform = True
         if form.is_valid():
-            print(form.cleaned_data['custom_reason'])
             wish = form.save(commit=False)
-            print(wish.custom_reason)
             wish.user_profile = UserProfile.objects.get(user=request.user)
             wish.save()
-            return redirect('wishlistuser', user=request.user.id)
+            return JsonResponse({'status': 'ok'})
         else:
-            return render(request, 'main/wishlist_user.html',
-                          {'wishes': wishes, 'user_': user, 'form': form, 'showform': showform})
+            return JsonResponse({'status': 'error', 'errors': form.errors})
 
 
 class WishChangeActive(View):
@@ -61,12 +58,12 @@ class WishDelete(View):
 class WishEdit(View):
     def get(self, request, *args, **kwargs):
         wish = WishListComponent.objects.get(id=kwargs['pk'])
-        form = WishListForm(instance=wish)
-        return render(request, 'main/wishlist_user.html', {'form': form, 'showform': True, 'wish': wish})
+        return JsonResponse({'id_name': wish.name, 'id_url': wish.url,  'id_active': wish.active, 'id_reason': wish.reason, 'id_custom_reason': wish.custom_reason})
 
     def post(self, request, *args, **kwargs):
-        wish = WishListComponent.objects.get(id=request.POST['wid'])
+        wish = WishListComponent.objects.get(id=kwargs['pk'])
         form = WishListForm(request.POST, instance=wish)
         if form.is_valid():
             form.save()
-        return redirect('wishlistuser', user=request.user.id)
+            return JsonResponse({'status': 'ok'})
+        return JsonResponse({'status': 'error', 'errors': form.errors})

@@ -4,31 +4,45 @@
 {% block title %} Облако вашей группы {% endblock %}
 
 {% block mainContent %}
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
-<link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
 <link rel="stylesheet" href="{% static 'main/css/material_font.css' %}">
 
-<div class="main-content-padding">
-    <a href="{% url 'cloud_photo' %}">
-        <i class="material-icons-size-2">image</i>
-        <p>Фотогалерея</p>
-    </a>
-    <br>
-    <a href="{% url 'cloud_video' %}">
-        <img src="{% static 'main/img/video.png' %}">
-        <p>Видеогалерея</p>
-    </a>
-    <br>
-    <a href="{% url 'cloud_doc' %}">
-        <p>Документы</p>
-    </a>
-    <br>
-    <a href="{% url 'cloud_archive' %}">
-        <p>Архивы</p>
-    </a>
+<div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    <img src="" class="img-thumbnail">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Фотогалерея</h5>
+                    <a href="{% url 'cloud_photo' %}" class="btn btn-outline-success">Перейти</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Видеогалерея</h5>
+                    <a href="{% url 'cloud_video' %}" class="btn btn-outline-success">Перейти</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Документы</h5>
+                    <a href="{% url 'cloud_doc' %}" class="btn btn-outline-success">Перейти</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Архивы</h5>
+                    <a href="{% url 'cloud_archive' %}" class="btn btn-outline-success">Перейти</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
