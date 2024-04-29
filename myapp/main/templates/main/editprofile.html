@@ -114,8 +114,8 @@
                                 </div>
                                 <div class="row pt-3 pb-3">
                                     <div class="col-11 d-flex justify-content-center">
-                                        <button type="submit" class="btn btn-outline-primary">Сохранить</button>
-                                        <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
+                                        <button type="submit" class="btn btn-outline-primary mx-2">Сохранить</button>
+                                        <button type="button" class="btn btn-outline-warning mx-2" data-bs-toggle="modal"
                                                 data-bs-target="#exampleModal">
                                             Сменить пароль
                                         </button>
@@ -141,13 +141,17 @@
                         {% csrf_token %}
                     <label for="id_old_password">Старый пароль:</label>
                     <input type="password" name="old_password" autocomplete="current-password" autofocus="" required=""
-                           id="id_old_password" class="form-control">
+                           id="id_old_password" class="form-control pt-2">
                     <label for="id_new_password1">Новый пароль:</label>
                     <input type="password" name="new_password1" autocomplete="new-password" required=""
-                           aria-describedby="id_new_password1_helptext" id="id_new_password1" class="form-control">
+                           aria-describedby="id_new_password1_helptext" id="id_new_password1" class="form-control pt-2">
 
                     <span class="helptext" id="id_new_password1_helptext"></span>
-                    <ul class="list-group">
+                    <label for="id_new_password2">Подтверждение нового пароля:</label>
+                    <input type="password" name="new_password2" autocomplete="new-password" required=""
+                           id="id_new_password2" class="form-control">
+                    </form>
+                    <ul class="list-group py-3 opacity-75">
                         <li class="list-group-item">Пароль не должен быть слишком похож на другую вашу личную
                             информацию.
                         </li>
@@ -155,10 +159,6 @@
                         <li class="list-group-item">Пароль не должен быть слишком простым и распространенным.</li>
                         <li class="list-group-item">Пароль не может состоять только из цифр.</li>
                     </ul>
-                    <label for="id_new_password2">Подтверждение нового пароля:</label>
-                    <input type="password" name="new_password2" autocomplete="new-password" required=""
-                           id="id_new_password2" class="form-control">
-                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="change_password">Сохранить</button>

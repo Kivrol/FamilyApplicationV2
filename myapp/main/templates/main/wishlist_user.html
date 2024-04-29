@@ -4,42 +4,158 @@
 {% block title %} Вишлист {{ user_ }} {% endblock %}
 
 {% block mainContent %}
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
-<link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
-<div class="main-content-padding">
-<table class="table">
-    {%  for w in wishes %}
-    <tr>
-        <td>{{ w.name }}</td>
-        <td>
-        {% if showform %}
-            {% if w.active %}
-            <a class="btn btn-secondary" href="{%  url 'wish_change_active' id=w.id %}">Скрыть</a>
+<link rel="stylesheet" href="{% static 'main/css/wishlist.css' %}">
 
-               {%  else %}
-                <a class="btn btn-primary" href="{%  url 'wish_change_active' id=w.id %}">Показать</a>
-            {%  endif %}
-        <a class="btn btn-warning" href="{%  url 'wish_change_wish' pk=w.id %}">Изменить</a>
-        <a class="btn btn-danger" href="{%  url 'delete_wish' id=w.id %}">Удалить</a>
-        {%  endif %}
-        </td>
-    </tr>
+<script>
+    window.addEventListener('DOMContentLoaded', function() {
+        var row = document.getElementById('rowsCount');
+        if (window.innerWidth > 1280) {
+            row.classList.add('row-cols-6');
+        } else if (window.innerWidth > 1024 && window.innerWidth <= 1280) {
+            row.classList.add('row-cols-5');
+        }
+        else if (window.innerWidth > 768 && window.innerWidth <= 1024) {
+            row.classList.add('row-cols-4');
+        }
+        else if (window.innerWidth > 480 && window.innerWidth <= 768) {
+            row.classList.add('row-cols-2');
+        }
+        else if (window.innerWidth <= 480 ) {
+            row.classList.add('row-cols-1');
+        }
+    });
 
+    window.addEventListener('resize', function() {
+        var row = document.getElementById('rowsCount');
+        row.classList.remove('row-cols-2', 'row-cols-4', 'row-cols-5', 'row-cols-6', 'row-cols-1');
+        if (window.innerWidth > 1280) {
+            row.classList.add('row-cols-6');
+        } else if (window.innerWidth > 1024 && window.innerWidth <= 1280) {
+            row.classList.add('row-cols-5');
+        }
+        else if (window.innerWidth > 768 && window.innerWidth <= 1024) {
+            row.classList.add('row-cols-4');
+        }
+        else if (window.innerWidth > 480 && window.innerWidth <= 768) {
+            row.classList.add('row-cols-2');
+        }
+        else if (window.innerWidth <= 480) {
+            row.classList.add('row-cols-1');
+        }
+    });
+</script>
 
-{% endfor %}
-</table>
-
-    {%  if showform %}
-        <form method="post">
-        {%  csrf_token %}
-        {{  form.as_p }}
-            <input type="hidden" value="{{ wish.id }}" name="wid">
-        <input type="submit" value="Добавить">
-        </form>
-    {%  endif %}
+<div class="container">
+    <div id="rowsCount" class="row">
+        {%  for w in wishes %}
+        {% if w.active %}
+        <div class="col mt-4">
+            <div class="card shadow">
+                {% if w.picture %}
+                <img class="card-img-top rounded-top border-bottom p-2 shadow-sm crop-img" src="/media/{{ w.picture }}">
+                {% else %}
+                <img class="card-img-top border-bottom p-2 shadow-sm crop-img" src="{% static 'main/img/orig.webp' %}">
+                {% endif %}
+                <div class="card-title text-center fs-4 mb-0">{{ w.name }}</div>
+                <div class="card-body text-center pt-0">
+                    <p class="card-text m-0">{{ w.reason }}</p>
+                    <a class="card-text" href="{{ w.url }}">Ссылка</a>
+                    <p class="card-text opacity-75">{{ w.date }}</p>
+                </div>
+                {% if showform %}
+                <div class="card-footer bg-dark">
+                    <div class="row text-center">
+                        <a class="underline-one p-1 col-6" href="{%  url 'wish_change_wish' pk=w.id %}">Изменить</a>
+                        <a class="underline-one p-1 col-6" href="{%  url 'delete_wish' id=w.id %}">Удалить</a>
+                    </div>
+                </div>
+                <!--                {% if w.active %}-->
+                <!--                <div class="card-footer bg-dark">-->
+                <!--                    <a class="underline-one p-1" href="{%  url 'wish_change_active' id=w.id %}">Скрыть</a>-->
+                <!--                    <a class="underline-one p-1" href="{%  url 'wish_change_wish' pk=w.id %}">Изменить</a>-->
+                <!--                    <a class="underline-one p-1" href="{%  url 'delete_wish' id=w.id %}">Удалить</a>-->
+                <!--                </div>-->
+                <!--                {% else %}-->
+                <!--                <div class="card-footer bg-dark">-->
+                <!--                    <a class="underline-one" href="{%  url 'wish_change_active' id=w.id %}">Показать</a>-->
+                <!--                    <a class="underline-one" href="{%  url 'wish_change_wish' pk=w.id %}">Изменить</a>-->
+                <!--                    <a class="underline-one" href="{%  url 'delete_wish' id=w.id %}">Удалить</a>-->
+                <!--                </div>-->
+                <!--                {% endif %}-->
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+        <div class="col mt-4">
+            <div class="card shadow opacity-50">
+                {% if w.picture %}
+                <img class="card-img-top rounded-top border-bottom p-2 shadow-sm crop-img" src="/media/{{ w.picture }}">
+                {% else %}
+                <img class="card-img-top border-bottom p-2 shadow-sm crop-img" src="{% static 'main/img/orig.webp' %}">
+                {% endif %}
+                <div class="card-title text-center fs-4 mb-0">{{ w.name }}</div>
+                <div class="card-body text-center pt-0">
+                    <p class="card-text m-0">{{ w.reason }}</p>
+                    <a class="card-text" href="{{ w.url }}">Ссылка</a>
+                    <p class="card-text opacity-75">{{ w.date }}</p>
+                </div>
+                {% if showform %}
+                <div class="card-footer bg-dark">
+                    <div class="row text-center">
+                        <a class="underline-one p-1 col-6" href="{%  url 'wish_change_wish' pk=w.id %}">Изменить</a>
+                        <a class="underline-one p-1 col-6" href="{%  url 'delete_wish' id=w.id %}">Удалить</a>
+                    </div>
+                </div>
+                <!--                {% if w.active %}-->
+                <!--                <div class="card-footer bg-dark">-->
+                <!--                    <a class="underline-one p-1" href="{%  url 'wish_change_active' id=w.id %}">Скрыть</a>-->
+                <!--                    <a class="underline-one p-1" href="{%  url 'wish_change_wish' pk=w.id %}">Изменить</a>-->
+                <!--                    <a class="underline-one p-1" href="{%  url 'delete_wish' id=w.id %}">Удалить</a>-->
+                <!--                </div>-->
+                <!--                {% else %}-->
+                <!--                <div class="card-footer bg-dark">-->
+                <!--                    <a class="underline-one" href="{%  url 'wish_change_active' id=w.id %}">Показать</a>-->
+                <!--                    <a class="underline-one" href="{%  url 'wish_change_wish' pk=w.id %}">Изменить</a>-->
+                <!--                    <a class="underline-one" href="{%  url 'delete_wish' id=w.id %}">Удалить</a>-->
+                <!--                </div>-->
+                <!--                {% endif %}-->
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
 </div>
+
+
+<!--<table class="table">-->
+<!--    {%  for w in wishes %}-->
+<!--    <tr>-->
+<!--        <td>{{ w.name }}</td>-->
+<!--        <td>-->
+<!--            {% if showform %}-->
+<!--                {% if w.active %}-->
+<!--                    <a class="btn btn-secondary" href="{%  url 'wish_change_active' id=w.id %}">Скрыть</a>-->
+<!--                {% else %}-->
+<!--                    <a class="btn btn-primary" href="{%  url 'wish_change_active' id=w.id %}">Показать</a>-->
+<!--                {% endif %}-->
+<!--                <a class="btn btn-warning" href="{%  url 'wish_change_wish' pk=w.id %}">Изменить</a>-->
+<!--                <a class="btn btn-danger" href="{%  url 'delete_wish' id=w.id %}">Удалить</a>-->
+<!--            {%  endif %}-->
+<!--        </td>-->
+<!--    </tr>-->
+<!--    {% endfor %}-->
+<!--</table>-->
+
+<!--<div class="container">-->
+<!--    {%  if showform %}-->
+<!--    <form method="post" enctype="multipart/form-data">-->
+<!--        {%  csrf_token %}-->
+<!--        {{  form.as_p }}-->
+<!--        <input type="hidden" value="{{ wish.id }}" name="wid">-->
+<!--        <input type="submit" value="Добавить">-->
+<!--    </form>-->
+<!--</div>-->
+<!--{%  endif %}-->
+
 {% endblock %}

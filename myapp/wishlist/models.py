@@ -11,7 +11,7 @@ class WishListComponent(models.Model):
         upload_to=f'wishImg/',
         null=True,
         blank=True,
-        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'png', 'ico'])],
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'png', 'ico', 'jpeg', 'webp'])],
         verbose_name='Картинка',
         name='wish_picture'
     )
@@ -20,7 +20,7 @@ class WishListComponent(models.Model):
     active = models.BooleanField(default=True)
     reason = models.CharField(max_length=100, verbose_name='Причина', null=True, choices=(('нг', 'Новый год'),
                                                                                           ('св', 'Свадьба'),
-                                                                                          ('др', 'День Рождения'),
+                                                                                          ('др!', 'День Рождения'),
                                                                                           ('wd', '8 Марта'),
                                                                                           ('md', '23 Февраля'),
                                                                                           ('др', 'Другое')),

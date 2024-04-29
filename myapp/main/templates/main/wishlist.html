@@ -4,32 +4,65 @@
 {% block title %} Вишлист вашей группы {% endblock %}
 
 {% block mainContent %}
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
-<link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
-<div class="main-content-padding">
+<link rel="stylesheet" href="{% static 'main/css/wishlist.css' %}">
+
+<script>
+    window.addEventListener('DOMContentLoaded', function() {
+        var row = document.getElementById('rowsCount');
+        if (window.innerWidth > 1024) {
+            row.classList.add('row-cols-5');
+        }
+        else if (window.innerWidth > 768 && window.innerWidth <= 1024) {
+            row.classList.add('row-cols-4');
+        }
+        else if (window.innerWidth > 320 && window.innerWidth <= 768) {
+            row.classList.add('row-cols-2');
+        }
+        else if (window.innerWidth <= 320) {
+            row.classList.add('row-cols-1');
+        }
+    });
+
+    window.addEventListener('resize', function() {
+        var row = document.getElementById('rowsCount');
+        row.classList.remove('row-cols-2', 'row-cols-4', 'row-cols-5', 'row-cols-1');
+        if (window.innerWidth > 1024) {
+            row.classList.add('row-cols-5');
+        }
+        else if (window.innerWidth > 768 && window.innerWidth <= 1024) {
+            row.classList.add('row-cols-4');
+        }
+        else if (window.innerWidth > 320 && window.innerWidth <= 768) {
+            row.classList.add('row-cols-2');
+        }
+        else if (window.innerWidth <= 320) {
+            row.classList.add('row-cols-1');
+        }
+    });
+</script>
+
 <div class="container">
-  <div class="row row-cols-5">
-      {%  for u in users %}
-    <div class="col">
-    <div class="card">
-        <img class="card-img-top img-thumbnail" src="/media/{{ u.userprofile.profileAvatar }}">
-        <div class="card-body">
-            <h5 class="card-title">{{ u.username }}</h5>
+    <div id="rowsCount" class="row">
+        {%  for u in users %}
+        <div class="col">
+            <div class="card shadow">
+                {% if u.userprofile.profileAvatar %}
+                <img class="card-img-top border-bottom p-2 shadow-sm" src="/media/{{ u.userprofile.profileAvatar }}">
+                {% else %}
+                <img class="card-img-top border-bottom p-2 shadow-sm" src="{% static 'main/img/profileDefault.png' %}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title text-center">{{ u.username }}</h5>
+                </div>
+                <div class="card-footer bg-dark">
+                    <div class="text-center">
+                        <a class="underline-one text-white" href="{%  url 'wishlistuser' user=u.id %}">К списку</a>
+                    </div>
+                </div>
+            </div>
+
         </div>
-        <div class="card-footer">
-            <a href="{%  url 'wishlistuser' user=u.id %}">К вишлисту</a>
-        </div>
+        {% endfor %}
     </div>
-
-          </div>
-{% endfor %}
-  </div>
-</div>
-
-
 </div>
 {% endblock %}
