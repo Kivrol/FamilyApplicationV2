@@ -138,3 +138,8 @@ AUTHENTICATION_FORM = 'myapp.forms.MyAuthenticationForm'
 # LOGOUT_REDIRECT_URL = '/login/'
 # REGISTER_REDIRECT_URL = reverse_lazy('main:login')
 LOGIN_URL = 'login'
+
+GRAPH_MODELS = {
+    'all_applications': True,
+    'graph_models': True,
+}

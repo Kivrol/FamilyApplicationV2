@@ -17,7 +17,7 @@ class AddCalendarItemForm(forms.ModelForm):
         widgets = {
             'start': forms.TextInput(attrs={'type': 'datetime-local'}),
             'end': forms.TextInput(attrs={'type': 'datetime-local'}),
-            'notification': forms.TextInput(attrs={'type': 'datetime-local'})
+            'notification': forms.TextInput(attrs={'type': 'hidden'}),
         }
 
     def clean_start(self):

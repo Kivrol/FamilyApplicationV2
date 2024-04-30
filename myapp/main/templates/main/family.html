@@ -4,34 +4,107 @@
 {% block title %} Ваша семья {% endblock %}
 
 {% block mainContent %}
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
 <link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
-<div class="main-content-padding">
-{% if is_creator %} 
-    <a href=" {% url 'process_request' %} ">
-        <button class="btn btn-primary">Запросы</button>
-    </a>
-{% endif %}
-    {% if family %}
-    {{ family.name }}
-    <ul>
-        {% for member in family.userprofile_set.all %}
-        <li>{{ member.user.username }}</li>
-        {% endfor %}
-    </ul>
-        {% if family.creator == request.user %}
-    <a href="{% url 'delete_family' id=family.id %}">Удалить</a>
-            {%  endif %}
-       <a href="{% url 'exit_from_group' id=family.id %}">Выйти</a>
-    {% else %}
 
-    Семьи не добавлено. <a href="{% url 'add_family' %}">Добавить</a> или <a
-        href="{%  url 'join_family' %}">Вступить</a>
-    {% endif %}
-
+<div class="container d-flex justify-content-center">
+    <div class="card border-1 rounded-2 shadow col-sm-12 col-md-8 col-xl-6">
+        {% if family %}
+        <div class="row">
+            <div class="col-4">
+                <div class="card-block bg-color d-flex justify-content-center p-2 align-items-center">
+                    <div class="container-fluid">
+                        <div class="row px-3">
+                            {% if family.familyAvatar %}
+                            <img src="{{ BASE_DIR }}/media/{{family.familyAvatar}}" class="rounded-circle" alt="Лого">
+                            {% else %}
+                            <img src="{% static 'main/img/profileDefault.png' %}" class="rounded-circle" alt="Лого">
+                            {% endif %}
+                        </div>
+                        <div class="row text-center">
+                            <p class="fs-5 mt-1 text-color mb-0">{{ family.name }}</p>
+                        </div>
+                        <div class="row text-center mt-2">
+                            {% if is_creator %}
+                            <a href=" {% url 'process_request' %} ">
+                                <button class="fill-dark p-2">Запросы</button>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="card-block">
+                    <div class="container mx-0 p-2">
+                        <div class="row mt-3">
+                            <p class="h4 text-color">Состав группы</p>
+                        </div>
+                        <div class="row">
+                            <hr class="hr-shelf"/>
+                        </div>
+                        {% for member in family.userprofile_set.all %}
+                        <div class="row items-align-center">
+                            <p class="h6 text-color">
+                                <i class="material-icons-size-2 text-custom-color-dark align-center">horizontal_rule</i>
+                                {{ member.user.username }}
+                            </p>
+                        </div>
+                        {% endfor %}
+                        <div class="row">
+                            <div class="col text-center mt-5">
+                                {% if family.creator == request.user %}
+                                <a href="{% url 'delete_family' id=family.id %}"><button class="fill-danger p-2">Удалить</button></a>
+                                {% endif %}
+                                <a href="{% url 'exit_from_group' id=family.id %}"><button class="fill-primary p-2">Покинуть</button></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="row">
+            <div class="card-block text-center">
+                <div class="container mx-0 p-2">
+                    <div class="row mt-2">
+                        <p class="h4 text-color">Вы ещё не состоите в группе</p>
+                    </div>
+                    <div class="row ps-4">
+                        <hr class="hr-shelf"/>
+                    </div>
+                </div>
+                <div class="mt-2 mb-4">
+                <a href="{% url 'add_family' %}"><button class="fill-primary">Создать</button></a>
+                <a href="{%  url 'join_family' %}"><button class="fill-success">Вступить</button></a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
 </div>
+
+
+<!--{% if is_creator %}-->
+<!--<a href=" {% url 'process_request' %} ">-->
+<!--    <button class="btn btn-primary">Запросы</button>-->
+<!--</a>-->
+<!--{% endif %}-->
+<!--{% if family %}-->
+<!--{{ family.name }}-->
+<!--<ul>-->
+<!--    {% for member in family.userprofile_set.all %}-->
+<!--    <li>{{ member.user.username }}</li>-->
+<!--    {% endfor %}-->
+<!--</ul>-->
+<!--{% if family.creator == request.user %}-->
+<!--<a href="{% url 'delete_family' id=family.id %}">Удалить</a>-->
+<!--{% endif %}-->
+<!--<a href="{% url 'exit_from_group' id=family.id %}">Выйти</a>-->
+<!--{% else %}-->
+
+<!--Семьи не добавлено. <a href="{% url 'add_family' %}">Добавить</a> или <a-->
+<!--        href="{%  url 'join_family' %}">Вступить</a>-->
+<!--{% endif %}-->
+
+<!--</div>-->
 {% endblock %}

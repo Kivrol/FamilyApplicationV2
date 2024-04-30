@@ -4,12 +4,6 @@
 {% block title %} Календарь {% endblock %}
 
 {% block mainContent %}
-{#<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">#}
-{#<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js">#}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
-{#<link rel="stylesheet" href="{% static 'main/css/profile.css' %}">#}
 
 <script>
 
@@ -35,7 +29,7 @@
                 //TODO аватар создателя
                 for (let event in data[i]['items']) {
                     $('#c' + i).append(`<a class="event d-block p-1 pl-2 pr-2 mb-1 rounded text-truncate small bg-custom-color-success text-white calendar_event"
-                   title="Test Event 2" id="event_${data[i]['items'][event]['id']}"><i class="material-icons-size-2">${data[i]['items'][event]['icon']}</i>${data[i]['items'][event]['title']}</a>`)
+                   title="Test Event 2" id="event_${data[i]['items'][event]['id']}"><i class="material-icons-size-2 pe-1">${data[i]['items'][event]['icon']}</i>${data[i]['items'][event]['title']}</a>`)
 
                 }
                 if (data[i]['items'].length===0)
@@ -160,7 +154,7 @@
                 $('#id_start').val(new Date(new Date(data['start'])- new Date().getTimezoneOffset() * 60 * 1000).toISOString().slice(0, -1))
                 $('#id_end').val(new Date(new Date(data['end'])- new Date().getTimezoneOffset() * 60 * 1000).toISOString().slice(0, -1))
                 console.log($('#id_start').val())
-                $('#modal_notify').html(`<input type="datetime-local" class="form-control" name="notification" id="id_notification">`)
+                $('#modal_notify').html(`<input type="hidden" class="form-control" name="notification" id="id_notification">`)
                 try {
                     $('#id_notification').val(new Date(new Date(data['notification'])- new Date().getTimezoneOffset() * 60 * 1000).toISOString().slice(0, -1))
                 }catch (e){}
@@ -690,9 +684,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" id="day_cancel" hidden="hidden">Отменить</button>
-                <button type="button" class="btn btn-outline-success" id="day_success" hidden="hidden">Сохранить</button>
-                <button class="btn btn-warning"  id="add_event">Добавить</button>
+                <button type="button" class="fill-warning" id="day_cancel" hidden="hidden">Отменить</button>
+                <button type="button" class="fill-success" id="day_success" hidden="hidden">Сохранить</button>
+                <button class="fill-primary"  id="add_event">Добавить</button>
             </div>
         </div>
     </div>
@@ -710,11 +704,11 @@
                     <p><b>Описание:</b> <span id="modal_desc"></span></p>
                     <p><b>Начало:</b> <span id="modal_start"></span></p>
                     <p><b>Окончание:</b> <span id="modal_end"></span></p>
-                    <p><b>Уведомление:</b> <span id="modal_notify"></span></p>
+<!--                    <p><b>Уведомление:</b> <span id="modal_notify"></span></p>-->
                     <input type="hidden" id="event_id">
                 </div>
                 <div class="modal-footer" id="event_footer">
-                    <a class="btn btn-warning" id="change_event">Изменить</a>
+                    <button class="fill-primary" id="change_event" type="button">Изменить</button>
                     <a class="btn btn-danger" id="modal_delete" hidden="hidden">Удалить</a>
                     <a class="btn btn-outline-secondary" id="decline_event" hidden="hidden">Отменить</a>
                     <a class="btn btn-outline-success" id="save_event" hidden="hidden">Сохранить</a>

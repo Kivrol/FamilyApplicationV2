@@ -4,48 +4,80 @@
 {% block title %} Облако вашей группы - фотогалерея {% endblock %}
 
 {% block mainContent %}
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
-<link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
-<link rel="stylesheet" href="{% static 'main/css/material_font.css' %}">
-
-    <script>
+<script>
     window.onload = function (){
-            $('#file_delete').click(function (){
-                var todelete = new Map()
+        $('#file_delete').click(function (){
+            var todelete = new Map()
             console.log('clicked')
             $('input[type=checkbox]').each(function(index,element){
                 todelete.set(element.id, element.checked)
             })
-                console.log(JSON.stringify(Object.fromEntries(todelete), null,  '\t'))
-                $.post('{% url "delete_cloud_batch_photo" %}', { 'data':JSON.stringify(Object.fromEntries(todelete)) }, function(data){
-                    window.location.reload()
-                })
+            console.log(JSON.stringify(Object.fromEntries(todelete), null,  '\t'))
+            $.post('{% url "delete_cloud_batch_photo" %}', { 'data':JSON.stringify(Object.fromEntries(todelete)) }, function(data){
+                window.location.reload()
+            })
         })
     }
 
-    </script>
-<div class="main-content-padding">
-
-{% for f in files %}
-    <p>
-        <input type="checkbox" id="{{ f.id }}">
-        <a href="/media/{{ f.photo_file }}" download>
-            <span class="material-symbols-outlined">{{ f }}</span>
-        </a>
-        <a  href="/media/{{ f.photo_file }}">
-            <i class="material-icons">slideshow</i></a>
-        <a href="{% url 'delete_cloud_photo' f.id %}">
-            <i class="material-icons">delete_forever</i>
-        </a>
-    </p>
-{%  endfor %}
-<button class="btn btn-outline-danger" id="file_delete">Удалить выбранные</button>
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Загрузить">
-</form>
+</script>
+<div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6">
+        {% for f in files %}
+        <div class="col">
+            <div class="card mt-3">
+                <div class="card-header">
+                    <img src="/media/{{ f.photo_file }}" class="img-thumbnail">
+                </div>
+                <div class="card-body text-center">
+                    <a class="underline-one" href="/media/{{ f.photo_file }}" download>
+                        {{ f }}
+                    </a>
+                </div>
+                <div class="card-footer bg-custom-color-dark">
+                    <div class="row align-items-center">
+                        <div class="col-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="{{ f.id }}">
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <a  href="/media/{{ f.photo_file }}">
+                                <button class="fill-light m-1 p-2 border-1">
+                                    <i class="material-icons-size-2">slideshow</i>
+                                </button>
+                            </a>
+                        </div>
+                        <div class="col-5">
+                            <a href="{% url 'delete_cloud_photo' f.id %}">
+                                <button class="fill-danger m-1 p-2 border-1">
+                                    <i class="material-icons-size-2">delete_forever</i>
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="col">
+            <div class="card mt-3">
+                <div class="card-header">
+                    <p class="text-center fs-5 mb-1">Загрузить фото</p>
+                </div>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="card-body py-4">
+                        <input type="file" name="photo_file" id="id_photo_file" class="form-control">
+                    </div>
+                    <div class="card-footer bg-custom-color-dark text-center">
+                        <button type="submit" class="fill-light mb-0 py-2">Загрузить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col">
+            <button class="fill-danger p-2" id="file_delete">Удалить выбранные</button>
+        </div>
+    </div>
 </div>
 {% endblock %}
