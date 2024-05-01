@@ -4,32 +4,58 @@
 {% block title %} Запрос на добавление в группу {% endblock %}
 
 {% block mainContent %}
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
-<link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
-    {% if messages %}
-    {% for msg in messages %}
-    {{ msg }}
-    {% endfor %}
-    {% endif %}
-<div class="main-content-padding">
-    {%  if req_list|length > 0 %}
-        Запросы отправлены в группы:
-<ul>
 
-{% for req in req_list %}
-    <li>{{ req.family }}</li>
-    {% endfor %}
-{%  endif %}
-</ul>
-    <form method="POST" action="">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Добавить">
-    </form>
+{% if messages %}
+{% for msg in messages %}
+{{ msg }}
+{% endfor %}
+{% endif %}
 
+<div class="container d-flex justify-content-center">
+    <div class="card col-sm-12 col-md-8 col-xl-6 shadow">
+        <div class="card-header bg-custom-color-light text-center">
+            <p class="fs-3 m-2">Запросы на добавление в группу</p>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="text-center">
+                    <p class="fs-4">Ваши запросы</p>
+                </div>
+            </div>
+            <div class="row">
+                <hr class="hr-shelf"/>
+            </div>
+            {%  if req_list|length > 0 %}
+            <div class="row">
+                {% for req in req_list %}
+                <p class="fs-5 text-color">
+                    <i class="material-icons-size-2 text-custom-color-dark align-center">horizontal_rule</i>
+                    {{ req.family }}
+                </p>
+                {% endfor %}
+            </div>
+            <div class="row">
+                <hr class="hr-shelf"/>
+            </div>
+            {% endif %}
+            <div class="row">
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <div class="form-floating mb-3">
+                        <select class="form-select" aria-label="Floating label select example" name="family" required="" id="id_family">
+                            <option value="" selected>---------</option>
+                            <option value="6">Группа для теста 1</option>
+                            <option value="10">Группа родственников</option>
+                        </select>
+                        <label class="ms-2" for="id_family">Family:</label>
+                    </div>
+            </div>
+        </div>
+        <div class="card-footer bg-custom-color-dark text-center">
+            <button type="submit" class="fill-light"> Отправить </button>
+        </div>
+        </form>
+    </div>
 </div>
+
 {% endblock %}

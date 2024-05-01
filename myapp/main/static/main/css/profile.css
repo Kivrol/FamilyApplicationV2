@@ -22,11 +22,11 @@ a {
 }
 
 .hr-shelf {
-	margin: -50px auto 10px 0px !important;
-	padding: 0;
-	height: 50px;
-	border: none;
-	border-bottom: 1px solid #000000;
-	box-shadow: 0 20px 20px -20px #333;
-	width: 95%;
+    margin: -50px auto 10px 0px !important;
+    padding: 0;
+    height: 50px;
+    border: none;
+    border-bottom: 1px solid #000000;
+    box-shadow: 0 20px 20px -20px #333;
+    width: 95%;
 }

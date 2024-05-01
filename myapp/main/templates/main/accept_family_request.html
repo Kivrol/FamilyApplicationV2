@@ -4,39 +4,53 @@
 {% block title %} Запрос на добавление в группу {% endblock %}
 
 {% block mainContent %}
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
-<link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
-<div class="main-content-padding">
-    <a href=" {% url 'family' %} ">
-        <button class="btn btn-primary">Назад</button>
-    </a>
-    {% if requests|length > 0 %}
-    <table class="table">
-        <thead>
-        <tr>
-            <td>№ п/п</td>
-            <td>Профиль</td>
-            <td>Действия</td>
-        </tr>
-        </thead>
 
-        {% for req in requests %}
-        <tr>
-            <td>{{forloop.counter}}</td>
-            <td>{{ req.user }}</td>
-            <td><a class="btn btn-success" href="{%  url 'accept_request' id=req.id %}">Добавить</a>
-                <a class="btn btn-danger" href="{% url 'decline_request' id=req.id %}">Отклонить</a></td>
-        </tr>
-        {% endfor %}
-
-    </table>
-    {% else %}
-    Необработанных запросов нет!
-    {% endif %}
-
+<div class="container d-flex justify-content-center">
+    <div class="card col-sm-12 col-md-8 col-xl-6 shadow">
+        <div class="card-header bg-custom-color-light text-center">
+            <p class="fs-3">Запросы на вступление в группу</p>
+        </div>
+        <div class="card-body">
+            {% if requests|length > 0 %}
+            <div class="row text-center">
+                <div class="col-2">
+                    <p class="fs-5">№ п/п</p>
+                </div>
+                <div class="col-5">
+                    <p class="fs-5">Профиль</p>
+                </div>
+                <div class="col-5">
+                    <p class="fs-5">Действия</p>
+                </div>
+            </div>
+            <div class="row text-center">
+                {% for req in requests %}
+                <div class="col-2">
+                    {{forloop.counter}}
+                </div>
+                <div class="col-5">
+                    {{ req.user }}
+                </div>
+                <div class="col-5 text-center">
+                    <a href="{%  url 'accept_request' id=req.id %}"><button type="submit" class="fill-success p-2 mx-2">Добавить</button></a>
+                    <a href="{% url 'decline_request' id=req.id %}"><button type="submit" class="fill-danger p-2 mx-2">Отклонить</button></a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="fs-5">Запросов на вступление в вашу группу нет</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="card-footer bg-custom-color-dark text-center">
+            <a href=" {% url 'family' %} "><button type="submit" class="fill-light px-4">Назад</button></a>
+        </div>
+    </div>
 </div>
+
+
+
 {% endblock %}

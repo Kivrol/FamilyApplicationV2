@@ -1,7 +1,7 @@
 {% extends 'main/htmlpatterns.html' %}
 {% load static %}
 
-{% block title %} Ваша семья {% endblock %}
+{% block title %} Ваша группа {% endblock %}
 
 {% block mainContent %}
 <link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
@@ -44,7 +44,7 @@
                         </div>
                         {% for member in family.userprofile_set.all %}
                         <div class="row items-align-center">
-                            <p class="h6 text-color">
+                            <p class="h6 text-color" {% if member.user == family.creator %} style="font-weight: bold" {% endif %}>
                                 <i class="material-icons-size-2 text-custom-color-dark align-center">horizontal_rule</i>
                                 {{ member.user.username }}
                             </p>
