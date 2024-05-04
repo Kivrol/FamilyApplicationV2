@@ -36,7 +36,7 @@ class Family(models.Model):
         upload_to=f'familyImg/',
         null=True,
         blank=True,
-        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'png', 'ico'])],
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'png', 'ico', 'jpeg', 'webp'])],
         verbose_name='Аватар',
         name='familyAvatar'
     )

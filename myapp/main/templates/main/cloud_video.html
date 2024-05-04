@@ -4,11 +4,6 @@
 {% block title %} Облако вашей группы - Видеогалерея {% endblock %}
 
 {% block mainContent %}
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/3.6.95/css/materialdesignicons.css">
-<link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
-    <link rel="stylesheet" href="{% static 'main/css/material_font.css' %}">
 
     <script>
     window.onload = function (){
@@ -26,27 +21,65 @@
     }
 
     </script>
-<div class="main-content-padding">
 
-{% for f in files %}
-    <p>
-        <input type="checkbox" id="{{ f.id }}">
-        <a href="/media/{{ f.video_file }}" download>
-            <img src="{% static 'main/img/video.png' %}">{{ f }}
-        </a>
-        <a  href="/media/{{ f.video_file }}">
-            <i class="material-icons">slideshow</i>
-        </a>
-        <a href="{% url 'delete_cloud_video' f.id %}">
-            <i class="material-icons">delete_forever</i>
-        </a>
-    </p>
-{%  endfor %}
-<button class="btn btn-outline-danger" id="file_delete">Удалить выбранные</button>
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Загрузить">
-</form>
+<div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6">
+        {% for f in files %}
+        <div class="col">
+            <div class="card mt-3">
+                <div class="card-header text-center bg-custom-color-light">
+                    <img src="/media/{{ f.video_file }}" class="img-thumbnail">
+                </div>
+                <div class="card-body text-center">
+                    <a class="underline-one" href="/media/{{ f.video_file }}" download>
+                        {{ f }}
+                    </a>
+                </div>
+                <div class="card-footer bg-custom-color-dark">
+                    <div class="row align-items-center">
+                        <div class="col-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="{{ f.id }}">
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <a  href="/media/{{ f.video_file }}">
+                                <button class="fill-light m-1 p-2 border-1">
+                                    <i class="material-icons-size-2">slideshow</i>
+                                </button>
+                            </a>
+                        </div>
+                        <div class="col-5">
+                            <a href="{% url 'delete_cloud_video' f.id %}">
+                                <button class="fill-danger m-1 p-2 border-1">
+                                    <i class="material-icons-size-2">delete_forever</i>
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="col">
+            <div class="card mt-3">
+                <div class="card-header text-center bg-custom-color-light">
+                    <p class="fs-5 mb-1">Загрузить видео</p>
+                </div>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="card-body py-4">
+                        <input type="file" name="video_file" id="id_video_file" class="form-control">
+                    </div>
+                    <div class="card-footer bg-custom-color-dark text-center">
+                        <button type="submit" class="fill-light mb-0 py-2">Загрузить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col">
+            <button class="fill-danger p-2" id="file_delete">Удалить выбранные</button>
+        </div>
+    </div>
 </div>
 {% endblock %}

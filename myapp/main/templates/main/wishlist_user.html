@@ -60,9 +60,9 @@
                     {% else %}
                     <p class="card-text opacity-75 p-0 m-0">Ссылки нет</p>
                     {% endif %}
-                {% if w.custom_reason %}
+                    {% if w.custom_reason %}
                     <p class="card-text text-center">{{ w.custom_reason }}</p>
-                {% endif %}
+                    {% endif %}
                     <p class="card-text opacity-75">{{ w.date }}</p>
                 </div>
                 {% if showform %}
@@ -102,7 +102,7 @@
                 {% endif %}
                 <div class="card-footer bg-custom-color-dark">
                     <button type="button" class="fill-light py-2" data-bs-toggle="modal" data-bs-target="#form">
-                    Добавить желание</button>
+                        Добавить желание</button>
                 </div>
             </div>
         </div>
@@ -121,25 +121,24 @@
             <div class="modal-body">
                 <form method="post" enctype="multipart/form-data" id="form_add">
                     {% csrf_token %}
-                    <p>
+                    <div class="form-floating mb-3">
+                        <input type="text" name="name" maxlength="50" required="" id="id_name" class="form-control" placeholder="Наименование:">
                         <label for="id_name">Наименование:</label>
-                        <input type="text" name="name" maxlength="50" required="" id="id_name" class="form-control">
-                    </p>
-                    <p>
-                        <label for="id_wish_picture">Картинка:</label>
+                    </div>
+                    <div class="form-floating mb-3">
                         <input type="file" name="wish_picture" accept="image/*" id="id_wish_picture" class="form-control">
-                    </p>
-                    <p>
+                        <label for="id_wish_picture">Картинка:</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="url" name="url" maxlength="200" id="id_url" class="form-control" placeholder="Ссылка:">
                         <label for="id_url">Ссылка:</label>
-                        <input type="url" name="url" maxlength="200" id="id_url" class="form-control">
-                    </p>
-                    <p>
-                        <label for="id_active">Активно:</label>
-                        <input type="checkbox" name="active" id="id_active" class="form-check">
-                    </p>
-                    <p>
-                        <label for="id_reason">Причина:</label>
-                        <select name="reason" id="id_reason" class="form-select">
+                    </div>
+                    <div class="mb-3">
+                        <input type="checkbox" name="active" id="id_active" class="btn-check" autocomplete="off">
+                        <label class="btn btn-outline-primary border-2" for="id_active">Отображать</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select name="reason" id="id_reason" class="form-select" aria-label="Floating label select example" >
                             <option value="Новый год">Новый год</option>
                             <option value="Свадьба">Свадьба</option>
                             <option value="День рождения">День Рождения</option>
@@ -147,11 +146,12 @@
                             <option value="23 февраля">23 Февраля</option>
                             <option value="Другое" selected="">Другое</option>
                         </select>
-                    </p>
-                    <p>
+                        <label for="id_reason">Причина:</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" name="custom_reason" maxlength="100" id="id_custom_reason" class="form-control" placeholder="Примечание:">
                         <label for="id_custom_reason">Примечание:</label>
-                        <input type="text" name="custom_reason" maxlength="100" id="id_custom_reason" class="form-control">
-                    </p>
+                    </div>
                     <input type="hidden" value="" name="wid">
                 </form>
             </div>
