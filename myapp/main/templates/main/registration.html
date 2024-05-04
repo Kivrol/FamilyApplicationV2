@@ -24,30 +24,25 @@
     <script src="https://kit.fontawesome.com/a673f0fe84.js"
             crossorigin="anonymous">
     </script>
+         <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <link rel="stylesheet" href="{% static 'main/css/login.css' %}">
     <link rel="stylesheet" href="{% static 'main/css/buttons.css' %}">
 </head>
 <body>
-{% if form.errors %}
+{%  if form.errors %}
+    <script>
+        {% for key, error in form.errors.items %}
+            toastr.error('{{ error }}',"Ошибка" );
+        {% endfor %}
 
-<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header">
-        <strong class="me-auto">Bootstrap</strong>
-        <small>11 мин. назад</small>
-        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button>
-    </div>
-    <div class="toast-body">
-        Привет мир! Это тост-сообщение.
-    </div>
-</div>
-<script>
-    var toastElList = [].slice.call(document.querySelectorAll('.toast'))
-    var toastList = toastElList.map(function (toastEl) {
-        return new bootstrap.Toast(toastEl, {})
-    })
-    toastList[0].show()
-</script>
-{% endif %}
+        console.log('{{ form.errors }}')
+    </script>
+
+{%  endif %}
 
 <div class="container d-flex justify-content-center position-absolute top-50 start-50 translate-middle">
     <div class="card shadow col-sm-12 col-md-8 col-lg-6 col-xl-4">

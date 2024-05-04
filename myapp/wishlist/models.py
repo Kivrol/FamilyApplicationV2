@@ -25,7 +25,7 @@ class WishListComponent(models.Model):
                                                                                           ('23 февраля', '23 Февраля'),
                                                                                           ('Другое', 'Другое')),
                               default="Другое")
-    custom_reason = models.CharField(max_length=100, verbose_name='Своя причина', null=True, blank=True)
+    custom_reason = models.CharField(max_length=100, verbose_name='Примечание', null=True, blank=True)
     objects = models.Manager()
 
     def __str__(self):

@@ -5,6 +5,17 @@
 
 {% block mainContent %}
 <link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
+    <script>
+    $(document).ready(()=>{
+        var changer = new bootstrap.Modal($('#changeGroup'), {})
+        $('#change_group').click(()=>{
+            changer.show()
+        })
+        $('#save_group').click(() => {
+
+        })
+    })
+    </script>
 
 <div class="container d-flex justify-content-center">
     <div class="card border-1 rounded-2 shadow col-sm-12 col-md-8 col-xl-6">
@@ -27,6 +38,7 @@
                             {% if is_creator %}
                             <a href=" {% url 'process_request' %} ">
                                 <button class="fill-dark p-2">Запросы</button>
+                            <a class="text-color" id="change_group"><button class="material-icons-size-3 fill-dark p-1 m-0">edit</button></a>
                             </a>
                             {% endif %}
                         </div>
@@ -47,6 +59,7 @@
                             <p class="h6 text-color" {% if member.user == family.creator %} style="font-weight: bold" {% endif %}>
                                 <i class="material-icons-size-2 text-custom-color-dark align-center">horizontal_rule</i>
                                 {{ member.user.username }}
+                                {% if request.user == family.creator  and member.user != family.creator%} <a href="{% url 'kick_from_group' member.id %}"><button class="fill-danger p-1">исключить</button></a> {% endif %}
                             </p>
                         </div>
                         {% endfor %}
@@ -83,28 +96,22 @@
     </div>
 </div>
 
-
-<!--{% if is_creator %}-->
-<!--<a href=" {% url 'process_request' %} ">-->
-<!--    <button class="btn btn-primary">Запросы</button>-->
-<!--</a>-->
-<!--{% endif %}-->
-<!--{% if family %}-->
-<!--{{ family.name }}-->
-<!--<ul>-->
-<!--    {% for member in family.userprofile_set.all %}-->
-<!--    <li>{{ member.user.username }}</li>-->
-<!--    {% endfor %}-->
-<!--</ul>-->
-<!--{% if family.creator == request.user %}-->
-<!--<a href="{% url 'delete_family' id=family.id %}">Удалить</a>-->
-<!--{% endif %}-->
-<!--<a href="{% url 'exit_from_group' id=family.id %}">Выйти</a>-->
-<!--{% else %}-->
-
-<!--Семьи не добавлено. <a href="{% url 'add_family' %}">Добавить</a> или <a-->
-<!--        href="{%  url 'join_family' %}">Вступить</a>-->
-<!--{% endif %}-->
-
-<!--</div>-->
+<div class="modal fade" id="changeGroup" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <form method="post" id="form_group_change">
+            {% csrf_token %}
+            <div class="modal-header" id="eventModalHeader">
+                <h5 class="modal-title" id="eventModalTitle">Изменение группы</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="eventModalBody">
+                {{ form.as_p }}
+            </div>
+            <div class="modal-footer" id="event_footer">
+                <button class="btn btn-outline-success" id="save_group">Сохранить</button>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}

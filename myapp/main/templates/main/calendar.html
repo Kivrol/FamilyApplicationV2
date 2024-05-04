@@ -4,7 +4,6 @@
 {% block title %} Календарь {% endblock %}
 
 {% block mainContent %}
-
 <script>
 
     function update(month, year) {
@@ -29,7 +28,7 @@
                 //TODO аватар создателя
                 for (let event in data[i]['items']) {
                     $('#c' + i).append(`<a class="event d-block p-1 pl-2 pr-2 mb-1 rounded text-truncate small bg-custom-color-success text-white calendar_event"
-                   title="Test Event 2" id="event_${data[i]['items'][event]['id']}"><i class="material-icons-size-2 pe-1">${data[i]['items'][event]['icon']}</i>${data[i]['items'][event]['title']}</a>`)
+                    id="event_${data[i]['items'][event]['id']}"><i class="material-icons-size-2 pe-1">${data[i]['items'][event]['icon']}</i>${data[i]['items'][event]['title']}</a>`)
 
                 }
                 if (data[i]['items'].length===0)
@@ -147,12 +146,11 @@
                       <option value="partner_exchange">Свадьба</option>
                     </select></p>`)
                 $('#modal_desc').html(`<p><textarea name="description" class="form-control"> ${data['description']}</textarea></p>`)
-                $('#modal_start').html(`<input type="datetime-local" class="form-control" name="start" id="id_start">`)
-                $('#modal_end').html(`<input type="datetime-local" class="form-control" name="end" id="id_end">`)
+                $('#modal_start').html(`<input type="datetime-local" class="form-control" name="start" id="id_start_change">`)
+                $('#modal_end').html(`<input type="datetime-local" class="form-control" name="end" id="id_end_change">`)
                 $('#modal_delete').attr("href", `/calendar/delete/${data['id']}`)
-                console.log(new Date(new Date(data['start'])- new Date().getTimezoneOffset() * 60 * 1000).toISOString().slice(0, -1))
-                $('#id_start').val(new Date(new Date(data['start'])- new Date().getTimezoneOffset() * 60 * 1000).toISOString().slice(0, -1))
-                $('#id_end').val(new Date(new Date(data['end'])- new Date().getTimezoneOffset() * 60 * 1000).toISOString().slice(0, -1))
+                $('#id_start_change').val(new Date(new Date(data['start'])- new Date().getTimezoneOffset() * 60 * 1000).toISOString().slice(0, -1))
+                $('#id_end_change').val(new Date(new Date(data['end'])- new Date().getTimezoneOffset() * 60 * 1000).toISOString().slice(0, -1))
                 console.log($('#id_start').val())
                 $('#modal_notify').html(`<input type="hidden" class="form-control" name="notification" id="id_notification">`)
                 try {
@@ -181,7 +179,7 @@
         $(document).on("click", "#add_event", function () {
             addEventCollapse.show()
             let now = new Date()
-            $('#id_start').val(new Date(new Date(year, month-1, sel_day, now.getHours(), now.getMinutes())- new Date().getTimezoneOffset() * 60 * 1000).toISOString().slice(0, -1))
+            $('#id_start').val(new Date(new Date(year, month-1, sel_day, now.getHours(), now.getMinutes())- new Date().getTimezoneOffset() * 60 * 1000+60000).toISOString().slice(0, -1))
             $('#add_event').attr('hidden', 'hidden')
             $('#day_cancel').removeAttr('hidden')
             $('#day_success').removeAttr('hidden')
@@ -228,7 +226,7 @@
                             $('#dayModalBody').html("")
                             for (let event in data[day_index]['items']){
                                 $('#dayModalBody').append(`<a class="event d-block p-1 pl-2 pr-2 mb-1 rounded text-truncate small bg-custom-color-success text-white calendar_event"
-                           title="Test Event 2" id="event_${data[index]['items'][event]['id']}"><i class="material-icons-size-2">${data[index]['items'][event]['icon']}</i>${data[index]['items'][event]['title']}</a>`)
+                            id="event_${data[index]['items'][event]['id']}"><i class="material-icons-size-2">${data[index]['items'][event]['icon']}</i>${data[index]['items'][event]['title']}</a>`)
                             }
                             dayModal.show()
                         })
@@ -265,8 +263,13 @@
                         $('.invalid-feedback').remove()
                         for(let e in data['errors'])
                         {
-                            $('#id_'+e).addClass('is-invalid')
-                            $('#id_'+e).after(`<div class="invalid-feedback">${data['errors'][e]}</div>`)
+                            let changer = e
+                            if (e=="end")
+                                changer = "end_change"
+                            if(e=="start")
+                                changer="start_change"
+                            $('#id_'+changer).addClass('is-invalid')
+                            $('#id_'+changer).after(`<div class="invalid-feedback">${data['errors'][e]}</div>`)
                         }
                     }
                 }
@@ -709,12 +712,13 @@
                 </div>
                 <div class="modal-footer" id="event_footer">
                     <button class="fill-primary" id="change_event" type="button">Изменить</button>
-                    <a class="btn btn-danger" id="modal_delete" hidden="hidden">Удалить</a>
-                    <a class="btn btn-outline-secondary" id="decline_event" hidden="hidden">Отменить</a>
-                    <a class="btn btn-outline-success" id="save_event" hidden="hidden">Сохранить</a>
+                    <a id="modal_delete" hidden="hidden"><button class="fill-danger"   type="button">Удалить</button></a>
+                    <button class="fill-secondary" id="decline_event" hidden="hidden" type="button">Отменить</button>
+                    <button class="fill-success" id="save_event" hidden="hidden" type="button">Сохранить</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
 {% endblock %}

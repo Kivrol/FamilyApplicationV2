@@ -60,7 +60,9 @@
                     {% else %}
                     <p class="card-text opacity-75 p-0 m-0">Ссылки нет</p>
                     {% endif %}
-
+                {% if w.custom_reason %}
+                    <p class="card-text text-center">{{ w.custom_reason }}</p>
+                {% endif %}
                     <p class="card-text opacity-75">{{ w.date }}</p>
                 </div>
                 {% if showform %}
@@ -147,7 +149,7 @@
                         </select>
                     </p>
                     <p>
-                        <label for="id_custom_reason">Своя причина:</label>
+                        <label for="id_custom_reason">Примечание:</label>
                         <input type="text" name="custom_reason" maxlength="100" id="id_custom_reason" class="form-control">
                     </p>
                     <input type="hidden" value="" name="wid">

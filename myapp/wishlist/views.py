@@ -8,7 +8,7 @@ from .models import WishListComponent
 
 class WishListMainPage(View):
     def get(self, request, *args, **kwargs):
-        ups = UserProfile.objects.filter(family=UserProfile.objects.get(user=request.user).family)
+        ups = UserProfile.objects.filter(family=UserProfile.objects.get(user=request.user).family).filter(family__isnull=False)
         users = [up.user for up in ups]
         if request.user in users:
             users.insert(0, users.pop(users.index(request.user)))

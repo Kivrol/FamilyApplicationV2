@@ -35,13 +35,7 @@ class AddCalendarItemForm(forms.ModelForm):
             raise ValidationError("Длительность события не должна превышать месяца")
         return self.cleaned_data['end']
 
-    def clean_notification(self):
-        if self.cleaned_data['notification'] is not None and self.cleaned_data['notification'] > self.cleaned_data[
-            'end']:
-            raise ValidationError("Напоминание не может быть позже конца события")
-        if self.cleaned_data['notification'] is not None and self.cleaned_data['notification'] < timezone.now():
-            raise ValidationError("Напоминание не может быть раньше текущей даты")
-        return self.cleaned_data['notification']
+
 
 
 class EditCalendarItemForm(forms.ModelForm):

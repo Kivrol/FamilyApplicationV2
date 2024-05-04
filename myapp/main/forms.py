@@ -13,9 +13,6 @@ from .models import Family
 from django.contrib.admin import widgets
 
 
-
-
-
 class AddFamily(forms.ModelForm):
     class Meta:
         model = Family
@@ -23,10 +20,13 @@ class AddFamily(forms.ModelForm):
 
 
 class AddFamilyRequest(forms.Form):
-    family = forms.ModelChoiceField(queryset=None)
+    family = forms.ModelChoiceField(queryset=None, widget=forms.Select(attrs={'class': 'form-control'}))
 
 
-
+class UpdateFamily(forms.ModelForm):
+    class Meta:
+        model = Family
+        fields = ['name', 'familyAvatar']
 
 
 class EditUserForm(forms.ModelForm):
@@ -66,7 +66,6 @@ class EditProfileForm(forms.ModelForm):
         fields = ['patronimic', 'profileAvatar', 'birthDate', 'phoneNumber']
 
 
-
 class MyAuthenticationForm(AuthenticationForm):
     error_messages = {
         'invalid_login': (
@@ -75,6 +74,3 @@ class MyAuthenticationForm(AuthenticationForm):
         ),
         'inactive': "This account is inactive.",
     }
-
-
-

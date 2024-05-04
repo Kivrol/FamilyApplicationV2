@@ -18,7 +18,7 @@ class LoginView(View):
             if user is not None:
                 login(request, user)
                 return redirect('profile')
-
+        print(form.errors)
         return render(request, 'registration/login.html', {'form': form})
 
 

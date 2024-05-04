@@ -19,4 +19,5 @@ urlpatterns = [
     path('cloud/', include('cloud.urls')),
     path('calendar/', include('lightlist_calendar.urls')),
     path('change_password/', views.ChangePassword.as_view(), name='change_password'),
+    path('kick_from_group/<int:member>', views.KickFromGroup.as_view(), name='kick_from_group'),
 ]

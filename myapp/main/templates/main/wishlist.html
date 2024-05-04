@@ -63,6 +63,10 @@
 
         </div>
         {% endfor %}
-    </div>
+    
+    </div>{% if users|length == 0 %}
+        <p class="display-4">Вы не состоите в группе</p>
+    {% endif %}
 </div>
+
 {% endblock %}
