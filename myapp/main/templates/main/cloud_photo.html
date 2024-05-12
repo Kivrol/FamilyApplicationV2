@@ -79,7 +79,7 @@
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="card-body py-4">
-                        <input type="file" name="photo_file" id="id_photo_file" class="form-control">
+                        <input type="file" name="photo_file" id="id_photo_file" class="form-control" accept=".jpg, .jpeg, .png, .ico, .bmp, .webp">
                     </div>
                     <div class="card-footer bg-custom-color-dark text-center">
                         <button type="submit" class="fill-light mb-0 py-2">Загрузить</button>

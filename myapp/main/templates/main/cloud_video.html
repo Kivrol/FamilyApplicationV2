@@ -69,7 +69,7 @@
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="card-body py-4">
-                        <input type="file" name="video_file" id="id_video_file" class="form-control">
+                        <input type="file" name="video_file" id="id_video_file" class="form-control" accept=".mp4, .avi, .mkv, .mov, .webm">
                     </div>
                     <div class="card-footer bg-custom-color-dark text-center">
                         <button type="submit" class="fill-light mb-0 py-2">Загрузить</button>
