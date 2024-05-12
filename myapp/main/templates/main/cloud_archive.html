@@ -22,15 +22,15 @@
 </script>
 <div class="container">
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6">
-        {% for f in files %}
+        {% for f, n, e in files %}
         <div class="col">
             <div class="card mt-3">
                 <div class="card-header text-center bg-custom-color-light">
-                    <p class="fs-5">Архив</p>
+                   <img src="{% url 'thumbnails' %}?ext={{ e }}&cat=archive" class="img-thumbnail">
                 </div>
                 <div class="card-body text-center">
-                    <a class="underline-one" href="/media/{{ f.archive_file }}" download>
-                        {{ f }}
+                    <a class="underline-one" href="{% url 'cloud_storage' %}?path={{ n }}" download>
+                        {{ n }}
                     </a>
                 </div>
                 <div class="card-footer bg-custom-color-dark">
@@ -41,7 +41,7 @@
                             </div>
                         </div>
                         <div class="col-5">
-                            <a  href="/media/{{ f.archive_file }}">
+                            <a  href="{% url 'cloud_storage' %}?path={{ n }}">
                                 <button class="fill-light m-1 p-2 border-2">
                                     <i class="material-icons-size-3 p-0">slideshow</i>
                                 </button>

@@ -20,7 +20,7 @@ class AddFamily(forms.ModelForm):
 
 
 class AddFamilyRequest(forms.Form):
-    family = forms.ModelChoiceField(queryset=None, widget=forms.Select(attrs={'class': 'form-control'}))
+    family = forms.TextInput(attrs={'class': 'form-control'})
 
 
 class UpdateFamily(forms.ModelForm):

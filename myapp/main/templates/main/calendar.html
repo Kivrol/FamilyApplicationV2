@@ -13,7 +13,6 @@
         }
         $.getJSON(`/calendar/api/${month}/${year}`, function (data) {
             for (let i = 0; i < data.length; i++) {
-                console.log(data[i]);
                 if (data[i]['day'] !== 0)
                 {
                     $('#t' + i).html(data[i]['day'])
@@ -24,11 +23,21 @@
                     $('#c'+i).addClass("d-none d-sm-inline-block bg-light text-muted")
                     $('#t' + i).html("")
                 }
-
+                console.log("raw", data[i]['items'])
+                let sorted = data[i]['items'].sort((a, b) => {
+                    const timeA = new Date(`2023-05-12T${a.start}`).getTime();
+                    const timeB = new Date(`2023-05-12T${b.start}`).getTime();
+                    return timeA - timeB;
+                });
+                console.log("sorted", sorted)
                 //TODO аватар создателя
-                for (let event in data[i]['items']) {
-                    $('#c' + i).append(`<a class="event d-block p-1 pl-2 pr-2 mb-1 rounded text-truncate small bg-custom-color-success text-white calendar_event"
-                    id="event_${data[i]['items'][event]['id']}"><i class="material-icons-size-2 pe-1">${data[i]['items'][event]['icon']}</i>${data[i]['items'][event]['title']}</a>`)
+                for (let event in sorted) {
+                    if(data[i]['items'][event]['start'])
+                        $('#c' + i).append(`<a class="event d-block p-1 pl-2 pr-2 mb-1 rounded text-truncate small bg-custom-color-success text-white calendar_event" style="text-decoration: none;"
+                        id="event_${data[i]['items'][event]['id']}"><i class="material-icons-size-2 pe-1">${data[i]['items'][event]['icon']}</i>${data[i]['items'][event]['title']} ${data[i]['items'][event]['start']}</a>`)
+                    else
+                        $('#c' + i).append(`<a class="event d-block p-1 pl-2 pr-2 mb-1 rounded text-truncate small bg-custom-color-success text-white calendar_event" style="text-decoration: none;"
+                        id="event_${data[i]['items'][event]['id']}"><i class="material-icons-size-2 pe-1">${data[i]['items'][event]['icon']}</i>${data[i]['items'][event]['title']}</a>`)
 
                 }
                 if (data[i]['items'].length===0)
@@ -91,9 +100,20 @@
                 else
                     $('#add_event').removeAttr('hidden')
                 $('#dayModalBody').html("")
-                for (let event in data[index]['items']){
-                    $('#dayModalBody').append(`<a class="event d-block p-1 pl-2 pr-2 mb-1 rounded text-truncate small bg-custom-color-success text-white calendar_event"
-                   title="Test Event 2" id="event_${data[index]['items'][event]['id']}"><i class="material-icons-size-2">${data[index]['items'][event]['icon']}</i>${data[index]['items'][event]['title']}</a>`)
+                
+                let sorted = data[index]['items'].sort((a, b) => {
+                    const timeA = new Date(`2023-05-12T${a.start}`).getTime();
+                    const timeB = new Date(`2023-05-12T${b.start}`).getTime();
+                    return timeA - timeB;
+                });
+                for (let event in sorted) {
+                    if(data[index]['items'][event]['start'])
+                       $('#dayModalBody').append(`<a class="event d-block p-1 pl-2 pr-2 mb-1 rounded text-truncate small bg-custom-color-success text-white calendar_event" style="text-decoration: none;"
+                        id="event_${data[index]['items'][event]['id']}"><i class="material-icons-size-2 pe-1">${data[index]['items'][event]['icon']}</i>${data[index]['items'][event]['title']} ${data[index]['items'][event]['start']}</a>`)
+                    else
+                        $('#dayModalBody').append(`<a class="event d-block p-1 pl-2 pr-2 mb-1 rounded text-truncate small bg-custom-color-success text-white calendar_event" style="text-decoration: none;"
+                        id="event_${data[index]['items'][event]['id']}"><i class="material-icons-size-2 pe-1">${data[index]['items'][event]['icon']}</i>${data[index]['items'][event]['title']}</a>`)
+
                 }
                 dayModal.show()
             })

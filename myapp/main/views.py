@@ -126,20 +126,23 @@ class JoinFamilyRequestView(View):
         req_list = JoinFamilyRequest.objects.filter(user=request.user, accepted=False)
         form = AddFamilyRequest()
         form.user = request.user
-        form.fields['family'].queryset = Family.objects.all()
         print(Family.objects.all())
         return render(request, 'main/join_family_request.html', {'form': form, 'req_list': req_list})
 
     def post(self, request, *args, **kwargs):
         form = AddFamilyRequest(request.POST)
-        form.fields['family'].queryset = Family.objects
         if form.is_valid():
             for f in JoinFamilyRequest.objects.all():
-                if f.family == form.cleaned_data['family'] and f.user == request.user and f.accepted == False:
+                if f.family.name == form.data['family'] and f.user == request.user and f.accepted == False:
                     messages.error(request, 'Запрос в эту группу уже отправлен')
                     return redirect('join_family')
-            JoinFamilyRequest(user=request.user, family=form.cleaned_data['family']).save()
-            return redirect('family')
+            if form.data['family'] in [f.name for f in Family.objects.all()]:
+                JoinFamilyRequest(user=request.user, family=Family.objects.get(name=form.data['family'])).save()
+                messages.success(request, 'Запрос отправлен')
+                return redirect('family')
+            else:
+                messages.error(request, 'Такой группы не существует')
+                return redirect('join_family')
         print(form.errors)
         return redirect('join_family')
 

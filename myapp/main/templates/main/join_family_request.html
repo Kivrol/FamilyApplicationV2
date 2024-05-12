@@ -4,11 +4,18 @@
 {% block title %} Запрос на добавление в группу {% endblock %}
 
 {% block mainContent %}
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 {% if messages %}
+    <script>
 {% for msg in messages %}
-{{ msg }}
-{% endfor %}
+    {% if msg.tags == 'error' %}
+    toastr.error("{{ msg }}")
+    {% else %}
+    toastr.info("{{ msg }}")
+    {% endif %}
+{% endfor %}    
+    </script>
 {% endif %}
 
 <div class="container d-flex justify-content-center">
@@ -42,16 +49,9 @@
                 <form method="POST" action="">
                     {% csrf_token %}
                     <div class="form-floating mb-3">
-                        <select class="form-select" aria-label="Floating label select example" name="family" required="" id="id_family">
-                            {% for opt in form.family %}
-                               {{ opt }}
-                            {% endfor %}
-
-                        </select>
+                        <input class="form-control" name="family" required="" id="id_family" type="text">
                         <label class="ms-2" for="id_family">Группа:</label>
                     </div>
-            </div>
-        </div>
         <div class="card-footer bg-custom-color-dark text-center">
             <button type="submit" class="fill-light"> Отправить </button>
         </div>

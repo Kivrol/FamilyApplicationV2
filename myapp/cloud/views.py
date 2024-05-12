@@ -1,4 +1,8 @@
 import json
+import os
+
+from django.contrib.auth.decorators import login_required
+from django.http import FileResponse
 
 from django.shortcuts import render, redirect
 from django.views.generic import View
@@ -6,6 +10,8 @@ from django.views.generic import View
 from .models import CloudFile
 from .forms import UploadVideoFile, UploadPhotoFile, UploadDocFile, UploadArchiveFile
 from main.models import UserProfile
+
+from myapp import settings
 
 
 class Cloud(View):
@@ -16,8 +22,14 @@ class Cloud(View):
 class CloudVideo(View):
     def get(self, request, *args, **kwargs):
         files = CloudFile.objects.filter(category='video', family=UserProfile.objects.get(user=request.user).family)
+        filesName = []
+        filesExt = []
+        for f in files:
+            n = f.video_file.name.split('/')[-1]
+            filesName.append(n)
+            filesExt.append(n.split('.')[1])
         form = UploadVideoFile()
-        return render(request, 'main/cloud_video.html', {'files': files, 'form': form})
+        return render(request, 'main/cloud_video.html', {'files': zip(files, filesName, filesExt), 'form': form})
 
     def post(self, request, *args, **kwargs):
         form = UploadVideoFile(request.POST, request.FILES)
@@ -53,11 +65,12 @@ class CloudPhoto(View):
     def get(self, request, *args, **kwargs):
         files = CloudFile.objects.filter(category='photo', family=UserProfile.objects.get(user=request.user).family)
         filesName = []
-        for i in range(len(files)):
-            n, f = files[i].photo_file.name.split('/')
-            filesName.append(f)
+        for f in files:
+            n = f.photo_file.name.split('/')[-1]
+            filesName.append(n)
         form = UploadPhotoFile()
-        return render(request, 'main/cloud_photo.html', {'files': files, 'form': form, 'filesName': filesName})
+        return render(request, 'main/cloud_photo.html',
+                      {'files': zip(files, filesName), 'form': form, 'filesName': filesName})
 
     def post(self, request, *args, **kwargs):
         form = UploadPhotoFile(request.POST, request.FILES)
@@ -94,11 +107,23 @@ class CloudDoc(View):
     def get(self, request, *args, **kwargs):
         files = CloudFile.objects.filter(category='doc', family=UserProfile.objects.get(user=request.user).family)
         form = UploadDocFile()
-        return render(request, 'main/cloud_doc.html', {'files': files, 'form': form})
+        filesName = []
+        filesExt=[]
+        for f in files:
+            n = f.doc_file.name.split('/')[-1]
+            filesName.append(n)
+            filesExt.append(n.split('.')[1])
+        return render(request, 'main/cloud_doc.html', {'files': zip(files, filesName, filesExt), 'filesName': files, 'form': form})
 
     def post(self, request, *args, **kwargs):
         form = UploadDocFile(request.POST, request.FILES)
         files = CloudFile.objects.filter(category='doc', family=UserProfile.objects.get(user=request.user).family)
+        filesName = []
+        filesExt = []
+        for f in files:
+            n = f.doc_file.name.split('/')[-1]
+            filesName.append(n)
+            filesExt.append(n.split('.')[1])
         if form.is_valid():
             new_file = form.save(commit=False)
             new_file.family = UserProfile.objects.get(user=request.user).family
@@ -106,7 +131,7 @@ class CloudDoc(View):
             new_file.category = 'doc'
             new_file.save()
         else:
-            return render(request, 'main/cloud_doc.html', {'files': files, 'form': form})
+            return render(request, 'main/cloud_doc.html', {'files': zip(files, filesName, filesExt), 'form': form})
         return redirect('cloud_doc')
 
 
@@ -130,11 +155,23 @@ class CloudArchive(View):
     def get(self, request, *args, **kwargs):
         files = CloudFile.objects.filter(category='archive', family=UserProfile.objects.get(user=request.user).family)
         form = UploadArchiveFile()
-        return render(request, 'main/cloud_archive.html', {'files': files, 'form': form})
+        filesName = []
+        filesExt = []
+        for f in files:
+            n = f.archive_file.name.split('/')[-1]
+            filesName.append(n)
+            filesExt.append(n.split('.')[1])
+        return render(request, 'main/cloud_archive.html', {'files': zip(files, filesName, filesExt), 'filesName': files, 'form': form})
 
     def post(self, request, *args, **kwargs):
         form = UploadArchiveFile(request.POST, request.FILES)
         files = CloudFile.objects.filter(category='archive', family=UserProfile.objects.get(user=request.user).family)
+        filesName = []
+        filesExt = []
+        for f in files:
+            n = f.archive_file.name.split('/')[-1]
+            filesName.append(n)
+            filesExt.append(n.split('.')[1])
         if form.is_valid():
             new_file = form.save(commit=False)
             new_file.family = UserProfile.objects.get(user=request.user).family
@@ -142,7 +179,7 @@ class CloudArchive(View):
             new_file.category = 'archive'
             new_file.save()
         else:
-            return render(request, 'main/cloud_archive.html', {'files': files, 'form': form})
+            return render(request, 'main/cloud_archive.html', {'files': zip(files, filesName, filesExt), 'filesName': files, 'form': form})
         return redirect('cloud_archive')
 
 
@@ -159,3 +196,21 @@ class DeleteArchiveFile(View):
                 if v:
                     CloudFile.objects.get(id=i).delete()
         return redirect('cloud_archive')
+
+
+
+class CloudStorage(View):
+    def get(self, request, *args, **kwargs):
+        print(request.GET.get('path'), settings.BASE_DIR, settings.MEDIA_ROOT)
+        attach = request.GET.get('thumbnail') != 'true'
+        f = open("{}/{}/{}".format(settings.BASE_DIR, 'media/files', request.GET.get('path')), 'rb')
+        return FileResponse(f, as_attachment=attach)
+
+
+class Thumbnailer(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            f = open("{}/{}/{}".format(settings.BASE_DIR, 'media/thumbnails', f"{request.GET.get('ext')}.png"), 'rb')
+        except FileNotFoundError:
+            f = open("{}/{}/{}".format(settings.BASE_DIR, 'media/thumbnails', f"{request.GET.get('cat')}.png"), 'rb')
+        return FileResponse(f)

@@ -4,6 +4,19 @@
 {% block title %} Ваша группа {% endblock %}
 
 {% block mainContent %}
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+{% if messages %}
+    <script>
+{% for msg in messages %}
+    {% if msg.tags == 'error' %}
+    toastr.error("{{ msg }}")
+    {% else %}
+    toastr.info("{{ msg }}")
+    {% endif %}
+{% endfor %}    
+    </script>
+{% endif %}
 <link rel="stylesheet" href="{% static 'main/css/profile.css' %}">
 <script>
     $(document).ready(()=>{

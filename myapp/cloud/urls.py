@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 
@@ -17,4 +18,6 @@ urlpatterns = [
     path('archive/', views.CloudArchive.as_view(), name='cloud_archive'),
     path('delete/archive/<int:id>', views.DeleteArchiveFile.as_view(), name='delete_cloud_archive'),
     path('delete/archive/', csrf_exempt(views.DeleteArchiveFile.as_view()), name='delete_cloud_batch_archive'),
+    path('storage/', login_required(views.CloudStorage.as_view()), name='cloud_storage'),
+    path('thumbnails/', login_required(views.Thumbnailer.as_view()), name='thumbnails'),
 ]
