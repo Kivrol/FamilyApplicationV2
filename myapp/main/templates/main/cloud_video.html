@@ -64,7 +64,7 @@
         <div class="col">
             <div class="card mt-3">
                 <div class="card-header text-center bg-custom-color-light">
-                    <p class="fs-5 mb-1">Загрузить видео</p>
+                    <img src="{% url 'thumbnails' %}?cat=add" class="img-thumbnail">
                 </div>
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
