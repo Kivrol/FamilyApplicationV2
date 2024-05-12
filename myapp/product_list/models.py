@@ -6,7 +6,7 @@ from main.models import Family
 class ProductListComponent(models.Model):
     family = models.ForeignKey(Family, on_delete=models.CASCADE)
     name = models.CharField(max_length=50, verbose_name='Наименование')
-    unit = models.CharField(max_length=2, choices=(('шт', 'шт'), ('кг', 'кг'), ('мл', 'мл')),
+    unit = models.CharField(max_length=2, choices=(('шт', 'шт'), ('кг', 'кг'), ('мл', 'мл'), ('уп', 'уп')),
                             verbose_name='Мера измерения')
     amount = models.FloatField(verbose_name='Количество')
     date = models.DateField(verbose_name='Дата добавления', default=timezone.now)

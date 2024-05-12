@@ -143,3 +143,5 @@ GRAPH_MODELS = {
     'all_applications': True,
     'graph_models': True,
 }
+
+SESSION_COOKIE_AGE = 24 * 60 * 60

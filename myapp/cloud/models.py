@@ -11,7 +11,7 @@ class CloudFile(models.Model):
     video_file = models.FileField(upload_to='files/', null=True, blank=True, validators=[
         FileExtensionValidator(allowed_extensions=['mp4', 'mkv', 'mov', 'webm', 'avi'])])
     photo_file = models.FileField(upload_to='files/', null=True, blank=True, validators=[
-        FileExtensionValidator(allowed_extensions=['jpg', 'png', 'ico', 'jpeg', 'bmp'])])
+        FileExtensionValidator(allowed_extensions=['jpg', 'png', 'ico', 'jpeg', 'bmp', 'webp'])])
     doc_file = models.FileField(upload_to='files/', null=True, blank=True, validators=[
         FileExtensionValidator(allowed_extensions=['doc', 'docx', 'pdf', 'odt', 'rtf', 'txt', 'ppt', 'pptx', 'xls', 'xlsx'])])
     archive_file = models.FileField(upload_to='files/', null=True, blank=True, validators=[

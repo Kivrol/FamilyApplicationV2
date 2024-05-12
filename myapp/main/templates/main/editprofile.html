@@ -42,7 +42,7 @@
                                 <div class="col-9">
                                     <div class="col-11">
                                         <input class="form-control" type="text" name="username" id="id_username"
-                                               value="{{ user.username }}">
+                                               {% if user.username %} value="{{ user.username }}" {% endif %}>
                                     </div>
                                 </div>
                             </div>
@@ -53,7 +53,7 @@
                                 <div class="col-9">
                                     <div class="col-11">
                                         <input class="form-control" type="text" name="last_name" id="id_last_name"
-                                               value="{{ user.last_name }}">
+                                               {%  if user.last_name %} value="{{ user.last_name }}" {% endif %}>
                                     </div>
                                 </div>
                             </div>
@@ -64,7 +64,7 @@
                                 <div class="col-9">
                                     <div class="col-11">
                                         <input class="form-control" type="text" name="first_name" id="id_first_name"
-                                               value="{{ user.first_name }}">
+                                               {% if user.first_name %} value="{{ user.first_name }}" {% endif %}>
                                     </div>
                                 </div>
                             </div>
@@ -75,7 +75,7 @@
                                 <div class="col-9">
                                     <div class="col-11">
                                         <input class="form-control" type="text" name="patronimic" id="id_patronimic"
-                                               value="{{ user.userprofile.patronimic }}">
+                                               {% if user.userprofile.patronimic %} value="{{ user.userprofile.patronimic }}" {% endif %}>
                                     </div>
                                 </div>
                             </div>
@@ -99,7 +99,7 @@
                                         <div class="input-group">
                                             <span class="input-group-text">+7</span>
                                         <input class="form-control" type="text" name="phoneNumber"
-                                               id="id_phoneNumber" value="{{ user.userprofile.phoneNumber }}">
+                                               id="id_phoneNumber" {% if user.userprofile.phoneNumber %} value="{{ user.userprofile.phoneNumber }}" {% endif %}>
                                         </div>
             
                                     </div>
@@ -112,7 +112,7 @@
                                 <div class="col-9">
                                     <div class="col-11">
                                         <input class="form-control" type="file" name="profileAvatar"
-                                               id="id_profileAvatar">
+                                               id="id_profileAvatar" accept=".jpg, .jpeg, .png, .webp, .ico">
                                     </div>
                                 </div>
                             </div>

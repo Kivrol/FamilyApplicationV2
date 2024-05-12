@@ -35,7 +35,10 @@ class WishListUser(View):
         if form.is_valid():
             wish = form.save(commit=False)
             wish.user_profile = UserProfile.objects.get(user=request.user)
+            print(form.cleaned_data['wish_picture'])
             wish.save()
+            print("Картинка пост", wish.wish_picture)
+            print('err', form.errors)
             return JsonResponse({'status': 'ok'})
         else:
             return JsonResponse({'status': 'error', 'errors': form.errors})

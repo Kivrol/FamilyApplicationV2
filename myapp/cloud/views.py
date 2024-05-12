@@ -52,12 +52,17 @@ class DeleteVideoFile(View):
 class CloudPhoto(View):
     def get(self, request, *args, **kwargs):
         files = CloudFile.objects.filter(category='photo', family=UserProfile.objects.get(user=request.user).family)
+        filesName = []
+        for i in range(len(files)):
+            n, f = files[i].photo_file.name.split('/')
+            filesName.append(f)
         form = UploadPhotoFile()
-        return render(request, 'main/cloud_photo.html', {'files': files, 'form': form})
+        return render(request, 'main/cloud_photo.html', {'files': files, 'form': form, 'filesName': filesName})
 
     def post(self, request, *args, **kwargs):
         form = UploadPhotoFile(request.POST, request.FILES)
         files = CloudFile.objects.filter(category='photo', family=UserProfile.objects.get(user=request.user).family)
+
         if form.is_valid():
             new_file = form.save(commit=False)
             new_file.family = UserProfile.objects.get(user=request.user).family

@@ -31,7 +31,7 @@ class UserProfile(models.Model):
 
 
 class Family(models.Model):
-    name = models.CharField(max_length=50, blank=True, null=True, verbose_name='Название', name='name')
+    name = models.CharField(max_length=50, blank=True, null=True, verbose_name='Название', name='name', unique=True)
     avatar = models.ImageField(
         upload_to=f'familyImg/',
         null=True,

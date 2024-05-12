@@ -61,7 +61,7 @@
                     <p class="card-text opacity-75 p-0 m-0">Ссылки нет</p>
                     {% endif %}
                     {% if w.custom_reason %}
-                    <p class="card-text text-center">{{ w.custom_reason }}</p>
+                    <p class="card-text text-center m-0">{{ w.custom_reason }}</p>
                     {% endif %}
                     <p class="card-text opacity-75">{{ w.date }}</p>
                 </div>
@@ -126,7 +126,7 @@
                         <label for="id_name">Наименование:</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="file" name="wish_picture" accept="image/*" id="id_wish_picture" class="form-control">
+                        <input type="file" name="wish_picture" accept="image/*" id="id_wish_picture" class="form-control" placeholder="Картинка:">
                         <label for="id_wish_picture">Картинка:</label>
                     </div>
                     <div class="form-floating mb-3">
@@ -156,7 +156,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="fill-success" id="add">Сохранить</button>
+                <button type="submit" class="fill-success" id="add">Сохранить</button>
             </div>
         </div>
     </div>
@@ -166,15 +166,17 @@
     var url = '/wishlist/{{ user.id }}'
     var m = new bootstrap.Modal(document.getElementById('form'),{})
     $(document).on("click", "#add", function () {
-        let form = $('#form_add')
+        let form = $('#form_add')[0]; // Получаем нативный JavaScript объект формы
         console.log("Saving")
-        var form_data = form.serialize();
+        var form_data = new FormData(form); // Создаем объект FormData и передаем ему нашу форму
         console.log(form_data)
         $.ajax({
             type: "POST",
             url: url,
             headers: {'X-CSRFToken': "{{ csrf_token }}"},
-            data: form_data,
+            data: form_data, // Передаем объект FormData, который содержит файл
+            processData: false, // Отключаем обработку данных
+            contentType: false, // Отключаем установку Content-Type заголовка
             success: function (data) {
                 if(data['status'] == 'ok'){
                     location.reload()

@@ -38,10 +38,12 @@ class FamilyView(View):
         return render(request, 'main/family.html', {'family': family, 'is_creator': is_creator, 'form': form})
 
     def post(self, request):
-        form = forms.UpdateFamily(request.POST, request.FILES, instance=UserProfile.objects.get(user=request.user).family)
+        form = forms.UpdateFamily(request.POST, request.FILES,
+                                  instance=UserProfile.objects.get(user=request.user).family)
         if form.is_valid():
             form.save()
         return redirect('family')
+
 
 class CreateFamily(View):
     def get(self, request):
@@ -87,17 +89,14 @@ class ExitFromGroup(View):
         return redirect('family')
 
 
-# Доработать редактирование профиля, нужно сделать проверку на пустые поля, и если они пустые, то не заменять поля в БД
 class EditProfile(View):
     def get(self, request, *args, **kwargs):
         userForm = EditUserForm(instance=request.user)
-
         up = UserProfile.objects.get(user=request.user)
         profileForm = EditProfileForm(instance=UserProfile.objects.get(user=request.user))
-
         changePass = PasswordChangeForm(request.user)
-
-        return render(request, 'main/editprofile.html', {'userForm': userForm, 'profileForm': profileForm, "changePass": changePass})
+        return render(request, 'main/editprofile.html',
+                      {'userForm': userForm, 'profileForm': profileForm, "changePass": changePass})
 
     def post(self, request, *args, **kwargs):
         user = request.user
@@ -111,6 +110,7 @@ class EditProfile(View):
         else:
             return render(request, 'main/editprofile.html', {'userForm': userForm, 'profileForm': profileForm})
 
+
 class ChangePassword(View):
     def post(self, request, *args, **kwargs):
         form = PasswordChangeForm(request.user, request.POST)
@@ -119,6 +119,7 @@ class ChangePassword(View):
             return JsonResponse({'status': 'ok'}, safe=False)
         else:
             return JsonResponse({'status': 'error', 'errors': form.errors}, safe=False)
+
 
 class JoinFamilyRequestView(View):
     def get(self, request, *args, **kwargs):
