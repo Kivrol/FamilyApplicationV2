@@ -27,7 +27,7 @@ class CloudVideo(View):
         for f in files:
             n = f.video_file.name.split('/')[-1]
             filesName.append(n)
-            filesExt.append(n.split('.')[1])
+            filesExt.append(n.split('.')[-1])
         form = UploadVideoFile()
         return render(request, 'main/cloud_video.html', {'files': zip(files, filesName, filesExt), 'form': form})
 
@@ -112,7 +112,7 @@ class CloudDoc(View):
         for f in files:
             n = f.doc_file.name.split('/')[-1]
             filesName.append(n)
-            filesExt.append(n.split('.')[1])
+            filesExt.append(n.split('.')[-1])
         return render(request, 'main/cloud_doc.html', {'files': zip(files, filesName, filesExt), 'filesName': files, 'form': form})
 
     def post(self, request, *args, **kwargs):
@@ -123,7 +123,7 @@ class CloudDoc(View):
         for f in files:
             n = f.doc_file.name.split('/')[-1]
             filesName.append(n)
-            filesExt.append(n.split('.')[1])
+            filesExt.append(n.split('.')[-1])
         if form.is_valid():
             new_file = form.save(commit=False)
             new_file.family = UserProfile.objects.get(user=request.user).family
@@ -160,7 +160,7 @@ class CloudArchive(View):
         for f in files:
             n = f.archive_file.name.split('/')[-1]
             filesName.append(n)
-            filesExt.append(n.split('.')[1])
+            filesExt.append(n.split('.')[-1])
         return render(request, 'main/cloud_archive.html', {'files': zip(files, filesName, filesExt), 'filesName': files, 'form': form})
 
     def post(self, request, *args, **kwargs):
@@ -171,7 +171,7 @@ class CloudArchive(View):
         for f in files:
             n = f.archive_file.name.split('/')[-1]
             filesName.append(n)
-            filesExt.append(n.split('.')[1])
+            filesExt.append(n.split('.')[-1])
         if form.is_valid():
             new_file = form.save(commit=False)
             new_file.family = UserProfile.objects.get(user=request.user).family

@@ -12,28 +12,28 @@
     {% if msg.tags == 'error' %}
     toastr.error("{{ msg }}")
     {% else %}
-    toastr.info("{{ msg }}")
+    toastr.success("{{ msg }}")
     {% endif %}
 {% endfor %}    
     </script>
 {% endif %}
 
 <div class="container d-flex justify-content-center">
-    <div class="card col-sm-12 col-md-8 col-xl-6 shadow">
+    <div class="card col-sm-12 col-md-8 col-xl-6 shadow m-0">
         <div class="card-header bg-custom-color-light text-center">
             <p class="fs-3 m-2">Запросы на добавление в группу</p>
         </div>
-        <div class="card-body">
-            <div class="row">
+        <div class="card-body p-0">
+            <div class="row pt-2">
                 <div class="text-center">
                     <p class="fs-4">Ваши запросы</p>
                 </div>
             </div>
-            <div class="row">
+            <div class="row px-4">
                 <hr class="hr-shelf"/>
             </div>
             {%  if req_list|length > 0 %}
-            <div class="row">
+            <div class="row px-4">
                 {% for req in req_list %}
                 <p class="fs-5 text-color">
                     <i class="material-icons-size-2 text-custom-color-dark align-center">horizontal_rule</i>
@@ -41,16 +41,16 @@
                 </p>
                 {% endfor %}
             </div>
-            <div class="row">
+            <div class="row px-4">
                 <hr class="hr-shelf"/>
             </div>
             {% endif %}
             <div class="row">
                 <form method="POST" action="">
                     {% csrf_token %}
-                    <div class="form-floating mb-3">
-                        <input class="form-control" name="family" required="" id="id_family" type="text">
-                        <label class="ms-2" for="id_family">Группа:</label>
+                    <div class="form-floating mb-3 px-4">
+                        <input class="form-control" name="family" required="" id="id_family" type="text" placeholder="Группа">
+                        <label class="ms-4" for="id_family">Группа:</label>
                     </div>
         <div class="card-footer bg-custom-color-dark text-center">
             <button type="submit" class="fill-light"> Отправить </button>

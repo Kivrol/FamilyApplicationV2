@@ -139,7 +139,7 @@ class JoinFamilyRequestView(View):
             if form.data['family'] in [f.name for f in Family.objects.all()]:
                 JoinFamilyRequest(user=request.user, family=Family.objects.get(name=form.data['family'])).save()
                 messages.success(request, 'Запрос отправлен')
-                return redirect('family')
+                return redirect('join_family')
             else:
                 messages.error(request, 'Такой группы не существует')
                 return redirect('join_family')
