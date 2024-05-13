@@ -41,6 +41,23 @@
 
 <div class="container">
     <div id="rowsCount" class="row">
+        {% if showform %}
+        <div class="col mt-4">
+            <div class="card shadow">
+                {% if w.wish_picture %}
+                <img class="card-img-top rounded-top border-bottom p-2 shadow-sm crop-img"
+                     src="/media/{{ w.wish_picture }}">
+                {% else %}
+                <img class="card-img-top rounded-top border-bottom p-2 shadow-sm crop-img"
+                     src="{% static 'main/img/orig.webp' %}">
+                {% endif %}
+                <div class="card-footer bg-custom-color-dark">
+                    <button type="button" class="fill-light py-2" data-bs-toggle="modal" data-bs-target="#form">
+                        Добавить желание</button>
+                </div>
+            </div>
+        </div>
+        {% endif %}
         {% for w in wishes %}
         <div class="col mt-4">
             <div class="card shadow {% if not w.active %} opacity-50 {% endif %}">
@@ -90,24 +107,6 @@
             </div>
         </div>
         {% endfor %}
-        {% if showform %}
-        <div class="col mt-4">
-            <div class="card shadow">
-                {% if w.wish_picture %}
-                <img class="card-img-top rounded-top border-bottom p-2 shadow-sm crop-img"
-                     src="/media/{{ w.wish_picture }}">
-                {% else %}
-                <img class="card-img-top rounded-top border-bottom p-2 shadow-sm crop-img"
-                     src="{% static 'main/img/orig.webp' %}">
-                {% endif %}
-                <div class="card-footer bg-custom-color-dark">
-                    <button type="button" class="fill-light py-2" data-bs-toggle="modal" data-bs-target="#form">
-                        Добавить желание</button>
-                </div>
-            </div>
-        </div>
-        {% endif %}
-
     </div>
 </div>
 

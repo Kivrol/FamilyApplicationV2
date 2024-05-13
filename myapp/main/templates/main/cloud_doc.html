@@ -22,7 +22,26 @@
 </script>
 
 <div class="container">
+    <div class="col">
+            <button class="fill-danger p-2" id="file_delete">Удалить выбранные</button>
+    </div>
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6">
+        <div class="col">
+            <div class="card mt-3">
+                <div class="card-header text-center bg-custom-color-light">
+                    <img src="{% url 'thumbnails' %}?cat=add" class="img-thumbnail">
+                </div>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="card-body py-4">
+                        <input type="file" name="doc_file" id="id_doc_file" class="form-control" accept=".doc, .docx, .pdf, .xls, .xlsx, .ppt, .pptx, .odt, .rtf, .txt">
+                    </div>
+                    <div class="card-footer bg-custom-color-dark text-center">
+                        <button type="submit" class="fill-light mb-0 py-2">Загрузить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
         {% for f, n, e in files %}
         <div class="col">
             <div class="card mt-3">
@@ -60,25 +79,6 @@
             </div>
         </div>
         {% endfor %}
-        <div class="col">
-            <div class="card mt-3">
-                <div class="card-header text-center bg-custom-color-light">
-                    <img src="{% url 'thumbnails' %}?cat=add" class="img-thumbnail">
-                </div>
-                <form method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="card-body py-4">
-                        <input type="file" name="doc_file" id="id_doc_file" class="form-control" accept=".doc, .docx, .pdf, .xls, .xlsx, .ppt, .pptx, .odt, .rtf, .txt">
-                    </div>
-                    <div class="card-footer bg-custom-color-dark text-center">
-                        <button type="submit" class="fill-light mb-0 py-2">Загрузить</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="col">
-            <button class="fill-danger p-2" id="file_delete">Удалить выбранные</button>
-        </div>
     </div>
 </div>
 {% endblock %}
